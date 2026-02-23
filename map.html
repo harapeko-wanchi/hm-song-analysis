@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>Redirecting…</title>
+  <script>
+    // 旧URL (map.html?m=A|B|C) からの互換リダイレクト
+    const m = new URLSearchParams(location.search).get('m');
+    const target = m === 'B' ? 'map-b.html' : m === 'C' ? 'map-c.html' : 'map-a.html';
+    location.replace(target);
+  </script>
+</head>
+<body>
+  <noscript>
+    <p><a href="map-a.html">ステージ・バイブスマップ</a></p>
+    <p><a href="map-b.html">サウンド・エンジンマップ</a></p>
+    <p><a href="map-c.html">エモーション・マップ</a></p>
+  </noscript>
+</body>
+</html>

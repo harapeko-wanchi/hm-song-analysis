@@ -1,0 +1,19 @@
+# Playwright MCP artifacts
+.playwright-mcp/
+
+# Python
+*.py
+__pycache__/
+*.pyc
+
+# VS Code
+.vscode/
+
+# OS
+Thumbs.db
+Desktop.ini
+.DS_Store
+
+# Temp / scratch
+*.tmp
+*.log

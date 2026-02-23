@@ -1,0 +1,1671 @@
+{
+  "version": "1.0",
+  "scoring_scale": {
+    "min": 0,
+    "max": 10,
+    "step": 0.1,
+    "method": "probit normalization (rank-based, mean=5.0, SD=2.3)",
+    "axes": [
+      "cute",
+      "cool",
+      "emo",
+      "happy",
+      "band",
+      "childlike",
+      "complexity",
+      "party",
+      "speed"
+    ]
+  },
+  "mapA_definition": {
+    "x_label": "かわいい ↔ かっこいい",
+    "y_label": "聴かせる ↔ 沸かせる",
+    "x_formula": "cool - cute",
+    "y_formula": "(party - 5) * 2"
+  },
+  "mapB_definition": {
+    "x_label": "エレクトロ ↔ バンド",
+    "y_label": "グルーヴィ ↔ ハイパー",
+    "x_formula": "(band - 5) * 2",
+    "y_formula": "(speed - 5) * 2"
+  },
+  "mapC_definition": {
+    "x_label": "子供心",
+    "y_label": "エモーショナル ↔ ハッピー",
+    "x_formula": "(childlike - 5) * 2",
+    "y_formula": "happy - emo"
+  },
+  "songs": [
+    {
+      "id": "playful_romantic",
+      "title": "PLAYFUL ROMANTIC",
+      "release_date": "2025-12-12",
+      "lyricist": "NNBS.",
+      "composer": "NNBS.",
+      "arranger": null,
+      "key": "Db",
+      "bpm": 196,
+      "youtube_url": "https://youtu.be/94DtjMOtbP4",
+      "thumbnail_url": "https://img.youtube.com/vi/2ZbE9EF5zss/maxresdefault.jpg",
+      "scores": {
+        "cute": 5.5,
+        "cool": 4.9,
+        "emo": 1.2,
+        "band": 6.6,
+        "childlike": 7.7,
+        "complexity": 7.4,
+        "party": 9.9,
+        "speed": 7.7,
+        "happy": 8.2
+      },
+      "mapA": {
+        "x": -0.6,
+        "y": 9.8
+      },
+      "tags": [
+        "コール映え",
+        "ギター＋シンセ",
+        "セルフタイトルアンセム",
+        "NNBS.第3のI7/♭7楽曲",
+        "Hey!Mommy!楽曲メドレー歌詞"
+      ],
+      "mapB": {
+        "x": 3.2,
+        "y": 5.4
+      },
+      "harmony_note": "196BPM(POJI POJI GOと同速) / Db7(I7)Pre-Chorusシャウト / I7/♭7(Db7/Cb)Chorus句読点 / ♭VII(Cb)Hey!HOロックコール / Eb(II=V/V)Intro/Instrumental / I-ii-iii-IV全音階上行(Bridge) / 全音階下行バスDb→C→Bb→Ab→Gb→F→Eb",
+      "lyrics_hooks": [
+        "PLAYFUL ROMANTIC",
+        "PLAYFUL ROMANTIC WAY!",
+        "WE ARE MOMMY Hey!",
+        "WE ARE THE 最高 BEST!",
+        "SUPER SUPER JUMPING",
+        "DANCEでBOOGIE ROCKでYEAH",
+        "NEW HAPPY WORLD",
+        "1.2.3 POPなBABY",
+        "Let's ROCK HAPPY BOP"
+      ],
+      "summary": "BPM196の超高速パーティーチューン。Hey!Mommy!全楽曲メドレー歌詞を持つセルフタイトルアンセムで、ギター＋シンセの厚みある楽器隊がコールを煽る。お祭り感・子供心ともにカタログ最高クラス。",
+      "mapC": {
+        "x": 5.4,
+        "y": 7.0
+      }
+    },
+    {
+      "id": "next_story",
+      "title": "Next Story",
+      "release_date": "2025-12-01",
+      "lyricist": "AILI",
+      "composer": "AILI",
+      "arranger": null,
+      "key": "C",
+      "bpm": 179,
+      "youtube_url": "https://youtu.be/BOd99ZGfDOs",
+      "thumbnail_url": "https://img.youtube.com/vi/wBzAMAY74tU/maxresdefault.jpg",
+      "scores": {
+        "cute": 0.1,
+        "cool": 5.9,
+        "emo": 9.9,
+        "band": 3.4,
+        "childlike": 0.1,
+        "complexity": 6.3,
+        "party": 0.1,
+        "speed": 5.7,
+        "happy": 0.1
+      },
+      "mapA": {
+        "x": 5.8,
+        "y": -9.8
+      },
+      "mapB": {
+        "x": -3.2,
+        "y": 1.4
+      },
+      "tags": [
+        "打ち込み系",
+        "AILI初内省エモーショナル",
+        "カタログ最高emo",
+        "カタログ最低childlike(最も大人)"
+      ],
+      "harmony_note": "FM7(9,#11)リディアン和声(Intro/Outro) / I-ii-vi-IV循環(Verse) / IVM7-V6-IM7/vi7浮遊Chorus / E(III=V/vi)唯一の非ダイアトニック / IM7↔vi7トニック揺動(Chorus解決) / Am-F(vi-IV)シャトル(Interlude)",
+      "lyrics_hooks": [
+        "Next Story",
+        "ワタシがこの世にいてもいなくても",
+        "呆れるほど自信がない",
+        "キミとボクに幸あれ",
+        "またいつか",
+        "サヨナラじゃない",
+        "僕は燃え尽きるんだ",
+        "ギリギリ綱渡り",
+        "やるせないほど淡々と",
+        "それでも願う"
+      ],
+      "summary": "カタログ最高エモ値を誇るAILI渾身の内省バラード。打ち込みの冷たさとリディアン和声の浮遊感の中で自問自答が続く。Hey!Mommy!の表現の幅を大きく押し広げた異色の一曲。",
+      "mapC": {
+        "x": -9.8,
+        "y": -9.8
+      }
+    },
+    {
+      "id": "hey_get_up_kids",
+      "title": "Hey! get up kids",
+      "release_date": "2025-09-22",
+      "lyricist": "NNBS.",
+      "composer": "NNBS.",
+      "arranger": null,
+      "key": "D",
+      "bpm": 210,
+      "note": "Live Documentary MV / 夜バゲットED",
+      "youtube_url": "https://youtu.be/RPCMCgRU4J8",
+      "thumbnail_url": "https://img.youtube.com/vi/RSrMGRi5mEA/maxresdefault.jpg",
+      "scores": {
+        "cute": 2.9,
+        "cool": 8.8,
+        "emo": 6.1,
+        "band": 9.9,
+        "childlike": 3.7,
+        "complexity": 7.7,
+        "party": 5.3,
+        "speed": 9.9,
+        "happy": 5.9
+      },
+      "mapA": {
+        "x": 5.9,
+        "y": 0.6
+      },
+      "mapB": {
+        "x": 9.8,
+        "y": 9.8
+      },
+      "tags": [
+        "コール映え",
+        "ギター＋バンドサウンド",
+        "ほぼ全英語詞",
+        "全楽曲最速210BPM",
+        "Live Documentary MV",
+        "NNBS.唯一バンドサウンド主体"
+      ],
+      "harmony_note": "全楽曲最速210BPM / Bbdim(♭VIdim)→vi半音接近(A→Bb→B) / E(II=V/V)セカンダリードミナント(Verse B) / vi-I-IV-V循環Hook(Hech charappa) / C#m(viim)経過上行(vi→vii→I) / DM7(IM7)+A7sus4(V7sus4)Intro",
+      "lyrics_hooks": [
+        "Hey! get up kids",
+        "Let's celebrate",
+        "Kick off now",
+        "Let's rock dancing",
+        "Hech charappa",
+        "Mecha-mecha Hacha",
+        "brand new new start",
+        "we are hey mommy",
+        "I won't let anyone"
+      ],
+      "summary": "全楽曲最速210BPM、カタログ最強バンドサウンド。ほぼ全英語詞でライブ感を追求したNNBS.唯一のギターロック主体楽曲。攻撃的なリフと祝祭的なコールが同居する。",
+      "mapC": {
+        "x": -2.6,
+        "y": -0.2
+      }
+    },
+    {
+      "id": "poji_poji_go",
+      "title": "POJI POJI GO",
+      "release_date": "2025-07-29",
+      "lyricist": "NNBS.",
+      "composer": "NNBS.",
+      "arranger": null,
+      "key": "E",
+      "bpm": 196,
+      "youtube_url": "https://youtu.be/F0bagOeDMFc",
+      "thumbnail_url": "https://img.youtube.com/vi/vUaE9XhA5aU/maxresdefault.jpg",
+      "scores": {
+        "cute": 4.7,
+        "cool": 5.3,
+        "emo": 3.9,
+        "band": 2.9,
+        "childlike": 7.4,
+        "complexity": 8.2,
+        "party": 7.7,
+        "speed": 7.1,
+        "happy": 7.4
+      },
+      "mapA": {
+        "x": 0.6,
+        "y": 5.4
+      },
+      "mapB": {
+        "x": -4.2,
+        "y": 4.2
+      },
+      "tags": [
+        "コール映え",
+        "打ち込み系",
+        "エレクトロポップ",
+        "セルフリファレンス"
+      ],
+      "harmony_note": "Em(b9)Phrygian♭9フレーム(Intro/Outro) / E↔G(♭III)クロマティックメディアント揺動 / B7ピボット(V7=III7)転調ヒンジ / C#→F#→B五度圏連鎖(Chorus A) / G7/F(I7/♭7)GALAXY!共通デバイス / I-IV-V 3コード基盤(Verse B) / NNBS.最多17コード",
+      "lyrics_hooks": [
+        "POJI POJI GO",
+        "MECHA HIT MECHA LOVER Z",
+        "GOING GOING WOW",
+        "わっちゃあっちゃお茶",
+        "強くなくても良いんだ",
+        "EVERY DAY MOMMY LIFE",
+        "CAN DO IT MANY MAKE SMILE",
+        "超Z DANCE DANCE SUPER SUPER",
+        "WE ARE Hey!Mommy!"
+      ],
+      "summary": "NNBS.最多17コードを擁するエレクトロポップ。コール映えとブライトさを軸に、Phrygian♭9やクロマティックメディアントなど複雑な和声を楽しげに使いこなす。",
+      "mapC": {
+        "x": 4.8,
+        "y": 3.5
+      }
+    },
+    {
+      "id": "hey_yummy",
+      "title": "Hey!Yummy!",
+      "release_date": "2025-07-07",
+      "lyricist": "早川博隆",
+      "composer": "早川博隆/柿迫ヒカル",
+      "arranger": null,
+      "key": "Eb→F",
+      "bpm": 150,
+      "youtube_url": "https://youtu.be/5c1vfetSi8E",
+      "thumbnail_url": "https://img.youtube.com/vi/N6uAJ8g1UG4/maxresdefault.jpg",
+      "scores": {
+        "cute": 6.6,
+        "cool": 3.7,
+        "emo": 7.4,
+        "band": 5.9,
+        "childlike": 4.9,
+        "complexity": 9.9,
+        "party": 3.2,
+        "speed": 3.7,
+        "happy": 4.5
+      },
+      "mapA": {
+        "x": -2.9,
+        "y": -3.6
+      },
+      "mapB": {
+        "x": 1.8,
+        "y": -2.6
+      },
+      "tags": [
+        "コール映え",
+        "ストリングス＋ギター＋シンセ"
+      ],
+      "harmony_note": "全曲最多35コード(含転調先) / Eb→F全音上転調(Final Chorus) / vi7-II7(V7/V)ジャズ循環(Verse) / G7(#9)ヘンドリクスコード(V7#9/vi) / BM9→Bbsus4半音クロマティック(Bridge) / Bbm7(13)同主調v借用(Chorus) / Bb7(♭9)→Bdim経過減三和音 / ii→iii→IV→#IV→V 5段クロマティック上行バス / Bridge 3/4拍子(AbM7-Gm7)唯一の拍子変化",
+      "lyrics_hooks": [
+        "Yummy",
+        "Honey",
+        "Like a candy",
+        "あーんして！",
+        "覚悟して！",
+        "やっぱだめー！♡",
+        "笑顔がエナジー",
+        "やきもちはSpicy?",
+        "I'm Happy"
+      ],
+      "summary": "全曲最多35コード＋唯一の拍子変化を持つ、カタログ最高複雑度の楽曲。キュートな表面の下にジャズ循環やヘンドリクスコード、全音転調が潜む超技巧派。",
+      "mapC": {
+        "x": -0.2,
+        "y": -2.9
+      }
+    },
+    {
+      "id": "ok",
+      "title": "OK",
+      "release_date": "2025-02-21",
+      "lyricist": "AILI",
+      "composer": "AILI",
+      "arranger": null,
+      "key": "C",
+      "bpm": 125,
+      "youtube_url": "https://youtu.be/2iYlT1pg9xE",
+      "thumbnail_url": "https://img.youtube.com/vi/gR_RUxgkl4s/maxresdefault.jpg",
+      "scores": {
+        "cute": 3.7,
+        "cool": 7.7,
+        "emo": 6.6,
+        "band": 3.9,
+        "childlike": 1.8,
+        "complexity": 7.1,
+        "party": 3.7,
+        "speed": 1.2,
+        "happy": 3.7
+      },
+      "mapA": {
+        "x": 4.0,
+        "y": -2.6
+      },
+      "mapB": {
+        "x": -2.2,
+        "y": -7.6
+      },
+      "tags": [
+        "コール映え",
+        "打ち込み系",
+        "自己肯定",
+        "ラップセクション"
+      ],
+      "harmony_note": "E7(#9)ヘンドリクスコード(V7#9/vi) / Em→Ebaug(♭IIIaug)半音クロマティック / Em/F→Em/G歩行バス(Verse) / Dm9↔E7(#9)シャトル(Pre-Chorus) / vi-V-I→ii-iii-IV二重循環(Chorus) / Bm♭5(vii°)→I解決(Bridge) / DIAMOND JETに次ぐ19コード",
+      "lyrics_hooks": [
+        "OK",
+        "Ei E Ei",
+        "舞い上がれ",
+        "乗りこなせ",
+        "とりあえず",
+        "I say I say",
+        "ぶっ飛んでて何が悪い",
+        "自由になれ",
+        "叫べばいい心の底から"
+      ],
+      "summary": "ラップセクションを備えたAILIのクールな自己肯定アンセム。ヘンドリクスコードや二重循環など凝った和声を低めのBPMに詰め込み、大人っぽく洗練された仕上がり。",
+      "mapC": {
+        "x": -6.4,
+        "y": -2.9
+      }
+    },
+    {
+      "id": "galaxy_galaxy",
+      "title": "GALAXY! GALAXY!",
+      "release_date": "2025-02-14",
+      "lyricist": "NNBS.",
+      "composer": "NNBS.",
+      "arranger": null,
+      "key": "B",
+      "bpm": 192,
+      "youtube_url": "https://youtu.be/-40V7Fuvqiw",
+      "thumbnail_url": "https://img.youtube.com/vi/WKnYbNIpu2w/maxresdefault.jpg",
+      "scores": {
+        "cute": 5.9,
+        "cool": 4.1,
+        "emo": 2.3,
+        "band": 5.5,
+        "childlike": 8.8,
+        "complexity": 5.7,
+        "party": 8.8,
+        "speed": 6.6,
+        "happy": 8.2
+      },
+      "mapA": {
+        "x": -1.8,
+        "y": 7.6
+      },
+      "mapB": {
+        "x": 1.0,
+        "y": 3.2
+      },
+      "tags": [
+        "コール映え",
+        "エレクトロポップ"
+      ],
+      "harmony_note": "I-II-IV 3コード循環(Verse) / I→V/7→vi→V→IV全音階下行バス(Chorus) / C#(II=V/V)恒常セカンダリードミナント / A(♭VII)Mixolydian借用 / B7/A(I7/♭7)Hookアクセント / C#→C#7(II→II7)微分変化 / II7→V→I完全終止(Outro)",
+      "lyrics_hooks": [
+        "GALAXY",
+        "BABY BABY BABY",
+        "STAY GOLD",
+        "STAR STAR",
+        "MOMMY SHOW TIME",
+        "王道 NO",
+        "わちゃわちゃGO",
+        "ARE YOU READY",
+        "JUMPING JUMPING",
+        "キラキラキラ",
+        "超超GALAXY"
+      ],
+      "summary": "明るさと子供心が炸裂するキラキラ系パーティーソング。3コード循環をベースにしつつMixolydian借用やI7/♭7デバイスでNNBS.流の色彩を加える。",
+      "mapC": {
+        "x": 7.6,
+        "y": 5.9
+      }
+    },
+    {
+      "id": "diamond_jet",
+      "title": "DIAMOND JET",
+      "release_date": "2024-12-24",
+      "lyricist": "阿久津健太郎",
+      "composer": "阿久津健太郎",
+      "arranger": null,
+      "key": "Eb",
+      "bpm": 149,
+      "youtube_url": "https://youtu.be/AeW4On1cCk0",
+      "thumbnail_url": "https://img.youtube.com/vi/AeW4On1cCk0/maxresdefault.jpg",
+      "scores": {
+        "cute": 2.3,
+        "cool": 8.2,
+        "emo": 7.7,
+        "band": 7.4,
+        "childlike": 2.9,
+        "complexity": 8.8,
+        "party": 3.9,
+        "speed": 3.9,
+        "happy": 4.7
+      },
+      "mapA": {
+        "x": 5.9,
+        "y": -2.2
+      },
+      "mapB": {
+        "x": 4.8,
+        "y": -2.2
+      },
+      "tags": [
+        "コール映え",
+        "リードギター＋シンセ",
+        "ギターソロ",
+        "飛翔"
+      ],
+      "harmony_note": "全曲最多21コード / iv(Abm)同主調借用 / F7(V7/V)セカンダリードミナント / AbM9→Ebsus4/G浮遊コーラス / Cmsus2→sus4→Cm(viサスペンション変容) / Am7-5(♯IVm7♭5)パッシングコード / ♭VII(Db)借用",
+      "lyrics_hooks": [
+        "ジェット",
+        "Carry on",
+        "Let me fly",
+        "Oh oh oh",
+        "奇跡のジェット",
+        "夢の続き",
+        "Fly high",
+        "Story",
+        "笑顔が守れないから"
+      ],
+      "summary": "ギターソロが映える骨太エモロック。iv借用やサスペンション変容など攻めた和声で飛翔感を表現し、Cool＋Emoの高得点がカタログ屈指の熱量を物語る。",
+      "mapC": {
+        "x": -4.2,
+        "y": -3.0
+      }
+    },
+    {
+      "id": "super_mommy_girls",
+      "title": "SUPER MOMMY GIRLS",
+      "release_date": "2024-09-01",
+      "lyricist": "NNBS.",
+      "composer": "NNBS.",
+      "arranger": null,
+      "key": "D→F#",
+      "bpm": 192,
+      "note": "2ndMV / ゴッドタンED",
+      "youtube_url": "https://youtu.be/pJDfWpZ7CI4",
+      "thumbnail_url": "https://img.youtube.com/vi/-8_7KLhaCEo/maxresdefault.jpg",
+      "scores": {
+        "cute": 4.5,
+        "cool": 6.8,
+        "emo": 4.5,
+        "band": 4.7,
+        "childlike": 6.8,
+        "complexity": 3.2,
+        "party": 7.4,
+        "speed": 6.8,
+        "happy": 6.6
+      },
+      "mapA": {
+        "x": 2.3,
+        "y": 4.8
+      },
+      "mapB": {
+        "x": -0.6,
+        "y": 3.6
+      },
+      "tags": [
+        "コール映え",
+        "打ち込み系",
+        "エレクトロポップ",
+        "2ndMV/ゴッドタンED"
+      ],
+      "harmony_note": "vi7↔viシャトル(Bm7↔Bm) / D→F#長3度上転調 / C#(VII→V)ピボットコード / G#(II)セカンダリードミナント / A#(III)→D#m二次ドミナント / N.C.+ベースonlyブレイク",
+      "lyrics_hooks": [
+        "SUPER",
+        "バナナン",
+        "オモシロイ",
+        "GET A KICK KICK",
+        "わっちゃわちゃ",
+        "CUTE WINK LOVE",
+        "不可能はない",
+        "ずっとあそぼう",
+        "HANDS UP",
+        "自分越えてやらなきゃ損"
+      ],
+      "summary": "ゴッドタンEDに採用された2ndMV曲。長3度転調やN.C.ブレイクを織り込んだ踊れるエレクトロポップで、コール映え×明るさ×疾走感のバランスが秀逸。",
+      "mapC": {
+        "x": 3.6,
+        "y": 2.1
+      }
+    },
+    {
+      "id": "beach_beach",
+      "title": "BEACH! BEACH!",
+      "release_date": "2024-08-15",
+      "lyricist": "NNBS.",
+      "composer": "NNBS.",
+      "arranger": null,
+      "key": "Eb",
+      "bpm": 155,
+      "note": "ビーチバレージャパン応援ソング",
+      "youtube_url": "https://youtu.be/FnklXXBbD8Q",
+      "thumbnail_url": "https://img.youtube.com/vi/xxC4IHrW33g/maxresdefault.jpg",
+      "scores": {
+        "cute": 3.4,
+        "cool": 6.3,
+        "emo": 5.5,
+        "band": 4.5,
+        "childlike": 4.3,
+        "complexity": 5.5,
+        "party": 5.5,
+        "speed": 4.3,
+        "happy": 6.6
+      },
+      "mapA": {
+        "x": 2.9,
+        "y": 1.0
+      },
+      "mapB": {
+        "x": -1.0,
+        "y": -1.4
+      },
+      "tags": [
+        "コール映え",
+        "エレクトロポップ",
+        "ビーチバレー応援ソング"
+      ],
+      "harmony_note": "I-V-vi-IV王道進行全編支配 / Eb→D→C二波下行バス(Hook) / F(II)セカンダリードミナント / AbM7(IVM7)浮遊ブリッジ / ii→V7クライマックス挿入 / IV始動OH OH OHローテーション",
+      "lyrics_hooks": [
+        "ビーチ",
+        "BE THE ONE",
+        "JUMPING JUMPING",
+        "ATTACK ATTACK",
+        "GOING ON",
+        "大きな壁トバソー",
+        "DEAR BEACH AND SKY",
+        "勝てるとしかもう思わない",
+        "OH OH OH",
+        "Let's BE EASY EASY"
+      ],
+      "summary": "ビーチバレー応援ソング。王道進行を軸にしたストレートなポップスで、座標マップ上では中央付近に位置する全方位型Hey!Mommy!サウンド。",
+      "mapC": {
+        "x": -1.4,
+        "y": 1.1
+      }
+    },
+    {
+      "id": "gokigen_mammy",
+      "title": "ご機嫌マミーはご機嫌ガール",
+      "release_date": "2024-05-01",
+      "lyricist": "AILI",
+      "composer": "AILI",
+      "arranger": null,
+      "key": "Db",
+      "bpm": 182,
+      "youtube_url": "https://youtu.be/mOzEaJDwGU4",
+      "thumbnail_url": "https://img.youtube.com/vi/NMhNrBQY_OU/maxresdefault.jpg",
+      "scores": {
+        "cute": 5.7,
+        "cool": 3.9,
+        "emo": 4.1,
+        "band": 5.1,
+        "childlike": 5.3,
+        "complexity": 6.8,
+        "party": 6.1,
+        "speed": 6.3,
+        "happy": 5.9
+      },
+      "mapA": {
+        "x": -1.8,
+        "y": 2.2
+      },
+      "mapB": {
+        "x": 0.2,
+        "y": 2.6
+      },
+      "tags": [
+        "コール映え",
+        "打ち込み系",
+        "エレクトロポップ",
+        "自己肯定"
+      ],
+      "harmony_note": "I7(V7/IV)恒常ドミナント化 / Gb→Gbm(IV→iv)同主調借用 / vi-IV-I-V循環(コーラス) / IV→iii→ii→♭VII下行ウォーク / N.C.ブレイク×3 / ♭VII多面体(B/B7/Badd9/BM7) / 最終BM7→I柔化解決",
+      "lyrics_hooks": [
+        "ご機嫌",
+        "パパパパパ〜ん",
+        "オーケー",
+        "己を称えよ",
+        "飛び出して",
+        "アイム・オーケー",
+        "笑う門には福",
+        "ルルララルル",
+        "空気は吸うもの"
+      ],
+      "summary": "AILI作の自己肯定エレクトロポップ。♭VII多面体やN.C.ブレイクなど仕掛けが豊富で、ほどよいキュートさとクールさを両立するバランス型楽曲。",
+      "mapC": {
+        "x": 0.6,
+        "y": 1.8
+      }
+    },
+    {
+      "id": "mochipuru",
+      "title": "もちぷる",
+      "release_date": "2024-04-23",
+      "lyricist": "NNBS.",
+      "composer": "NNBS.",
+      "arranger": null,
+      "key": "E",
+      "bpm": 198,
+      "youtube_url": "https://youtu.be/igk5-k_xDrQ",
+      "thumbnail_url": "https://img.youtube.com/vi/aoz3iX8aACE/maxresdefault.jpg",
+      "scores": {
+        "cute": 9.9,
+        "cool": 0.1,
+        "emo": 0.1,
+        "band": 0.1,
+        "childlike": 9.9,
+        "complexity": 1.2,
+        "party": 8.2,
+        "speed": 8.2,
+        "happy": 9.9
+      },
+      "mapA": {
+        "x": -9.8,
+        "y": 6.4
+      },
+      "mapB": {
+        "x": -9.8,
+        "y": 6.4
+      },
+      "tags": [
+        "コール映え",
+        "エレクトロポップ",
+        "ナンセンスワード洪水",
+        "冒険"
+      ],
+      "harmony_note": "198BPM(カタログ第2位) / I-IV 2コードループ(サビ) / I-Vシャトル(ヴァース) / C#(VI)唯一の色彩和音 / vi→V→IV→I逆行ウォーク",
+      "lyrics_hooks": [
+        "もちもち",
+        "ぷるぷる",
+        "ママーミー",
+        "モチモチキュルルン",
+        "ぴょんぴょん",
+        "LOVE ME DO",
+        "はちゃめちゃ",
+        "限界なんてない",
+        "フツウから飛び出そう"
+      ],
+      "summary": "ナンセンスワード洪水で突き抜けるキュート＆子供心の極致。I-IVの2コードループで構成されるシンプル和声が、かえって強烈な中毒性を生む。カタログ最高キュート値。",
+      "mapC": {
+        "x": 9.8,
+        "y": 9.8
+      }
+    },
+    {
+      "id": "ice_party",
+      "title": "ICE PARTY",
+      "release_date": "2024-04-17",
+      "lyricist": "しえりーほ",
+      "composer": "しえりーほ",
+      "arranger": null,
+      "key": "B",
+      "bpm": 137,
+      "youtube_url": "https://youtu.be/vYOVrHVmirs",
+      "thumbnail_url": "https://img.youtube.com/vi/MNIQk00QuDw/maxresdefault.jpg",
+      "scores": {
+        "cute": 7.7,
+        "cool": 2.9,
+        "emo": 2.6,
+        "band": 2.3,
+        "childlike": 6.6,
+        "complexity": 2.3,
+        "party": 6.8,
+        "speed": 2.6,
+        "happy": 7.7
+      },
+      "mapA": {
+        "x": -4.8,
+        "y": 3.6
+      },
+      "mapB": {
+        "x": -5.4,
+        "y": -4.8
+      },
+      "tags": [
+        "コール映え",
+        "エレクトロポップ",
+        "電子音＋ホイッスル",
+        "童心"
+      ],
+      "harmony_note": "B→BM7→B7内声クロマティック下行 / AM7→A6→Aadd9(♭VII変容) / G#(VI)ピカルディ借用 / G→A(♭VI→♭VII)しえりーほ署名 / B→A#→G#→F#下行バスライン / C#→D→D#半音上行バス",
+      "lyrics_hooks": [
+        "アイス",
+        "パーティー",
+        "フレーバー",
+        "GIRLS POWER",
+        "CHERRY フィルター",
+        "LOVE LOVE YOU",
+        "秘密基地",
+        "ねぇちょっと！",
+        "明日も愛してね♡",
+        "大歓声→大変身→大賛成"
+      ],
+      "summary": "しえりーほ作のキュート系エレクトロポップ。内声クロマティック下行やピカルディ借用など洒落た和声の上で、アイスに見立てたPOPワールドが広がる。",
+      "mapC": {
+        "x": 3.2,
+        "y": 5.1
+      }
+    },
+    {
+      "id": "bird_trip",
+      "title": "BIRD TRIP",
+      "release_date": "2023-12-25",
+      "lyricist": "NNBS.",
+      "composer": "NNBS.",
+      "arranger": null,
+      "key": "Ab",
+      "bpm": 180,
+      "youtube_url": "https://youtu.be/XshLCXg3TUo",
+      "thumbnail_url": "https://img.youtube.com/vi/fWz13hmDekw/maxresdefault.jpg",
+      "scores": {
+        "cute": 4.3,
+        "cool": 5.5,
+        "emo": 6.3,
+        "band": 4.3,
+        "childlike": 4.1,
+        "complexity": 5.3,
+        "party": 4.3,
+        "speed": 6.1,
+        "happy": 4.1
+      },
+      "mapA": {
+        "x": 1.2,
+        "y": -1.4
+      },
+      "mapB": {
+        "x": -1.4,
+        "y": 2.2
+      },
+      "tags": [
+        "コール映え",
+        "エレクトロポップ",
+        "仲間",
+        "飛翔"
+      ],
+      "harmony_note": "4コード完結構造 / iii-II-I-V循環(サビ) / I-V-II-iii上行5度連鎖(ヴァース) / Ebadd9浮遊和音",
+      "lyrics_hooks": [
+        "STAY GOLD",
+        "I WILL BE THERE",
+        "CHU PUNKY",
+        "カモカモ",
+        "飛べるのかな",
+        "僕らの夢の場所へ",
+        "声が羽になる",
+        "oh oh oh"
+      ],
+      "summary": "仲間との飛翔をテーマにした4コード構造のミドルテンポ楽曲。5度連鎖と循環進行でシンプルに駆け抜ける、NNBS.作品の中でも素直な一曲。",
+      "mapC": {
+        "x": -1.8,
+        "y": -2.2
+      }
+    },
+    {
+      "id": "hello_hey_world",
+      "title": "HELLO!! Hey!! WORLD!!",
+      "release_date": "2023-11-28",
+      "lyricist": "NNBS.",
+      "composer": "NNBS.",
+      "arranger": null,
+      "key": "B",
+      "bpm": 175,
+      "youtube_url": "https://youtu.be/50xhlR6_gWY",
+      "thumbnail_url": "https://img.youtube.com/vi/2LRSFpwbBrE/maxresdefault.jpg",
+      "scores": {
+        "cute": 5.1,
+        "cool": 5.1,
+        "emo": 3.4,
+        "band": 5.3,
+        "childlike": 5.9,
+        "complexity": 2.6,
+        "party": 6.6,
+        "speed": 5.3,
+        "happy": 6.3
+      },
+      "mapA": {
+        "x": 0.0,
+        "y": 3.2
+      },
+      "mapB": {
+        "x": 0.6,
+        "y": 0.6
+      },
+      "tags": [
+        "コール映え",
+        "エレクトロポップ",
+        "打ち込み系＋ギター",
+        "グループアンセム",
+        "仲間",
+        "子ども心"
+      ],
+      "harmony_note": "I-ii-iii-V上行ウォーク / ♭VII借用(A) / EM7→F#→G#m7浮遊パート / A→N.C.モーダル終止",
+      "lyrics_hooks": [
+        "NATTO",
+        "CHUCHU",
+        "WA WAWAO",
+        "ぶっちょな",
+        "1.2.3.GO",
+        "僕らとキミとね",
+        "MAMAMA",
+        "わっちゃちゃ"
+      ],
+      "summary": "グループアンセム的ポジションのエレクトロポップ。上行ウォークにNATTO・わっちゃちゃなどユニークコールを乗せ、マップ上でもほぼ中央に位置する万能曲。",
+      "mapC": {
+        "x": 1.8,
+        "y": 2.9
+      }
+    },
+    {
+      "id": "summer_land",
+      "title": "Summer land",
+      "release_date": "2023-08-19",
+      "lyricist": "しえりーほ",
+      "composer": "しえりーほ",
+      "arranger": null,
+      "key": "E",
+      "bpm": 155,
+      "youtube_url": "https://youtu.be/yAOyeSyHKqc",
+      "thumbnail_url": "https://img.youtube.com/vi/ggKw6c-wLOE/maxresdefault.jpg",
+      "scores": {
+        "cute": 6.3,
+        "cool": 4.3,
+        "emo": 5.7,
+        "band": 6.8,
+        "childlike": 4.5,
+        "complexity": 4.7,
+        "party": 4.1,
+        "speed": 4.1,
+        "happy": 5.1
+      },
+      "mapA": {
+        "x": -2.0,
+        "y": -1.8
+      },
+      "mapB": {
+        "x": 3.6,
+        "y": -1.8
+      },
+      "tags": [
+        "コール映え",
+        "ギター＋ピアノ",
+        "セリフパート",
+        "夏",
+        "恋"
+      ],
+      "harmony_note": "I-V-vi-IV王道進行 / E→Eaug→E6内声クロマティック / E→Em同主調切替 / A→B→C→Dクロマティック上行 / Am7→D7ダブル借用 / Em→D→D#→Eアウトロ解決",
+      "lyrics_hooks": [
+        "超好き",
+        "O!DO!RE!",
+        "HA!SHA!GE!",
+        "lala lala",
+        "夢見がち",
+        "めっちゃ好きだけん",
+        "出会えてよかった",
+        "みんなで歌え"
+      ],
+      "summary": "しえりーほ作のアコースティック寄り夏恋ソング。ギター＋ピアノの温かい編成に王道進行を乗せつつ、同主調切替やクロマティック上行で切なさを演出。",
+      "mapC": {
+        "x": -1.0,
+        "y": -0.6
+      }
+    },
+    {
+      "id": "7777777",
+      "title": "7777777",
+      "release_date": "2023-05-20",
+      "lyricist": "NNBS.",
+      "composer": "NNBS.",
+      "arranger": null,
+      "key": "Ab",
+      "bpm": 145,
+      "note": "1stミュージック・ビデオ",
+      "youtube_url": "https://youtu.be/UCq_lFYgnLA",
+      "thumbnail_url": "https://img.youtube.com/vi/g2aFfNC-ouY/maxresdefault.jpg",
+      "scores": {
+        "cute": 6.8,
+        "cool": 2.3,
+        "emo": 1.8,
+        "band": 1.2,
+        "childlike": 8.2,
+        "complexity": 0.1,
+        "party": 6.3,
+        "speed": 3.2,
+        "happy": 6.8
+      },
+      "mapA": {
+        "x": -4.5,
+        "y": 2.6
+      },
+      "mapB": {
+        "x": -7.6,
+        "y": -3.6
+      },
+      "tags": [
+        "コール映え",
+        "打ち込み系",
+        "エレクトロポップ",
+        "1st MV",
+        "パーティー"
+      ],
+      "harmony_note": "I-IVの2コードループ / Dbadd9→Eb6→Fm7→Ab装飾循環 / サビ全音階内声下行 / F(VI)クロマティックメディアント",
+      "lyrics_hooks": [
+        "カラフル",
+        "ワンダーランド",
+        "CUNE",
+        "PA PA PARTY",
+        "CAN DO DO DO",
+        "ナナナ",
+        "LET'S PARTY",
+        "フワフワ",
+        "夢中で無敵",
+        "ARE YOU READY?"
+      ],
+      "summary": "1st MVの記念碑的楽曲。I-IVの2コードループで全曲最低複雑度=最もシンプルなHey!Mommy!。エレクトロのキラキラ感と子供心全開のパーティーソング。",
+      "mapC": {
+        "x": 6.4,
+        "y": 5.0
+      }
+    },
+    {
+      "id": "koisuru_tochu",
+      "title": "恋するとちゅう",
+      "release_date": "2023-02-14",
+      "lyricist": "NNBS.",
+      "composer": "NNBS.",
+      "arranger": null,
+      "key": "Ab",
+      "bpm": 167,
+      "youtube_url": "https://youtu.be/Ua4unLLVlX4",
+      "thumbnail_url": "https://img.youtube.com/vi/kVLfwxJZcm0/maxresdefault.jpg",
+      "scores": {
+        "cute": 7.4,
+        "cool": 2.6,
+        "emo": 6.8,
+        "band": 6.1,
+        "childlike": 3.2,
+        "complexity": 4.5,
+        "party": 2.9,
+        "speed": 4.5,
+        "happy": 5.5
+      },
+      "mapA": {
+        "x": -4.8,
+        "y": -4.2
+      },
+      "mapB": {
+        "x": 2.2,
+        "y": -1.0
+      },
+      "tags": [
+        "コール＆レスポンス",
+        "ギター＋シンセ",
+        "胸きゅん",
+        "甘酸っぱい",
+        "多幸感"
+      ],
+      "harmony_note": "Ab→Eb属調転調 / Db→DbM7→Db7内声下行 / Eb→EbM7→Eb7移調再現 / C(VI)クロマティックメディアント / Ebm(v)同主調借用 / F major間奏転調",
+      "lyrics_hooks": [
+        "ときめき",
+        "POOGIE",
+        "わちゃわちゃ",
+        "NA NA NA",
+        "恋してみたいな"
+      ],
+      "summary": "胸きゅんな甘酸っぱいラブソング。属調転調や内声下行など意外と凝った和声を持ちながら、コール＆レスポンスでライブ映えも抜群の人気曲。",
+      "mapC": {
+        "x": -3.6,
+        "y": -1.3
+      }
+    },
+    {
+      "id": "candy_pop",
+      "title": "CANDY POP",
+      "release_date": "2023-01-30",
+      "lyricist": "しえりーほ",
+      "composer": "しえりーほ",
+      "arranger": null,
+      "key": "B",
+      "bpm": 170,
+      "youtube_url": "https://youtu.be/CyqXn2QmISI",
+      "thumbnail_url": "https://img.youtube.com/vi/0xE9H1rKdWQ/maxresdefault.jpg",
+      "scores": {
+        "cute": 8.2,
+        "cool": 1.8,
+        "emo": 2.9,
+        "band": 4.9,
+        "childlike": 6.1,
+        "complexity": 1.8,
+        "party": 4.9,
+        "speed": 4.9,
+        "happy": 8.8
+      },
+      "mapA": {
+        "x": -6.4,
+        "y": -0.2
+      },
+      "mapB": {
+        "x": -0.2,
+        "y": -0.2
+      },
+      "tags": [
+        "コール映え",
+        "エレクトロポップ",
+        "打ち込み＋ギターソロ",
+        "キュート",
+        "甘い"
+      ],
+      "harmony_note": "カノン進行変形 / Bsus4↔Bm同主調交替 / A→B→C→Dクロマティック上行 / BM7/G#m9装飾",
+      "lyrics_hooks": [
+        "キャンディ",
+        "kiss me now",
+        "うちら最高",
+        "ラタタ",
+        "ワチャチャ",
+        "JUMPING",
+        "follow me",
+        "守ってあげる",
+        "拗ねちゃう"
+      ],
+      "summary": "しえりーほ作のストレートなキュート系ポップ。カノン進行変形とクロマティック上行で親しみやすさ全開、甘い歌詞とキャッチーなメロディが入門曲的立ち位置。",
+      "mapC": {
+        "x": 2.2,
+        "y": 5.9
+      }
+    },
+    {
+      "id": "voyage",
+      "title": "Voyage!",
+      "release_date": "2022-12-03",
+      "lyricist": "AILI",
+      "composer": "AILI",
+      "arranger": null,
+      "key": "B",
+      "bpm": 170,
+      "youtube_url": "https://youtu.be/ByFFnidyH",
+      "thumbnail_url": "https://img.youtube.com/vi/t-0Zus5pSVA/maxresdefault.jpg",
+      "scores": {
+        "cute": 3.9,
+        "cool": 6.1,
+        "emo": 5.3,
+        "band": 3.7,
+        "childlike": 6.3,
+        "complexity": 6.1,
+        "party": 5.9,
+        "speed": 5.1,
+        "happy": 5.5
+      },
+      "mapA": {
+        "x": 2.2,
+        "y": 1.8
+      },
+      "mapB": {
+        "x": -2.6,
+        "y": 0.2
+      },
+      "tags": [
+        "コール映え",
+        "打ち込み系",
+        "エレクトロポップ",
+        "冒険",
+        "航海"
+      ],
+      "harmony_note": "IV-vi-V-I王道進行 / Bbdim↔Bsus4交互 / クロマティック間奏 / B→C半音上転調 / ♭VII借用(A/Bb) / Bsus4M7浮遊感",
+      "lyrics_hooks": [
+        "ノーバリーノーズ",
+        "全身全力",
+        "面舵いっぱい",
+        "Shine like a star",
+        "Hey mommy",
+        "WooWaa",
+        "モヤモヤ断捨離"
+      ],
+      "summary": "冒険・航海をテーマにしたAILI作のエレクトロポップ。半音上転調や♭VII借用でスケール感を演出しつつ、コール映えでライブの盛り上がりも確保。",
+      "mapC": {
+        "x": 2.6,
+        "y": 0.2
+      }
+    },
+    {
+      "id": "start_rush",
+      "title": "START RUSH!!",
+      "release_date": "2022-11-26",
+      "lyricist": "昆真由美",
+      "composer": "古橋勇紀",
+      "arranger": null,
+      "key": "Ab",
+      "bpm": 196,
+      "youtube_url": "https://youtu.be/_h2scdbIFU4",
+      "thumbnail_url": "https://img.youtube.com/vi/piRYV2brVfA/maxresdefault.jpg",
+      "scores": {
+        "cute": 2.6,
+        "cool": 6.6,
+        "emo": 7.1,
+        "band": 7.1,
+        "childlike": 3.9,
+        "complexity": 5.9,
+        "party": 5.7,
+        "speed": 7.4,
+        "happy": 6.3
+      },
+      "mapA": {
+        "x": 4.0,
+        "y": 1.4
+      },
+      "mapB": {
+        "x": 4.2,
+        "y": 4.8
+      },
+      "tags": [
+        "コール映え",
+        "ギター＋シンセ",
+        "全力疾走",
+        "超ハイテンポ",
+        "感謝"
+      ],
+      "harmony_note": "Ab→C→Ab転調 / Dbm圏落ちサビ / iii-IV-V-vi上行進行 / E7#9テンション / AbaugM7ブリッジ / ウォーキングベース",
+      "lyrics_hooks": [
+        "START RUSH",
+        "Don't be afraid",
+        "ReadyReady",
+        "HurryHurry",
+        "強くなりたい",
+        "ありがとう"
+      ],
+      "summary": "196BPMで全力疾走するロック寄りハイテンポ楽曲。転調やウォーキングベースが技巧を光らせ、感謝のメッセージを情熱的に叫ぶ爽快な一曲。",
+      "mapC": {
+        "x": -2.2,
+        "y": -0.8
+      }
+    },
+    {
+      "id": "booooooon",
+      "title": "BOOOOOOON",
+      "release_date": "2022-11-12",
+      "lyricist": "NNBS.",
+      "composer": "NNBS.",
+      "arranger": null,
+      "key": "Fm",
+      "bpm": 140,
+      "youtube_url": "https://youtu.be/NK5IE0RTxOo",
+      "thumbnail_url": "https://img.youtube.com/vi/7HoXdO7pafk/maxresdefault.jpg",
+      "scores": {
+        "cute": 5.3,
+        "cool": 4.5,
+        "emo": 4.3,
+        "band": 3.2,
+        "childlike": 5.1,
+        "complexity": 3.9,
+        "party": 4.5,
+        "speed": 2.9,
+        "happy": 5.3
+      },
+      "mapA": {
+        "x": -0.8,
+        "y": -1.0
+      },
+      "mapB": {
+        "x": -3.6,
+        "y": -4.2
+      },
+      "tags": [
+        "コール映え",
+        "打ち込み系",
+        "エレクトロポップ",
+        "日常肯定"
+      ],
+      "harmony_note": "3コードループ / Fm→F同主調交替 / Eb/G転回ベース / N.C.アウトロ",
+      "lyrics_hooks": [
+        "BOOOOOOON",
+        "RA PA",
+        "ブギウギ",
+        "I DON'T JUST TOO CUTE",
+        "いいんじゃない",
+        "ふにゃふにゃ",
+        "跳ねよう",
+        "ブチ上げ",
+        "NA NA NANA",
+        "トゲトゲが星になる"
+      ],
+      "summary": "マップ中央付近に位置する日常肯定エレクトロポップ。3コードループ＋同主調交替のシンプル構成で、ゆるく踊れる肩の力が抜けた楽曲。",
+      "mapC": {
+        "x": 0.2,
+        "y": 1.0
+      }
+    },
+    {
+      "id": "love_me_do_do",
+      "title": "LOVE ME DO DO",
+      "release_date": "2022-07-15",
+      "lyricist": "NNBS.",
+      "composer": "NNBS.",
+      "arranger": null,
+      "key": "D",
+      "bpm": 176,
+      "youtube_url": "https://youtu.be/8xMtWwHWo_E",
+      "thumbnail_url": "https://img.youtube.com/vi/mQlPH9QkIEM/maxresdefault.jpg",
+      "scores": {
+        "cute": 8.8,
+        "cool": 1.2,
+        "emo": 4.7,
+        "band": 8.2,
+        "childlike": 3.4,
+        "complexity": 4.9,
+        "party": 3.4,
+        "speed": 5.5,
+        "happy": 5.1
+      },
+      "mapA": {
+        "x": -7.6,
+        "y": -3.2
+      },
+      "mapB": {
+        "x": 6.4,
+        "y": 1.0
+      },
+      "tags": [
+        "ギターロック",
+        "バンドサウンド",
+        "疾走感",
+        "恋愛",
+        "片思い",
+        "ビスケットケース姉妹曲"
+      ],
+      "harmony_note": "D/F#経過ベース / ♭VII借用(C) / D→E全音転調",
+      "lyrics_hooks": [
+        "LOVELY",
+        "LOVE ME",
+        "テレテレ",
+        "ドキドキ",
+        "ねねね",
+        "ポンとポンと",
+        "POP DAY",
+        "マルだバツだ"
+      ],
+      "summary": "キュート値トップクラスのギターロック。バンドサウンドの力強さとキュートな歌詞のギャップが個性的で、ビスケットケースと対をなす姉妹曲。",
+      "mapC": {
+        "x": -3.2,
+        "y": 0.4
+      }
+    },
+    {
+      "id": "biscuit_case",
+      "title": "ビスケットケース",
+      "release_date": "2022-07-08",
+      "lyricist": "NNBS.",
+      "composer": "NNBS.",
+      "arranger": null,
+      "key": "E",
+      "bpm": 206,
+      "youtube_url": "https://youtu.be/eu8IGTHLUHk",
+      "thumbnail_url": "https://img.youtube.com/vi/Yo-ktRUj0ks/maxresdefault.jpg",
+      "scores": {
+        "cute": 6.1,
+        "cool": 3.4,
+        "emo": 3.2,
+        "band": 8.8,
+        "childlike": 5.5,
+        "complexity": 4.3,
+        "party": 5.1,
+        "speed": 8.8,
+        "happy": 6.1
+      },
+      "mapA": {
+        "x": -2.7,
+        "y": 0.2
+      },
+      "mapB": {
+        "x": 7.6,
+        "y": 7.6
+      },
+      "tags": [
+        "コール＆レスポンス",
+        "ギターロック",
+        "バンドサウンド",
+        "超疾走感",
+        "ポジティブ",
+        "仲間"
+      ],
+      "harmony_note": "B7完全終止",
+      "lyrics_hooks": [
+        "ビスケットモチーフ",
+        "パクパク",
+        "ワクワク",
+        "FALLIN LOVE",
+        "LUCKY",
+        "HOW ARE YOU?",
+        "ナナナ合唱",
+        "WAKE UP",
+        "I WANNA BE",
+        "GO GO HEY HEY"
+      ],
+      "summary": "206BPMの超疾走バンドロック。B7完全終止のシンプルさが潔く、ナナナ合唱とコール＆レスポンスでライブ定番の盛り上がり曲。",
+      "mapC": {
+        "x": 1.0,
+        "y": 2.9
+      }
+    },
+    {
+      "id": "magnet",
+      "title": "MAGNET",
+      "release_date": "2022-02-25",
+      "lyricist": "AILI",
+      "composer": "AILI",
+      "arranger": null,
+      "key": "F#m",
+      "bpm": 145,
+      "youtube_url": "https://youtu.be/DR2MJG1M4Ww",
+      "thumbnail_url": "https://img.youtube.com/vi/yuVg0GEr9kM/maxresdefault.jpg",
+      "scores": {
+        "cute": 1.8,
+        "cool": 9.9,
+        "emo": 8.2,
+        "band": 2.6,
+        "childlike": 2.3,
+        "complexity": 5.1,
+        "party": 1.8,
+        "speed": 3.4,
+        "happy": 1.8
+      },
+      "mapA": {
+        "x": 8.1,
+        "y": -6.4
+      },
+      "mapB": {
+        "x": -4.8,
+        "y": -3.2
+      },
+      "tags": [
+        "コール映え",
+        "クール",
+        "大人っぽい",
+        "仲間",
+        "決意"
+      ],
+      "harmony_note": "F#mワンコード / 下行ベースライン / Aadd9開放感 / Bm7/Dサブドミナントマイナー",
+      "lyrics_hooks": [
+        "MOMMY",
+        "Make fun",
+        "I need you",
+        "バトルフィールド",
+        "攻め",
+        "磁石",
+        "Hey M.O.M.M.Y"
+      ],
+      "summary": "カタログ最高クール値を持つ大人のダンスナンバー。F#mワンコードを軸にした硬質なサウンドは、グループの「攻め」の側面を象徴する。",
+      "mapC": {
+        "x": -5.4,
+        "y": -6.4
+      }
+    },
+    {
+      "id": "hey_baby",
+      "title": "Hey!Baby!",
+      "release_date": "2022-02-18",
+      "lyricist": "NNBS.",
+      "composer": "NNBS.",
+      "arranger": null,
+      "key": "E",
+      "bpm": 178,
+      "youtube_url": "https://youtu.be/VU_R4ufY17U",
+      "thumbnail_url": "https://img.youtube.com/vi/hk1_z0gONds/maxresdefault.jpg",
+      "scores": {
+        "cute": 4.9,
+        "cool": 4.7,
+        "emo": 3.7,
+        "band": 7.7,
+        "childlike": 7.1,
+        "complexity": 4.1,
+        "party": 7.1,
+        "speed": 5.9,
+        "happy": 7.1
+      },
+      "mapA": {
+        "x": -0.2,
+        "y": 4.2
+      },
+      "mapB": {
+        "x": 5.4,
+        "y": 1.8
+      },
+      "tags": [
+        "コール映え",
+        "ギターロック",
+        "ポップロック",
+        "超疾走感",
+        "ポジティブ",
+        "キャッチー"
+      ],
+      "harmony_note": "下行ベースライン / Esus4浮遊感",
+      "lyrics_hooks": [
+        "Dash",
+        "Jump",
+        "片足ブラブラ",
+        "Wawawa",
+        "Stay gold",
+        "Ma Ma Me",
+        "めちゃ踊ろう"
+      ],
+      "summary": "ポップロックの王道を行くバンドサウンド楽曲。子供心とお祭り感を備えた中高速テンポで、ライブの盛り上げ役に最適なキャッチーさを持つ。",
+      "mapC": {
+        "x": 4.2,
+        "y": 3.4
+      }
+    },
+    {
+      "id": "scp",
+      "title": "SCP!",
+      "release_date": "2022-02-11",
+      "lyricist": "NNBS.",
+      "composer": "NNBS.",
+      "arranger": null,
+      "key": "G",
+      "bpm": 165,
+      "youtube_url": "https://youtu.be/lTM472Z0hWs",
+      "thumbnail_url": "https://img.youtube.com/vi/fVYsYP8ewLg/maxresdefault.jpg",
+      "scores": {
+        "cute": 4.1,
+        "cool": 5.7,
+        "emo": 5.1,
+        "band": 5.7,
+        "childlike": 4.7,
+        "complexity": 3.4,
+        "party": 4.7,
+        "speed": 4.7,
+        "happy": 5.3
+      },
+      "mapA": {
+        "x": 1.6,
+        "y": -0.6
+      },
+      "mapB": {
+        "x": 1.4,
+        "y": -0.6
+      },
+      "tags": [
+        "コール＆レスポンス",
+        "ラップ",
+        "疾走感",
+        "仲間",
+        "冒険"
+      ],
+      "harmony_note": "Em7-5テンション",
+      "lyrics_hooks": [
+        "スター",
+        "ブギー",
+        "ハピハピ",
+        "掛け声",
+        "プチョヘンザ",
+        "壊れた靴",
+        "STAR STAR"
+      ],
+      "summary": "ラップを含む中庸なバランス楽曲。疾走感と仲間テーマを軸に、座標マップで原点付近に位置するオールラウンダー。",
+      "mapC": {
+        "x": -0.6,
+        "y": 0.2
+      }
+    },
+    {
+      "id": "tickey_luppy_doo",
+      "title": "Tickey Luppy Doo",
+      "release_date": "2022-02-04",
+      "lyricist": "徳田光希",
+      "composer": "徳田光希、大竹智之",
+      "arranger": null,
+      "key": "Fm",
+      "bpm": 118,
+      "youtube_url": "https://youtu.be/H_EfXe6P3Hg",
+      "thumbnail_url": "https://img.youtube.com/vi/uP8qh3r2R2o/maxresdefault.jpg",
+      "scores": {
+        "cute": 7.1,
+        "cool": 3.2,
+        "emo": 5.9,
+        "band": 1.8,
+        "childlike": 5.7,
+        "complexity": 2.9,
+        "party": 2.6,
+        "speed": 0.1,
+        "happy": 3.9
+      },
+      "mapA": {
+        "x": -3.9,
+        "y": -4.8
+      },
+      "mapB": {
+        "x": -6.4,
+        "y": -9.8
+      },
+      "tags": [
+        "コール映え",
+        "マイナー基調",
+        "シアトリカル",
+        "ファンタジー",
+        "魔法",
+        "キュート"
+      ],
+      "harmony_note": "ドミナント解決",
+      "lyrics_hooks": [
+        "呪文フック",
+        "反復フレーズ",
+        "おとぎ話",
+        "シンデレラ",
+        "宝石",
+        "ティアラ",
+        "夜の冒険"
+      ],
+      "summary": "全楽曲最低速118BPMのシアトリカルなファンタジー楽曲。マイナー基調でおとぎ話の世界観を構築し、カタログ内で独特の立ち位置を占める。",
+      "mapC": {
+        "x": 1.4,
+        "y": -2.0
+      }
+    },
+    {
+      "id": "look",
+      "title": "LOOK!!",
+      "release_date": "2022-01-28",
+      "lyricist": "山崎あおい",
+      "composer": "山崎あおい",
+      "arranger": "鶴﨑輝一",
+      "key": "A",
+      "bpm": 125,
+      "youtube_url": "https://youtu.be/uI4dpHWDvcA",
+      "thumbnail_url": "https://img.youtube.com/vi/WgEpWzlLpIE/maxresdefault.jpg",
+      "scores": {
+        "cute": 3.2,
+        "cool": 7.1,
+        "emo": 4.9,
+        "band": 4.1,
+        "childlike": 2.6,
+        "complexity": 3.7,
+        "party": 2.3,
+        "speed": 1.8,
+        "happy": 4.1
+      },
+      "mapA": {
+        "x": 3.9,
+        "y": -5.4
+      },
+      "mapB": {
+        "x": -1.8,
+        "y": -6.4
+      },
+      "tags": [
+        "コール映え",
+        "シンセポップ",
+        "自己肯定",
+        "クール",
+        "煽り曲",
+        "セルフプロデュース"
+      ],
+      "harmony_note": "add9の爽やかさ",
+      "lyrics_hooks": [
+        "Look me!!",
+        "ド真ん中",
+        "ドヤ感",
+        "華やか",
+        "無敵感",
+        "強い私"
+      ],
+      "summary": "山崎あおい提供のクールな煽り曲。低速ながらドヤ感あふれるセルフプロデュース的世界観で、自己肯定を突き付けるシンセポップ。",
+      "mapC": {
+        "x": -4.8,
+        "y": -0.8
+      }
+    },
+    {
+      "id": "sumi_haji",
+      "title": "SUMI-HAJI",
+      "release_date": "2021-10-01",
+      "lyricist": "山崎あおい",
+      "composer": "山崎あおい",
+      "arranger": null,
+      "key": "Fm",
+      "bpm": 128,
+      "youtube_url": "https://youtu.be/RmFx3TaCnB0",
+      "thumbnail_url": "https://img.youtube.com/vi/RmFx3TaCnB0/maxresdefault.jpg",
+      "scores": {
+        "cute": 1.2,
+        "cool": 7.4,
+        "emo": 8.8,
+        "band": 6.3,
+        "childlike": 1.2,
+        "complexity": 6.6,
+        "party": 1.2,
+        "speed": 2.3,
+        "happy": 1.2
+      },
+      "mapA": {
+        "x": 6.2,
+        "y": -7.6
+      },
+      "mapB": {
+        "x": 2.6,
+        "y": -5.4
+      },
+      "tags": [
+        "マイナー基調",
+        "疾走感",
+        "クール",
+        "大人っぽい",
+        "都会的",
+        "尖り"
+      ],
+      "harmony_note": "テンションコード多め",
+      "lyrics_hooks": [
+        "酸いと甘い",
+        "焦燥",
+        "衝動",
+        "危うさ",
+        "若さの痛み",
+        "ヒリヒリ",
+        "攻める",
+        "煽り",
+        "覚悟",
+        "全力宣言",
+        "Give me"
+      ],
+      "summary": "グループ最古参のマイナー基調クール楽曲。エモ値・クール値が高く、若さの衝動と痛みを尖ったサウンドで表現するHey!Mommy!の原点。",
+      "mapC": {
+        "x": -7.6,
+        "y": -7.6
+      }
+    }
+  ]
+}
