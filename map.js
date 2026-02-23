@@ -156,6 +156,8 @@ function initZoomPan(container) {
   }, { passive: false });
 
   let dragging = false, lastX, lastY;
+  let activeTouches = 0;           // track finger count to suppress drag during pinch
+
   vp.addEventListener('pointerdown', e => {
     if (e.button !== 0) return;
     dragging = true; lastX = e.clientX; lastY = e.clientY;
@@ -164,7 +166,7 @@ function initZoomPan(container) {
     hideTooltip();
   });
   vp.addEventListener('pointermove', e => {
-    if (!dragging) return;
+    if (!dragging || activeTouches >= 2) return;   // suppress pan while pinching
     const dx = (e.clientX - lastX) / s.zoom;
     const dy = (e.clientY - lastY) / s.zoom;
     s.panX += dx; s.panY += dy;
@@ -178,15 +180,17 @@ function initZoomPan(container) {
 
   let pinchDist = 0;
   vp.addEventListener('touchstart', e => {
-    if (e.touches.length === 2) {
+    activeTouches = e.touches.length;
+    if (activeTouches >= 2) {
+      e.preventDefault();                          // block browser zoom/scroll immediately
       pinchDist = Math.hypot(
         e.touches[0].clientX - e.touches[1].clientX,
         e.touches[0].clientY - e.touches[1].clientY
       );
     }
-  }, { passive: true });
+  }, { passive: false });
   vp.addEventListener('touchmove', e => {
-    if (e.touches.length === 2) {
+    if (e.touches.length >= 2) {
       e.preventDefault();
       const newDist = Math.hypot(
         e.touches[0].clientX - e.touches[1].clientX,
@@ -199,6 +203,9 @@ function initZoomPan(container) {
       pinchDist = newDist;
     }
   }, { passive: false });
+  vp.addEventListener('touchend', e => {
+    activeTouches = e.touches.length;
+  }, { passive: true });
 
 }
 
