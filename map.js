@@ -81,10 +81,14 @@ function buildPoint(song, mapKey, range) {
     <div class="map-point-title">${song.title}</div>`;
 
   /* Store tooltip data on the element */
+  const youtubeLink = song.youtube_url
+    ? `<a href="${song.youtube_url}" target="_blank" rel="noopener" style="display:inline-block;margin-top:.35rem;font-size:.75rem;color:var(--accent);text-decoration:underline;">▶ YouTubeで見る</a>`
+    : '';
   el._tooltipHTML = `
     <div class="tt-title">${song.title}</div>
     ${ttHTML}
-    <div style="margin-top:.3rem;font-size:.68rem;color:var(--muted);">(${x}, ${y})</div>`;
+    <div style="margin-top:.3rem;font-size:.68rem;color:var(--muted);">(${x}, ${y})</div>
+    ${youtubeLink}`;
 
   return el;
 }
@@ -252,20 +256,53 @@ function positionTooltip(el) {
   tooltip.style.left = left + 'px';
 }
 
+/* ------ Touch detection ------ */
+const isTouchDevice = () => 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+
 function attachTooltipListeners(container) {
+  /* --- Desktop: hover --- */
   container.addEventListener('pointerenter', e => {
+    if (isTouchDevice()) return;
     const pt = e.target.closest('.map-point');
     if (pt) showTooltip(pt);
   }, true);
   container.addEventListener('pointerleave', e => {
+    if (isTouchDevice()) return;
     const pt = e.target.closest('.map-point');
     if (pt) hideTooltip();
   }, true);
   container.addEventListener('pointermove', e => {
+    if (isTouchDevice()) return;
     const pt = e.target.closest('.map-point');
     if (pt && tooltip.classList.contains('visible')) positionTooltip(pt);
     else if (!pt) hideTooltip();
   }, true);
+
+  /* --- Mobile: tap to show tooltip, block link navigation --- */
+  container.addEventListener('click', e => {
+    if (!isTouchDevice()) return;
+    const pt = e.target.closest('.map-point');
+    if (!pt) return;
+    /* Prevent <a> from navigating */
+    const anchor = e.target.closest('a');
+    if (anchor && pt.contains(anchor)) {
+      e.preventDefault();
+    }
+    /* Toggle tooltip */
+    if (tooltip.classList.contains('visible') && tooltip._currentPoint === pt) {
+      hideTooltip();
+    } else {
+      showTooltip(pt);
+      tooltip._currentPoint = pt;
+    }
+  }, true);
+
+  /* Dismiss tooltip when tapping outside */
+  document.addEventListener('click', e => {
+    if (!isTouchDevice()) return;
+    if (e.target.closest('.map-point') || e.target.closest('.map-tooltip')) return;
+    hideTooltip();
+  });
 }
 
 /* ------ Init: load songs and populate maps ------ */

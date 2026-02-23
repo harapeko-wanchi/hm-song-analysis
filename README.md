@@ -8,6 +8,30 @@
 
 ---
 
+## Hey!Mommy! について
+
+**Hey!Mommy!**（ヘイマミー）は、振付師・槙田紗子による『SACO PROJECT!』オーディションから 2021 年に誕生した 6 人組の女性アイドルグループです。「いつまでも子ども心を忘れずに、日常に大きな HAPPY を！」をコンセプトに活動しています。
+
+| メンバー | 担当色 |
+|----------|--------|
+| 原明日香 | Hey!Green!（リーダー・振付師） |
+| 秋元悠里 | Hey!Pink! |
+| 佐々木ひまわり | Hey!Yellow! |
+| 今丘葉月 | Hey!White! |
+| 延松舞佳 | Hey!Red! |
+| 作島藍 | Hey!Purple! |
+
+### 関連リンク
+
+- [公式サイト](https://www.heymommy.jp/)
+- [Wikipedia](https://ja.wikipedia.org/wiki/Hey!Mommy!)
+- [X (Twitter)](https://x.com/heymommy123)
+- [Instagram](https://www.instagram.com/heymommy1234/)
+- [YouTube](https://www.youtube.com/@heymommyofficial8970)
+- [TikTok](https://www.tiktok.com/@happyheymommy)
+
+---
+
 ## 制作について
 
 - **生成 AI（Claude Opus 4.6）** を使用して楽曲の和声分析・スコアリング・Web サイト構築を行いました
@@ -86,5 +110,7 @@ BPM 118（Tickey Luppy Doo）から 210（Hey! get up kids）まで非常に幅�
 ---
 
 ## ライセンス
+
+本リポジトリのソースコードは [MIT License](LICENSE) のもとで公開されています。
 
 楽曲の著作権は各権利者に帰属します。本リポジトリは分析・可視化を目的としたファンプロジェクトです。

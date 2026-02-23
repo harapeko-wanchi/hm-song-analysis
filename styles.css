@@ -425,17 +425,19 @@ a:hover { text-decoration: underline; }
 
 .map-title {
   text-align: center;
-  margin: 1rem 0 0;
-  font-size: 1.2rem;
+  margin: .4rem 0 0;
+  font-size: 1rem;
   font-weight: 700;
   letter-spacing: .06em;
+  line-height: 1.2;
   color: var(--fg);
 }
 
 .map-subtitle {
   text-align: center;
-  margin: .3rem 0 .3rem;
-  font-size: .85rem;
+  margin: .15rem 0 .2rem;
+  font-size: .78rem;
+  line-height: 1.2;
   color: var(--muted);
 }
 
@@ -479,6 +481,8 @@ a:hover { text-decoration: underline; }
 /* ===== Responsive ===== */
 @media (max-width: 600px) {
   .cards-grid { grid-template-columns: 1fr; padding: 1rem; }
+  .map-title { margin: .2rem 0 0; font-size: .88rem; }
+  .map-subtitle { margin: .1rem 0 .15rem; font-size: .7rem; }
   .map-viewport { width: 95vw; height: 95vw; }
   .map-point-thumb, .map-point-placeholder { width: 42px; height: 42px; }
   .map-point-title { font-size: .58rem; }
