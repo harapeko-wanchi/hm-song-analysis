@@ -42,6 +42,7 @@ function buildPoint(song, mapKey, range) {
     thumbInner = `
       <div class="map-point-thumb">
         <img src="${song.thumbnail_url}" alt="${song.title}" loading="lazy">
+        ${song.youtube_url ? '<div class="map-point-play">▶</div>' : ''}
       </div>`;
   } else {
     thumbInner = `<div class="map-point-placeholder">${song.title}</div>`;
@@ -82,7 +83,7 @@ function buildPoint(song, mapKey, range) {
 
   /* Store tooltip data on the element */
   const youtubeLink = song.youtube_url
-    ? `<a href="${song.youtube_url}" target="_blank" rel="noopener" style="display:inline-block;margin-top:.35rem;font-size:.75rem;color:var(--accent);text-decoration:underline;">▶ YouTubeで見る</a>`
+    ? `<a class="tt-youtube" href="${song.youtube_url}" target="_blank" rel="noopener">▶ YouTubeで見る</a>`
     : '';
   el._tooltipHTML = `
     <div class="tt-title">${song.title}</div>
@@ -160,6 +161,8 @@ function initZoomPan(container) {
 
   vp.addEventListener('pointerdown', e => {
     if (e.button !== 0) return;
+    /* Don't capture pointer if clicking a link inside a map-point (desktop YouTube nav) */
+    if (!isTouchDevice() && e.target.closest('.map-point a')) return;
     dragging = true; lastX = e.clientX; lastY = e.clientY;
     vp.setPointerCapture(e.pointerId);
     vp.style.cursor = 'grabbing';
