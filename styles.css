@@ -407,6 +407,7 @@ a:hover { text-decoration: underline; }
   position: fixed;
   background: var(--card);
   border: 1px solid var(--border);
+  border-top: 3px solid var(--accent);
   border-radius: 8px;
   padding: .6rem .8rem;
   min-width: 180px;
@@ -416,8 +417,19 @@ a:hover { text-decoration: underline; }
   z-index: 9999;
   pointer-events: none;
 }
-.map-tooltip.visible { display: block; }
-.map-tooltip .tt-title { font-weight: 700; font-size: .85rem; margin-bottom: .3rem; }
+.map-tooltip.visible { display: block; pointer-events: auto; }
+.map-tooltip .tt-header { display: flex; align-items: flex-start; justify-content: space-between; gap: .4rem; }
+.map-tooltip .tt-title { font-weight: 700; font-size: .85rem; margin-bottom: .3rem; flex: 1; }
+.map-tooltip .tt-close {
+  display: none;
+  width: 24px; height: 24px;
+  border: none; background: transparent;
+  color: var(--muted); font-size: 1.1rem; line-height: 1;
+  cursor: pointer; padding: 0; margin: -2px -4px 0 0;
+  border-radius: 4px; flex-shrink: 0;
+}
+.map-tooltip .tt-close:active { background: rgba(255,255,255,.1); }
+.touch .map-tooltip .tt-close { display: flex; align-items: center; justify-content: center; }
 .map-tooltip .tt-row { display: flex; justify-content: space-between; gap: .8rem; color: var(--muted); }
 
 /* ===== Map Tabs ===== */
@@ -486,4 +498,14 @@ a:hover { text-decoration: underline; }
   .map-viewport { width: 95vw; height: 95vw; }
   .map-point-thumb, .map-point-placeholder { width: 42px; height: 42px; }
   .map-point-title { font-size: .58rem; }
+  .map-ctrl-btn { width: 44px; height: 44px; font-size: 1.25rem; border-radius: 10px; }
+  .map-controls { gap: .5rem; margin: .6rem auto 1rem; }
 }
+
+/* Tap feedback for touch devices */
+.touch .map-point:active {
+  transform: translate(-50%, -50%) scale(calc(var(--inv-zoom, 1) * 0.9));
+  transition: transform 0s;
+}
+
+

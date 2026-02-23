@@ -199,6 +199,7 @@ function initZoomPan(container) {
       pinchDist = newDist;
     }
   }, { passive: false });
+
 }
 
 /* --- Control buttons --- */
@@ -259,7 +260,45 @@ function positionTooltip(el) {
 /* ------ Touch detection ------ */
 const isTouchDevice = () => 'ontouchstart' in window || navigator.maxTouchPoints > 0;
 
+/* Add .touch class to <html> for CSS hooks */
+if (isTouchDevice()) document.documentElement.classList.add('touch');
+
+function showTooltipWithClose(el) {
+  if (!el._tooltipHTML) return;
+  const raw = el._tooltipHTML;
+  const closeBtn = '<button class="tt-close" aria-label="閉じる">✕</button>';
+  // Extract title and wrap with header + close button
+  const titleMatch = raw.match(/<div class="tt-title">.*?<\/div>/);
+  const title = titleMatch ? titleMatch[0] : '';
+  const rest = raw.replace(title, '');
+  tooltip.innerHTML = `<div class="tt-header">${title}${closeBtn}</div>${rest}`;
+
+  tooltip.querySelector('.tt-close')?.addEventListener('click', e => {
+    e.stopPropagation();
+    hideTooltip();
+  });
+
+  tooltip.classList.add('visible');
+  positionTooltip(el);
+}
+
 function attachTooltipListeners(container) {
+  /* --- Drag detection: track pointer movement to distinguish tap from drag --- */
+  let dragStartX = 0, dragStartY = 0, dragMoved = false;
+  const DRAG_THRESHOLD = 6; // px – movement beyond this = drag, not tap
+  container.parentElement.addEventListener('pointerdown', e => {
+    dragMoved = false;
+    dragStartX = e.clientX;
+    dragStartY = e.clientY;
+  }, true);
+  container.parentElement.addEventListener('pointermove', e => {
+    if (!dragMoved && e.pressure > 0) {
+      const dx = e.clientX - dragStartX;
+      const dy = e.clientY - dragStartY;
+      if (dx * dx + dy * dy > DRAG_THRESHOLD * DRAG_THRESHOLD) dragMoved = true;
+    }
+  }, true);
+
   /* --- Desktop: hover --- */
   container.addEventListener('pointerenter', e => {
     if (isTouchDevice()) return;
@@ -281,6 +320,7 @@ function attachTooltipListeners(container) {
   /* --- Mobile: tap to show tooltip, block link navigation --- */
   container.addEventListener('click', e => {
     if (!isTouchDevice()) return;
+    if (dragMoved) return;                       // Ignore drag release
     const pt = e.target.closest('.map-point');
     if (!pt) return;
     /* Prevent <a> from navigating */
@@ -292,7 +332,7 @@ function attachTooltipListeners(container) {
     if (tooltip.classList.contains('visible') && tooltip._currentPoint === pt) {
       hideTooltip();
     } else {
-      showTooltip(pt);
+      showTooltipWithClose(pt);
       tooltip._currentPoint = pt;
     }
   }, true);
