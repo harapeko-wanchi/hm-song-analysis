@@ -1,0 +1,99 @@
+    .cmp-page { max-width: 1200px; margin: 0 auto; padding: 1.5rem 1rem 3rem; }
+
+    .cmp-title { text-align: center; font-size: 1.15rem; font-weight: 700; margin-bottom: .2rem; }
+    .cmp-subtitle { text-align: center; font-size: .78rem; color: var(--muted); margin-bottom: 1.2rem; }
+
+    /* ---- Overview Section ---- */
+    .overview {
+      display: flex; gap: 1.2rem; align-items: flex-start;
+      justify-content: center; flex-wrap: wrap; margin-bottom: 2rem;
+    }
+    .overview-chart { flex: 0 0 min(90vw, 520px); }
+    #overviewCanvas { width: 100%; height: auto; border-radius: var(--radius); }
+
+    .overview-legend {
+      flex: 0 1 300px; display: flex; flex-direction: column; gap: .35rem;
+    }
+    .legend-row {
+      display: flex; align-items: center; gap: .5rem; padding: .3rem .5rem;
+      border-radius: 6px; cursor: pointer; transition: background .15s;
+    }
+    .legend-row:hover { background: var(--surface); }
+    .legend-row.dimmed { opacity: .25; }
+    .legend-swatch { width: 16px; height: 16px; border-radius: 4px; flex-shrink: 0; }
+    .legend-name { font-weight: 600; font-size: .82rem; }
+    .legend-count { font-size: .7rem; color: var(--muted); margin-left: auto; }
+
+    /* ---- Composer Cards ---- */
+    .composer-cards {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
+      gap: 1.5rem;
+    }
+    .c-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: var(--radius); overflow: hidden;
+      display: flex; flex-direction: column;
+    }
+    .c-card-head {
+      display: flex; align-items: center; gap: .6rem;
+      padding: .8rem 1rem; border-bottom: 1px solid var(--border);
+    }
+    .c-card-dot { width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0; }
+    .c-card-name { font-weight: 700; font-size: 1rem; }
+    .c-card-badge {
+      margin-left: auto; font-size: .7rem; color: var(--muted);
+      background: var(--surface); padding: .15rem .5rem; border-radius: 999px;
+    }
+    .c-card-body { padding: 1rem; display: flex; gap: 1rem; flex-wrap: wrap; }
+
+    .c-card-radar { flex: 0 0 200px; }
+    .c-card-radar canvas { width: 200px; height: 200px; }
+
+    .c-card-stats { flex: 1; min-width: 140px; font-size: .78rem; }
+    .stat-row { display: flex; justify-content: space-between; padding: .2rem 0; border-bottom: 1px solid var(--border); }
+    .stat-row:last-child { border-bottom: none; }
+    .stat-label { color: var(--muted); }
+    .stat-val { font-weight: 600; font-variant-numeric: tabular-nums; }
+    .stat-val.high { color: #6cf0b0; }
+    .stat-val.low { color: #f06c6c; }
+
+    .c-card-songs {
+      padding: .5rem 1rem 1rem;
+      border-top: 1px solid var(--border);
+    }
+    .c-card-songs-title { font-size: .68rem; font-weight: 700; color: var(--accent); margin-bottom: .3rem; letter-spacing: .06em; }
+    .c-card-songs-list { display: flex; flex-wrap: wrap; gap: .3rem; }
+    .c-song-tag {
+      font-size: .68rem; padding: .12rem .5rem;
+      border-radius: 999px; background: var(--surface);
+      border: 1px solid var(--border); color: var(--muted);
+      white-space: nowrap;
+    }
+
+    /* ---- Comparison Table ---- */
+    .cmp-table-section { margin-top: 2rem; }
+    .cmp-table-title { font-size: .92rem; font-weight: 700; text-align: center; margin-bottom: .6rem; }
+    .cmp-scroll { overflow-x: auto; border-radius: var(--radius); border: 1px solid var(--border); }
+    .cmp-table {
+      width: 100%; border-collapse: collapse; font-size: .75rem; white-space: nowrap;
+    }
+    .cmp-table th, .cmp-table td {
+      padding: .4rem .6rem; text-align: center;
+      border-bottom: 1px solid var(--border);
+    }
+    .cmp-table th {
+      background: var(--surface); color: var(--muted); font-weight: 600;
+      position: sticky; top: 0;
+    }
+    .cmp-table th:first-child, .cmp-table td:first-child { text-align: left; }
+    .cmp-table td.max-cell { font-weight: 700; color: var(--accent); }
+    .cmp-table td.min-cell { color: var(--muted); opacity: .5; }
+    .cmp-table td { font-variant-numeric: tabular-nums; }
+
+    @media (max-width: 600px) {
+      .cmp-page { padding: 1rem .5rem 2rem; }
+      .composer-cards { grid-template-columns: 1fr; }
+      .c-card-body { flex-direction: column; align-items: center; }
+      .c-card-radar { flex: none; }
+      .overview { flex-direction: column; align-items: center; }
+    }

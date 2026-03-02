@@ -1,0 +1,94 @@
+    .compare-page { max-width: 1100px; margin: 0 auto; padding: 1.5rem 1rem 3rem; }
+
+    .compare-title {
+      text-align: center; font-size: 1.15rem; font-weight: 700;
+      margin-bottom: .2rem;
+    }
+    .compare-subtitle {
+      text-align: center; font-size: .78rem; color: var(--muted);
+      margin-bottom: 1.2rem;
+    }
+
+    /* Slot selectors */
+    .slots { display: flex; gap: .8rem; justify-content: center; flex-wrap: wrap; margin-bottom: 1.5rem; }
+    .slot {
+      display: flex; align-items: center; gap: .5rem;
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 8px; padding: .4rem .7rem;
+    }
+    .slot-dot {
+      width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0;
+    }
+    .slot select {
+      font-family: inherit; font-size: .82rem;
+      background: var(--card); color: var(--text);
+      border: 1px solid var(--border); border-radius: 6px;
+      padding: .3rem .5rem; min-width: 180px;
+      cursor: pointer;
+    }
+    .slot select:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
+    .slot-clear {
+      background: none; border: none; color: var(--muted);
+      font-size: 1rem; cursor: pointer; padding: 0 .2rem; line-height: 1;
+    }
+    .slot-clear:hover { color: var(--text); }
+
+    /* Chart area */
+    .chart-area {
+      display: flex; flex-direction: column; align-items: center;
+      margin-bottom: 1.5rem;
+    }
+    #radarCanvas {
+      width: min(90vw, 560px);
+      height: min(90vw, 560px);
+      border-radius: var(--radius);
+    }
+
+    /* Legend */
+    .chart-legend {
+      display: flex; gap: 1.2rem; justify-content: center; flex-wrap: wrap;
+      margin-top: .8rem; font-size: .78rem;
+    }
+    .legend-item {
+      display: flex; align-items: center; gap: .35rem;
+    }
+    .legend-swatch {
+      width: 14px; height: 14px; border-radius: 3px;
+    }
+
+    /* Diff table */
+    .diff-section { margin-top: 1.5rem; }
+    .diff-title {
+      font-size: .88rem; font-weight: 700; margin-bottom: .6rem;
+      text-align: center;
+    }
+    .diff-table {
+      width: 100%; border-collapse: collapse;
+      font-size: .78rem;
+    }
+    .diff-table th, .diff-table td {
+      padding: .4rem .6rem;
+      border-bottom: 1px solid var(--border);
+      text-align: center;
+    }
+    .diff-table th {
+      color: var(--muted); font-weight: 600;
+      position: sticky; top: 0; background: var(--bg);
+    }
+    .diff-table th:first-child, .diff-table td:first-child {
+      text-align: right; color: var(--muted);
+    }
+    .diff-table td.val { font-variant-numeric: tabular-nums; }
+    .diff-table .max-cell { font-weight: 700; color: var(--accent); }
+
+    /* Empty state */
+    .empty-msg {
+      text-align: center; color: var(--muted);
+      font-size: .85rem; padding: 3rem 1rem;
+    }
+
+    @media (max-width: 600px) {
+      .compare-page { padding: 1rem .5rem 2rem; }
+      .slot select { min-width: 140px; font-size: .75rem; }
+      .slots { gap: .5rem; }
+    }

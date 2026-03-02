@@ -3,15 +3,16 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ステージ・バイブスマップ — Hey!Mommy! Song Analysis</title>
+  <title>スコアヒートマップ — Hey!Mommy! Song Analysis</title>
   <!-- OGP -->
-  <meta property="og:title" content="ステージ・バイブスマップ — Hey!Mommy! Song Analysis">
-  <meta property="og:description" content="Hey!Mommy!「かわいい↔かっこいい / 聴かせる↔沸かせる」ポジションマップ">
-  <meta property="og:image" content="https://harapeko-wanchi.github.io/hm-song-analysis/img/og-map-a.png">
-  <meta property="og:url" content="https://harapeko-wanchi.github.io/hm-song-analysis/map-a.html">
+  <meta property="og:title" content="スコアヒートマップ — Hey!Mommy! Song Analysis">
+  <meta property="og:description" content="Hey!Mommy! 全楽曲 × 9軸スコアをヒートマップで俯瞰">
+  <meta property="og:image" content="https://harapeko-wanchi.github.io/hm-song-analysis/img/og-index.png">
+  <meta property="og:url" content="https://harapeko-wanchi.github.io/hm-song-analysis/heatmap.html">
   <meta property="og:type" content="website">
   <meta name="twitter:card" content="summary_large_image">
   <link rel="stylesheet" href="styles/common.css">
+  <link rel="stylesheet" href="styles/heatmap.css">
 </head>
 <body>
 
@@ -25,12 +26,12 @@
     <span>List</span>
   </a>
   <div class="nav-dropdown">
-    <button class="nav-btn active" title="ポジショニングマップ" aria-label="ポジショニングマップ">
+    <button class="nav-btn" title="ポジショニングマップ" aria-label="ポジショニングマップ">
       <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.3"><circle cx="9" cy="9" r="7"/><line x1="9" y1="2" x2="9" y2="16"/><line x1="2" y1="9" x2="16" y2="9"/></svg>
       <span>マップ</span>
     </button>
     <div class="nav-dropdown-menu">
-      <a href="map-a.html" class="active">バイブス</a>
+      <a href="map-a.html">バイブス</a>
       <a href="map-b.html">エンジン</a>
       <a href="map-c.html">エモーション</a>
     </div>
@@ -39,7 +40,7 @@
     <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.3"><polygon points="9,2 15,6 14,13 4,13 3,6"/><polygon points="9,5 12,7.5 11.5,11.5 6.5,11.5 6,7.5" stroke-dasharray="2,1.5"/></svg>
     <span>比較</span>
   </a>
-  <a href="heatmap.html" class="nav-btn" title="ヒートマップ" aria-label="スコアヒートマップ">
+  <a href="heatmap.html" class="nav-btn active" title="ヒートマップ" aria-label="スコアヒートマップ">
     <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.3"><rect x="2" y="2" width="4" height="4" rx=".5"/><rect x="7" y="2" width="4" height="4" rx=".5"/><rect x="12" y="2" width="4" height="4" rx=".5"/><rect x="2" y="7" width="4" height="4" rx=".5"/><rect x="7" y="7" width="4" height="4" rx=".5"/><rect x="12" y="7" width="4" height="4" rx=".5"/><rect x="2" y="12" width="4" height="4" rx=".5"/><rect x="7" y="12" width="4" height="4" rx=".5"/><rect x="12" y="12" width="4" height="4" rx=".5"/></svg>
     <span>ヒートマップ</span>
   </a>
@@ -49,32 +50,44 @@
   </a>
 </nav>
 
-<div class="map-wrap" id="wrapA">
-  <div class="map-title">ステージ・バイブスマップ</div>
-  <div class="map-subtitle">
-    x: かわいい ↔ かっこいい &nbsp;/&nbsp; y: 聴かせる ↔ 沸かせる
+<div class="heatmap-page">
+  <div class="heatmap-title">スコアヒートマップ</div>
+  <div class="heatmap-subtitle">全楽曲 × 9軸を色で一覧 — 列ヘッダをクリックでソート</div>
+
+  <div class="sort-bar" id="sortBar">
+    <button class="sort-btn active" data-sort="release">リリース順</button>
+    <button class="sort-btn" data-sort="title">曲名順</button>
+    <button class="sort-btn" data-sort="bpm">BPM順</button>
+    <button class="sort-btn" data-sort="composer">作曲家別</button>
   </div>
-  <div class="map-viewport">
-    <div class="map-container" id="mapA">
-      <div class="map-axis-x"></div>
-      <div class="map-axis-y"></div>
-      <div class="map-label map-label-left" style="color:var(--cute);">← かわいい</div>
-      <div class="map-label map-label-right" style="color:var(--cool);">かっこいい →</div>
-      <div class="map-label map-label-top" style="color:#fcb040;">↑ 沸かせる</div>
-      <div class="map-label map-label-bottom" style="color:#6cf0b0;">↓ 聴かせる</div>
-      <div class="map-quadrant-label" style="top:15%;left:15%;">胸キュン☆ブチ上げ</div>
-      <div class="map-quadrant-label" style="top:15%;right:15%;text-align:right;">攻め！全力アゲ</div>
-      <div class="map-quadrant-label" style="bottom:15%;left:15%;">甘くてじんわり</div>
-      <div class="map-quadrant-label" style="bottom:15%;right:15%;text-align:right;">大人のエモ</div>
+
+  <div class="heatmap-scroll">
+    <table class="hm-table" id="hmTable">
+      <thead id="hmHead"></thead>
+      <tbody id="hmBody"></tbody>
+    </table>
+  </div>
+
+  <div class="color-mode-bar" id="colorModeBar">
+    <button class="color-mode-btn active" data-mode="unified">共通カラー</button>
+    <button class="color-mode-btn" data-mode="composer">作曲家別カラー</button>
+  </div>
+
+  <div id="legendArea">
+    <div class="color-legend" id="unifiedLegend">
+      <span>0</span>
+      <div class="color-legend-bar"></div>
+      <span>10</span>
     </div>
-  </div>
-  <div class="map-controls">
-    <button class="map-ctrl-btn" data-target="mapA" data-action="zoom-in" title="ズームイン">＋</button>
-    <button class="map-ctrl-btn" data-target="mapA" data-action="zoom-out" title="ズームアウト">−</button>
-    <button class="map-ctrl-btn" data-target="mapA" data-action="reset" title="リセット">↺</button>
+    <div class="composer-legend" id="composerLegend" style="display:none"></div>
   </div>
 </div>
 
-<script src="scripts/map.js"></script>
+<div class="hm-tooltip" id="hmTooltip">
+  <div class="tt-song"></div>
+  <div class="tt-axis"></div>
+</div>
+
+<script src="scripts/heatmap.js"></script>
 </body>
 </html>
