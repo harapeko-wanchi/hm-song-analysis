@@ -300,7 +300,7 @@ function displaySetlist(setlist) {
     card.className = 'sl-card';
 
     const thumbHTML = s.thumbnail_url
-      ? `<div class="sl-card-thumb"><img src="${s.thumbnail_url}" alt="${s.title}" loading="lazy"></div>`
+      ? `<div class="sl-card-thumb">${s.youtube_url ? `<a href="${s.youtube_url}" target="_blank" rel="noopener" title="YouTubeで再生">` : ''}<img src="${s.thumbnail_url}" alt="${s.title}" loading="lazy">${s.youtube_url ? '</a>' : ''}</div>`
       : '';
 
     const role = roles[i];
