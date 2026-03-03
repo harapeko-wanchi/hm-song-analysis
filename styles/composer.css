@@ -24,32 +24,79 @@
     .legend-name { font-weight: 600; font-size: .82rem; }
     .legend-count { font-size: .7rem; color: var(--muted); margin-left: auto; }
 
-    /* ---- Composer Cards ---- */
-    .composer-cards {
-      display: grid; grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
-      gap: 1.5rem;
-    }
-    .c-card {
-      background: var(--card); border: 1px solid var(--border);
-      border-radius: var(--radius); overflow: hidden;
-      display: flex; flex-direction: column;
-    }
-    .c-card-head {
-      display: flex; align-items: center; gap: .6rem;
-      padding: .8rem 1rem; border-bottom: 1px solid var(--border);
-    }
-    .c-card-dot { width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0; }
-    .c-card-name { font-weight: 700; font-size: 1rem; }
-    .c-card-badge {
-      margin-left: auto; font-size: .7rem; color: var(--muted);
-      background: var(--surface); padding: .15rem .5rem; border-radius: 999px;
-    }
-    .c-card-body { padding: 1rem; display: flex; gap: 1rem; flex-wrap: wrap; }
+    /* ---- Composer Detail Tabs ---- */
+    .ctabs-section { margin-bottom: 2rem; }
 
-    .c-card-radar { flex: 0 0 200px; }
-    .c-card-radar canvas { width: 200px; height: 200px; }
+    .ctabs-bar {
+      display: flex; flex-wrap: wrap; gap: .35rem; padding-bottom: .5rem;
+      border-bottom: 1px solid var(--border); margin-bottom: 0;
+    }
 
-    .c-card-stats { flex: 1; min-width: 140px; font-size: .78rem; }
+    .ctab-btn {
+      all: unset; cursor: pointer; display: flex; align-items: center; gap: .4rem;
+      padding: .5rem .8rem; border-radius: 8px 8px 0 0; font-size: .78rem;
+      font-weight: 600; white-space: nowrap; transition: background .15s, color .15s;
+      color: var(--muted); border: 1px solid transparent; border-bottom: none;
+      position: relative; flex-shrink: 0;
+    }
+    .ctab-btn::after {
+      content: ''; position: absolute; bottom: -1px; left: 0; right: 0;
+      height: 2px; background: transparent; transition: background .15s;
+    }
+    .ctab-btn:hover { background: var(--surface); color: var(--text); }
+    .ctab-btn.active {
+      background: var(--card); color: var(--tab-color, var(--text));
+      border-color: var(--border);
+    }
+    .ctab-btn.active::after { background: var(--tab-color, var(--accent)); }
+
+    .ctab-swatch { width: 10px; height: 10px; border-radius: 3px; flex-shrink: 0; }
+    .ctab-label { font-size: .78rem; }
+    .ctab-count {
+      font-size: .62rem; color: var(--muted); background: var(--surface);
+      padding: .08rem .35rem; border-radius: 999px; margin-left: .1rem;
+    }
+
+    .ctabs-content {
+      background: var(--card); border: 1px solid var(--border); border-top: none;
+      border-radius: 0 0 var(--radius) var(--radius); min-height: 200px;
+    }
+
+    .ctab-panel { display: none; padding: 1.2rem; }
+    .ctab-panel.active { display: block; }
+
+    /* Tab panel layout */
+    .ctab-top {
+      display: flex; gap: 1.2rem; align-items: flex-start;
+      flex-wrap: wrap; margin-bottom: 1rem;
+    }
+    .ctab-radar { flex: 0 0 min(90vw, 260px); }
+    .ctab-radar canvas { width: 100%; height: auto; }
+
+    .ctab-info {
+      flex: 1; min-width: 200px; display: flex; flex-direction: column; gap: .8rem;
+    }
+    .ctab-stats { font-size: .78rem; }
+
+    .ctab-songs-title {
+      font-size: .68rem; font-weight: 700; color: var(--accent);
+      margin-bottom: .3rem; letter-spacing: .06em;
+    }
+    .ctab-songs-list { display: flex; flex-wrap: wrap; gap: .3rem; }
+
+    .ctab-summary {
+      font-size: .85rem; line-height: 1.65; color: var(--text);
+      font-weight: 500; margin-bottom: .8rem;
+      padding: .6rem .8rem; background: var(--surface); border-radius: 6px;
+      border-left: 3px solid var(--accent);
+    }
+
+    .ctab-details {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: .6rem 1.5rem;
+    }
+
+    /* Reuse existing stat/song/profile-detail styles */
     .stat-row { display: flex; justify-content: space-between; padding: .2rem 0; border-bottom: 1px solid var(--border); }
     .stat-row:last-child { border-bottom: none; }
     .stat-label { color: var(--muted); }
@@ -57,17 +104,21 @@
     .stat-val.high { color: #6cf0b0; }
     .stat-val.low { color: #f06c6c; }
 
-    .c-card-songs {
-      padding: .5rem 1rem 1rem;
-      border-top: 1px solid var(--border);
-    }
-    .c-card-songs-title { font-size: .68rem; font-weight: 700; color: var(--accent); margin-bottom: .3rem; letter-spacing: .06em; }
-    .c-card-songs-list { display: flex; flex-wrap: wrap; gap: .3rem; }
     .c-song-tag {
       font-size: .68rem; padding: .12rem .5rem;
       border-radius: 999px; background: var(--surface);
       border: 1px solid var(--border); color: var(--muted);
       white-space: nowrap;
+    }
+
+    .profile-detail-section { margin-bottom: .5rem; }
+    .profile-detail-title {
+      font-size: .72rem; font-weight: 700; color: var(--accent);
+      letter-spacing: .06em; margin-bottom: .2rem;
+      padding-left: .3rem; border-left: 3px solid var(--accent);
+    }
+    .profile-detail-body {
+      font-size: .78rem; line-height: 1.65; color: var(--muted);
     }
 
     /* ---- Comparison Table ---- */
@@ -92,8 +143,10 @@
 
     @media (max-width: 600px) {
       .cmp-page { padding: 1rem .5rem 2rem; }
-      .composer-cards { grid-template-columns: 1fr; }
-      .c-card-body { flex-direction: column; align-items: center; }
-      .c-card-radar { flex: none; }
       .overview { flex-direction: column; align-items: center; }
+      .ctab-top { flex-direction: column; align-items: center; }
+      .ctab-radar { flex: none; width: min(90vw, 280px); }
+      .ctab-info { min-width: 0; width: 100%; }
+      .ctab-details { grid-template-columns: 1fr; }
+      .ctab-panel { padding: .8rem; }
     }
