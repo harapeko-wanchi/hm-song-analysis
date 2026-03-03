@@ -46,10 +46,19 @@
   display: flex; gap: 1.2rem; align-items: flex-start; flex-wrap: wrap;
 }
 .rec-source-thumb {
+  display: block; position: relative;
   width: 160px; aspect-ratio: 16/9; border-radius: 8px;
   overflow: hidden; flex-shrink: 0; background: #111;
 }
 .rec-source-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.rec-source-thumb .play-icon {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(0,0,0,.35);
+  opacity: 0; transition: opacity .2s;
+  font-size: 2rem; color: #fff;
+}
+.rec-source-thumb:hover .play-icon { opacity: 1; }
 .rec-source-info { flex: 1; min-width: 200px; }
 .rec-source-title { font-size: 1.1rem; font-weight: 700; margin-bottom: .2rem; }
 .rec-source-meta { font-size: .78rem; color: var(--muted); margin-bottom: .6rem; }
@@ -83,10 +92,19 @@
 .rec-rank.rank-3 { color: #cd7f32; }
 
 .rec-card-thumb {
+  display: block; position: relative;
   width: 100px; aspect-ratio: 16/9; border-radius: 6px;
   overflow: hidden; flex-shrink: 0; background: #111;
 }
 .rec-card-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.rec-card-thumb .play-icon {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(0,0,0,.35);
+  opacity: 0; transition: opacity .2s;
+  font-size: 1.5rem; color: #fff;
+}
+.rec-card-thumb:hover .play-icon { opacity: 1; }
 
 .rec-card-body { flex: 1; min-width: 160px; }
 .rec-card-title { font-size: .95rem; font-weight: 700; margin-bottom: .15rem; }

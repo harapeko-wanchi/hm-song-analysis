@@ -108,7 +108,10 @@ function showResult(songId) {
   // Source card
   const src = document.getElementById('recSource');
   const thumbHTML = song.thumbnail_url
-    ? `<div class="rec-source-thumb">${song.youtube_url ? `<a href="${song.youtube_url}" target="_blank" rel="noopener" title="YouTubeで再生">` : ''}<img src="${song.thumbnail_url}" alt="${song.title}" loading="lazy">${song.youtube_url ? '</a>' : ''}</div>`
+    ? `<a href="${song.youtube_url || '#'}" target="_blank" rel="noopener" class="rec-source-thumb">
+        <img src="${song.thumbnail_url}" alt="${song.title}" loading="lazy">
+        <div class="play-icon">▶</div>
+      </a>`
     : '';
   src.innerHTML = `
     ${thumbHTML}
@@ -139,7 +142,10 @@ function showResult(songId) {
 
     const rankClass = idx < 3 ? ` rank-${idx + 1}` : '';
     const thumbHTML = s.thumbnail_url
-      ? `<div class="rec-card-thumb">${s.youtube_url ? `<a href="${s.youtube_url}" target="_blank" rel="noopener" title="YouTubeで再生">` : ''}<img src="${s.thumbnail_url}" alt="${s.title}" loading="lazy">${s.youtube_url ? '</a>' : ''}</div>`
+      ? `<a href="${s.youtube_url || '#'}" target="_blank" rel="noopener" class="rec-card-thumb">
+          <img src="${s.thumbnail_url}" alt="${s.title}" loading="lazy">
+          <div class="play-icon">▶</div>
+        </a>`
       : '';
 
     // Axis comparison bars
