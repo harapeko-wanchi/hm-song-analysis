@@ -1,0 +1,345 @@
+/* ===== Batting Order Maker Page ===== */
+.bt-page { max-width: 1100px; margin: 0 auto; padding: 1.5rem 1rem 3rem; }
+
+.bt-title { text-align: center; font-size: 1.15rem; font-weight: 700; margin-bottom: .2rem; }
+.bt-subtitle { text-align: center; font-size: .78rem; color: var(--muted); margin-bottom: 1.5rem; line-height: 1.5; }
+
+/* ===== Layout ===== */
+.bt-layout {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 1.2rem;
+  align-items: start;
+}
+
+/* ===== Song Pool ===== */
+.bt-pool {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: .8rem;
+  position: sticky;
+  top: 56px;
+  max-height: calc(100vh - 80px);
+  display: flex;
+  flex-direction: column;
+  gap: .5rem;
+  overflow: hidden;
+}
+
+.bt-pool-header {
+  font-size: .78rem;
+  font-weight: 700;
+  color: var(--muted);
+  letter-spacing: .04em;
+  padding-bottom: .3rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.bt-pool-search {
+  all: unset;
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  padding: .35rem .6rem;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  font-size: .78rem;
+  transition: border-color .15s;
+}
+.bt-pool-search:focus { border-color: var(--accent); outline: none; }
+.bt-pool-search::placeholder { color: var(--muted); }
+
+.bt-pool-list {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: .35rem;
+  padding-right: 2px;
+}
+.bt-pool-list::-webkit-scrollbar { width: 4px; }
+.bt-pool-list::-webkit-scrollbar-track { background: transparent; }
+.bt-pool-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+/* ===== Song Chip ===== */
+.bt-song-chip {
+  display: flex;
+  align-items: center;
+  gap: .55rem;
+  padding: .35rem .55rem;
+  border-radius: 8px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  cursor: grab;
+  transition: background .15s, border-color .15s, opacity .15s;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.bt-song-chip:hover { background: var(--card); border-color: var(--accent); }
+.bt-song-chip:active { cursor: grabbing; }
+.bt-song-chip.bt-used { opacity: .3; cursor: default; pointer-events: none; }
+.bt-song-chip.bt-selected { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 12%, var(--surface)); }
+.bt-song-chip.bt-dragging { opacity: .4; }
+
+.bt-chip-thumb {
+  width: 38px;
+  height: 38px;
+  object-fit: cover;
+  border-radius: 5px;
+  flex-shrink: 0;
+  background: var(--border);
+  display: block;
+}
+
+.bt-chip-info { flex: 1; min-width: 0; }
+.bt-chip-title {
+  font-size: .76rem;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.3;
+}
+.bt-chip-meta { font-size: .63rem; color: var(--muted); margin-top: .1rem; }
+
+/* ===== Lineup ===== */
+.bt-lineup-wrap { display: flex; flex-direction: column; gap: 1rem; }
+.bt-lineup { display: flex; flex-direction: column; gap: .6rem; }
+
+/* ===== Slot Card ===== */
+.bt-slot {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  transition: border-color .15s, box-shadow .15s;
+  overflow: hidden;
+}
+.bt-slot.bt-drag-over {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent) 25%, transparent);
+}
+
+.bt-slot-header {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  padding: .45rem .7rem;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+}
+
+.bt-slot-num {
+  font-size: .85rem;
+  font-weight: 800;
+  color: var(--accent);
+  width: 28px;
+  flex-shrink: 0;
+}
+
+.bt-pos-select {
+  all: unset;
+  font-family: inherit;
+  font-size: .72rem;
+  font-weight: 600;
+  padding: .18rem .5rem;
+  border-radius: 6px;
+  background: var(--card);
+  color: var(--text);
+  border: 1px solid var(--border);
+  cursor: pointer;
+  transition: border-color .15s;
+  appearance: auto;
+  -webkit-appearance: auto;
+}
+.bt-pos-select:focus { border-color: var(--accent); outline: none; }
+
+.bt-slot-remove {
+  all: unset;
+  cursor: pointer;
+  margin-left: auto;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: .75rem;
+  color: var(--muted);
+  transition: background .15s, color .15s;
+  flex-shrink: 0;
+}
+.bt-slot-remove:hover { background: var(--border); color: var(--text); }
+.bt-slot-remove[hidden] { display: none; }
+
+.bt-slot-body { padding: .5rem .7rem; }
+
+/* Empty zone */
+.bt-slot-empty-zone {
+  min-height: 58px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px dashed var(--border);
+  border-radius: 8px;
+  font-size: .72rem;
+  color: var(--muted);
+  transition: border-color .15s, color .15s;
+  cursor: pointer;
+  text-align: center;
+  padding: .5rem;
+}
+.bt-slot-empty-zone:hover { border-color: color-mix(in srgb, var(--accent) 50%, var(--border)); }
+.bt-slot.bt-drag-over .bt-slot-empty-zone { border-color: var(--accent); color: var(--accent); }
+
+/* Filled song display */
+.bt-slot-song {
+  display: none;
+  gap: .6rem;
+  align-items: flex-start;
+}
+.bt-slot-song.visible { display: flex; }
+
+.bt-slot-thumb {
+  width: 56px;
+  height: 56px;
+  object-fit: cover;
+  border-radius: 6px;
+  flex-shrink: 0;
+  background: var(--border);
+  display: block;
+}
+
+.bt-slot-info { flex: 1; min-width: 0; }
+.bt-slot-title { font-size: .85rem; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.bt-slot-meta { font-size: .68rem; color: var(--muted); margin-top: .1rem; }
+
+.bt-slot-comment {
+  all: unset;
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  margin-top: .4rem;
+  padding: .28rem .55rem;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  font-size: .72rem;
+  transition: border-color .15s;
+}
+.bt-slot-comment:focus { border-color: var(--accent); outline: none; }
+.bt-slot-comment::placeholder { color: var(--muted); font-style: italic; }
+
+/* ===== Pitcher Section ===== */
+.bt-pitcher-section {
+  margin-top: .8rem;
+}
+
+.bt-section-label {
+  font-size: .72rem;
+  font-weight: 700;
+  color: var(--muted);
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  padding: .3rem .2rem .4rem;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: .5rem;
+}
+
+.bt-pitcher-slots {
+  display: flex;
+  flex-direction: column;
+  gap: .5rem;
+}
+
+.bt-pitcher-role {
+  font-size: .8rem;
+  font-weight: 800;
+  color: #f06c9c;
+  width: 52px;
+  flex-shrink: 0;
+}
+
+/* ===== Action Buttons ===== */
+.bt-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .5rem;
+  padding-top: .2rem;
+}
+
+.bt-action-btn {
+  all: unset;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: .4rem;
+  padding: .48rem .9rem;
+  border-radius: 8px;
+  font-size: .78rem;
+  font-weight: 600;
+  border: 1px solid var(--border);
+  color: var(--text);
+  background: var(--card);
+  transition: opacity .15s, transform .1s, border-color .15s;
+  white-space: nowrap;
+}
+.bt-action-btn:hover { opacity: .85; border-color: var(--accent); }
+.bt-action-btn:active { transform: scale(.96); }
+
+.bt-action-twitter { background: #000; color: #fff; border-color: #333; }
+.bt-action-twitter:hover { border-color: #555; }
+.bt-action-link { }
+.bt-action-img { }
+.bt-action-reset { color: var(--muted); }
+.bt-action-reset:hover { color: #f06c6c; border-color: #f06c6c; }
+
+/* ===== Toast ===== */
+.bt-toast {
+  position: fixed;
+  bottom: 1.8rem;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--accent);
+  color: #fff;
+  padding: .45rem 1.2rem;
+  border-radius: 999px;
+  font-size: .78rem;
+  font-weight: 600;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 999;
+  transition: opacity .2s;
+  white-space: nowrap;
+}
+.bt-toast.visible { opacity: 1; }
+
+/* ===== Responsive ===== */
+@media (max-width: 768px) {
+  .bt-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .bt-pool {
+    position: static;
+    max-height: 220px;
+    top: auto;
+  }
+
+  .bt-pool-list {
+    max-height: 120px;
+  }
+
+  .bt-slot-thumb { width: 44px; height: 44px; }
+  .bt-slot-title { font-size: .8rem; }
+
+  .bt-actions { justify-content: center; }
+}
+
+@media (max-width: 480px) {
+  .bt-page { padding: 1rem .5rem 2rem; }
+  .bt-action-btn { font-size: .72rem; padding: .42rem .7rem; }
+}
