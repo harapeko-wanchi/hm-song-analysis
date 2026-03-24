@@ -37,6 +37,26 @@
   },
   "songs": [
     {
+      "id": "my_first_love_song",
+      "title": "MY FIRST LOVE SONG",
+      "release_date": null,
+      "lyricist": null,
+      "composer": null,
+      "arranger": null,
+      "key": null,
+      "bpm": null,
+      "youtube_url": "https://youtu.be/gIsGfj-wjYE",
+      "thumbnail_url": "https://img.youtube.com/vi/gIsGfj-wjYE/maxresdefault.jpg",
+      "scores": null,
+      "mapA": null,
+      "mapB": null,
+      "mapC": null,
+      "tags": [],
+      "harmony_note": null,
+      "lyrics_hooks": [],
+      "summary": null
+    },
+    {
       "id": "playful_romantic",
       "title": "PLAYFUL ROMANTIC",
       "release_date": "2025-12-12",
