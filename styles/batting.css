@@ -194,6 +194,12 @@
 .bt-slot-empty-zone:hover { border-color: color-mix(in srgb, var(--accent) 50%, var(--border)); }
 .bt-slot.bt-drag-over .bt-slot-empty-zone { border-color: var(--accent); color: var(--accent); }
 
+.bt-hint-touch { display: none; }
+@media (pointer: coarse) {
+  .bt-hint-pointer { display: none; }
+  .bt-hint-touch { display: inline; }
+}
+
 /* Filled song display */
 .bt-slot-song {
   display: none;

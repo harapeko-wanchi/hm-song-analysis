@@ -80,7 +80,6 @@ fetch('songs.json')
     renderPitchers();
     syncPoolUsedState();
     attachDragHandlers();
-    attachTouchHandlers();
     attachActionHandlers();
   });
 
@@ -98,7 +97,7 @@ function buildSlotDOM() {
         <button class="bt-slot-remove" aria-label="削除" hidden>✕</button>
       </div>
       <div class="bt-slot-body">
-        <div class="bt-slot-empty-zone">曲をドラッグ or タップで選択</div>
+        <div class="bt-slot-empty-zone"><span class="bt-hint-pointer">曲をドラッグ or クリックで選択</span><span class="bt-hint-touch">曲を選んでここをタップ</span></div>
         <div class="bt-slot-song">
           <img class="bt-slot-thumb" alt="" loading="lazy">
           <div class="bt-slot-info">
@@ -127,7 +126,7 @@ function buildPitcherDOM() {
         <button class="bt-slot-remove" aria-label="削除" hidden>✕</button>
       </div>
       <div class="bt-slot-body">
-        <div class="bt-slot-empty-zone">曲をドラッグ or タップで選択</div>
+        <div class="bt-slot-empty-zone"><span class="bt-hint-pointer">曲をドラッグ or クリックで選択</span><span class="bt-hint-touch">曲を選んでここをタップ</span></div>
         <div class="bt-slot-song">
           <img class="bt-slot-thumb" alt="" loading="lazy">
           <div class="bt-slot-info">
@@ -450,152 +449,6 @@ function attachDragHandlers() {
     el => parseInt(el.dataset.pitcher),
     assignPitcher
   ));
-}
-
-// ===== Touch Drag and Drop =====
-function attachTouchHandlers() {
-  let ghost = null;
-  let touchActive = false;
-  let touchMoved = false;
-  let touchStartPos = { x: 0, y: 0 };
-  let highlighted = null;
-  const THRESHOLD = 8;
-
-  function createGhost(sourceEl, touch) {
-    const rect = sourceEl.getBoundingClientRect();
-    ghost = sourceEl.cloneNode(true);
-    ghost.style.cssText = `
-      position: fixed;
-      left: ${rect.left}px; top: ${rect.top}px;
-      width: ${rect.width}px; height: ${rect.height}px;
-      opacity: .75; pointer-events: none;
-      z-index: 9999; border-radius: 8px;
-      box-shadow: 0 8px 24px rgba(0,0,0,.5);
-      transform: scale(1.04); transition: none;
-    `;
-    document.body.appendChild(ghost);
-  }
-
-  function moveGhost(touch) {
-    if (!ghost) return;
-    ghost.style.left = (touch.clientX - parseFloat(ghost.style.width) / 2) + 'px';
-    ghost.style.top  = (touch.clientY - parseFloat(ghost.style.height) / 2) + 'px';
-  }
-
-  function cleanup() {
-    if (ghost) { ghost.remove(); ghost = null; }
-    if (highlighted) { highlighted.classList.remove('bt-drag-over'); highlighted = null; }
-    touchActive = false;
-    touchMoved = false;
-  }
-
-  function slotAtPoint(x, y) {
-    const el = document.elementFromPoint(x, y);
-    return el ? el.closest('.bt-slot') : null;
-  }
-
-  function onTouchStart(getInfo) {
-    return e => {
-      const info = getInfo(e);
-      if (!info) return;
-      touchActive = true;
-      touchMoved = false;
-      touchStartPos = { x: e.touches[0].clientX, y: e.touches[0].clientY };
-      setDragging(info.songId, info.type, info.idx);
-      // ghost is created lazily on first move past threshold
-      info.sourceEl && (onTouchStart._pendingEl = info.sourceEl);
-    };
-  }
-  onTouchStart._pendingEl = null;
-
-  document.addEventListener('touchmove', e => {
-    if (!touchActive) return;
-    const touch = e.touches[0];
-    const dx = touch.clientX - touchStartPos.x;
-    const dy = touch.clientY - touchStartPos.y;
-
-    if (!touchMoved && Math.hypot(dx, dy) < THRESHOLD) return;
-    touchMoved = true;
-    e.preventDefault(); // prevent scroll while dragging
-
-    if (!ghost && onTouchStart._pendingEl) createGhost(onTouchStart._pendingEl, touch);
-    moveGhost(touch);
-
-    if (highlighted) { highlighted.classList.remove('bt-drag-over'); highlighted = null; }
-    const slotEl = slotAtPoint(touch.clientX, touch.clientY);
-    if (slotEl) { slotEl.classList.add('bt-drag-over'); highlighted = slotEl; }
-  }, { passive: false });
-
-  document.addEventListener('touchend', e => {
-    if (!touchActive) return;
-    const touch = e.changedTouches[0];
-    const wasDrag = touchMoved;
-    const { songId, type: fromType, idx: fromIdx } = dragging;
-    cleanup();
-    dragging = { songId: null, type: null, idx: null };
-    onTouchStart._pendingEl = null;
-
-    if (!wasDrag || !songId) return; // short tap → let click handler work
-
-    const slotEl = slotAtPoint(touch.clientX, touch.clientY);
-    if (!slotEl) return;
-    slotEl.classList.remove('bt-drag-over');
-
-    if (slotEl.dataset.slot !== undefined && slotEl.dataset.slot !== '') {
-      const idx = parseInt(slotEl.dataset.slot);
-      if (!(fromType === 'slot' && fromIdx === idx)) assignSlot(idx, songId, fromType, fromIdx);
-    } else if (slotEl.dataset.pitcher !== undefined && slotEl.dataset.pitcher !== '') {
-      const idx = parseInt(slotEl.dataset.pitcher);
-      if (!(fromType === 'pitcher' && fromIdx === idx)) assignPitcher(idx, songId, fromType, fromIdx);
-    }
-  }, { passive: true });
-
-  document.addEventListener('touchcancel', () => {
-    cleanup();
-    dragging = { songId: null, type: null, idx: null };
-    onTouchStart._pendingEl = null;
-  }, { passive: true });
-
-  // Pool chips
-  poolListEl.addEventListener('touchstart', e => {
-    const chip = e.target.closest('.bt-song-chip');
-    if (!chip || chip.classList.contains('bt-used')) return;
-    touchActive = true;
-    touchMoved = false;
-    touchStartPos = { x: e.touches[0].clientX, y: e.touches[0].clientY };
-    setDragging(chip.dataset.songId, 'pool', null);
-    onTouchStart._pendingEl = chip;
-  }, { passive: true });
-
-  // Filled batting slots
-  lineupEl.addEventListener('touchstart', e => {
-    const songDiv = e.target.closest('.bt-slot-song.visible');
-    if (!songDiv) return;
-    const slotEl = songDiv.closest('[data-slot]');
-    if (!slotEl) return;
-    const i = parseInt(slotEl.dataset.slot);
-    if (!state.slots[i]?.songId) return;
-    touchActive = true;
-    touchMoved = false;
-    touchStartPos = { x: e.touches[0].clientX, y: e.touches[0].clientY };
-    setDragging(state.slots[i].songId, 'slot', i);
-    onTouchStart._pendingEl = songDiv;
-  }, { passive: true });
-
-  // Filled pitcher slots
-  pitcherSlotsEl.addEventListener('touchstart', e => {
-    const songDiv = e.target.closest('.bt-slot-song.visible');
-    if (!songDiv) return;
-    const slotEl = songDiv.closest('[data-pitcher]');
-    if (!slotEl) return;
-    const i = parseInt(slotEl.dataset.pitcher);
-    if (!state.pitchers[i]?.songId) return;
-    touchActive = true;
-    touchMoved = false;
-    touchStartPos = { x: e.touches[0].clientX, y: e.touches[0].clientY };
-    setDragging(state.pitchers[i].songId, 'pitcher', i);
-    onTouchStart._pendingEl = songDiv;
-  }, { passive: true });
 }
 
 // ===== Click / Action Handlers =====
