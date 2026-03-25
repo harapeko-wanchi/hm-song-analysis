@@ -117,7 +117,8 @@
   transition: border-color .15s, box-shadow .15s;
   overflow: hidden;
 }
-.bt-slot.bt-drag-over {
+.bt-slot.bt-drag-over,
+.bt-slot.bt-selected {
   border-color: var(--accent);
   box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent) 25%, transparent);
 }
@@ -303,6 +304,106 @@
 .bt-action-reset { color: var(--muted); }
 .bt-action-reset:hover { color: #f06c6c; border-color: #f06c6c; }
 
+/* ===== Song Picker Modal ===== */
+.bt-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.55);
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+.bt-modal-overlay[hidden] { display: none; }
+
+.bt-modal {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  width: 100%;
+  max-width: 420px;
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.bt-modal-header {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  padding: .7rem 1rem;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.bt-modal-title {
+  flex: 1;
+  font-size: .88rem;
+  font-weight: 700;
+}
+
+.bt-modal-close {
+  all: unset;
+  cursor: pointer;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: .8rem;
+  color: var(--muted);
+  transition: background .15s, color .15s;
+}
+.bt-modal-close:hover { background: var(--border); color: var(--text); }
+
+.bt-modal-search {
+  all: unset;
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  padding: .5rem 1rem;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  font-size: .82rem;
+  flex-shrink: 0;
+}
+.bt-modal-search::placeholder { color: var(--muted); }
+
+.bt-modal-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: .4rem;
+  display: flex;
+  flex-direction: column;
+  gap: .3rem;
+}
+.bt-modal-list::-webkit-scrollbar { width: 4px; }
+.bt-modal-list::-webkit-scrollbar-track { background: transparent; }
+.bt-modal-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+.bt-modal-item {
+  display: flex;
+  align-items: center;
+  gap: .55rem;
+  padding: .4rem .6rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background .12s;
+}
+.bt-modal-item:hover,
+.bt-modal-item:active { background: var(--surface); }
+
+.bt-modal-empty {
+  text-align: center;
+  color: var(--muted);
+  font-size: .8rem;
+  padding: 1.5rem;
+}
+
 /* ===== Toast ===== */
 .bt-toast {
   position: fixed;
@@ -330,16 +431,10 @@
   }
 
   .bt-pool {
-    position: static;
-    max-height: 220px;
-    top: auto;
+    display: none;
   }
 
-  .bt-pool-list {
-    max-height: 120px;
-  }
-
-  .bt-slot-thumb { width: 44px; height: 44px; }
+.bt-slot-thumb { width: 44px; height: 44px; }
   .bt-slot-title { font-size: .8rem; }
 
   .bt-actions { justify-content: center; }

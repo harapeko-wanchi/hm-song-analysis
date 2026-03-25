@@ -13,10 +13,15 @@ const POSITION_LABEL = {
   RF: '右翼',
   DH: '指名打者',
 };
-const PITCHER_ROLES = ['先発', '中継ぎ', '抑え'];
+const PITCHER_COUNT = 1;
 const DEFAULT_POSITION = '';
 const COMMENT_MAX = 40;
 const DEBOUNCE_MS = 400;
+
+// URL compact encoding: position → 1 char
+const POS_CHAR = { '':'_', P:'p', C:'c', '1B':'1', '2B':'2', '3B':'3', SS:'s', LF:'l', CF:'m', RF:'r', DH:'d' };
+const CHAR_POS = Object.fromEntries(Object.entries(POS_CHAR).map(([k,v]) => [v,k]));
+
 
 // ===== State =====
 const state = {
@@ -25,17 +30,13 @@ const state = {
     position: DEFAULT_POSITION,
     comment: ''
   })),
-  pitchers: PITCHER_ROLES.map(role => ({
-    role,
-    songId: null,
-    comment: ''
-  }))
+  pitchers: Array.from({ length: PITCHER_COUNT }, () => ({ songId: null, comment: '' }))
 };
 
 let allSongs = [];
 let songMap = {};
 let poolFilter = { query: '' };
-let selectedSong = null;
+let pickerTarget = null; // { type: 'slot'|'pitcher', idx: number }
 // DnD tracking: type = 'pool' | 'slot' | 'pitcher', idx = index or null
 let dragging = { songId: null, type: null, idx: null };
 let commentDebounceTimer = null;
@@ -47,6 +48,9 @@ const lineupEl = document.getElementById('btLineup');
 const pitcherSlotsEl = document.getElementById('btPitcherSlots');
 const searchEl = document.getElementById('btSearch');
 const toastEl = document.getElementById('btToast');
+const pickerModalEl = document.getElementById('btModal');
+const pickerSearchEl = document.getElementById('btModalSearch');
+const pickerListEl = document.getElementById('btModalList');
 
 // ===== Init =====
 fetch('songs.json')
@@ -97,7 +101,7 @@ function buildSlotDOM() {
         <button class="bt-slot-remove" aria-label="削除" hidden>✕</button>
       </div>
       <div class="bt-slot-body">
-        <div class="bt-slot-empty-zone"><span class="bt-hint-pointer">曲をドラッグ or クリックで選択</span><span class="bt-hint-touch">曲を選んでここをタップ</span></div>
+        <div class="bt-slot-empty-zone"><span class="bt-hint-pointer">ドラッグ or クリックで曲を追加</span><span class="bt-hint-touch">タップして曲を選択</span></div>
         <div class="bt-slot-song">
           <img class="bt-slot-thumb" alt="" loading="lazy">
           <div class="bt-slot-info">
@@ -116,17 +120,17 @@ function buildSlotDOM() {
 // ===== Build Pitcher Slot DOM =====
 function buildPitcherDOM() {
   pitcherSlotsEl.innerHTML = '';
-  PITCHER_ROLES.forEach((role, i) => {
+  for (let i = 0; i < PITCHER_COUNT; i++) {
     const slot = document.createElement('div');
     slot.className = 'bt-slot bt-pitcher-slot';
     slot.dataset.pitcher = i;
     slot.innerHTML = `
       <div class="bt-slot-header">
-        <span class="bt-pitcher-role">${role}</span>
+        <span class="bt-pitcher-role">投手</span>
         <button class="bt-slot-remove" aria-label="削除" hidden>✕</button>
       </div>
       <div class="bt-slot-body">
-        <div class="bt-slot-empty-zone"><span class="bt-hint-pointer">曲をドラッグ or クリックで選択</span><span class="bt-hint-touch">曲を選んでここをタップ</span></div>
+        <div class="bt-slot-empty-zone"><span class="bt-hint-pointer">ドラッグ or クリックで曲を追加</span><span class="bt-hint-touch">タップして曲を選択</span></div>
         <div class="bt-slot-song">
           <img class="bt-slot-thumb" alt="" loading="lazy">
           <div class="bt-slot-info">
@@ -139,7 +143,7 @@ function buildPitcherDOM() {
       </div>
     `;
     pitcherSlotsEl.appendChild(slot);
-  });
+  }
 }
 
 // ===== Render Pool =====
@@ -170,61 +174,40 @@ function renderPool() {
   });
 }
 
+// ===== Render Slot (shared helper) =====
+function renderSlotEl(slotEl, data) {
+  const emptyZone    = slotEl.querySelector('.bt-slot-empty-zone');
+  const songDiv      = slotEl.querySelector('.bt-slot-song');
+  const removeBtn    = slotEl.querySelector('.bt-slot-remove');
+  const commentInput = slotEl.querySelector('.bt-slot-comment');
+
+  if (data.songId && songMap[data.songId]) {
+    const song = songMap[data.songId];
+    emptyZone.style.display = 'none';
+    songDiv.classList.add('visible');
+    removeBtn.removeAttribute('hidden');
+    slotEl.querySelector('.bt-slot-thumb').src = song.thumbnail_url || '';
+    slotEl.querySelector('.bt-slot-title').textContent = song.title;
+    slotEl.querySelector('.bt-slot-meta').textContent =
+      `BPM ${song.bpm || '?'} · Key ${song.key || '?'} · ${song.composer || ''}`;
+    commentInput.value = data.comment;
+  } else {
+    emptyZone.style.display = '';
+    songDiv.classList.remove('visible');
+    removeBtn.setAttribute('hidden', '');
+    commentInput.value = '';
+  }
+}
+
 // ===== Render Lineup =====
 function renderLineup() {
-  lineupEl.querySelectorAll('.bt-slot').forEach((slotEl, i) => {
-    const slot = state.slots[i];
-    const emptyZone = slotEl.querySelector('.bt-slot-empty-zone');
-    const songDiv = slotEl.querySelector('.bt-slot-song');
-    const removeBtn = slotEl.querySelector('.bt-slot-remove');
-    const commentInput = slotEl.querySelector('.bt-slot-comment');
-
-    if (slot.songId && songMap[slot.songId]) {
-      const song = songMap[slot.songId];
-      emptyZone.style.display = 'none';
-      songDiv.classList.add('visible');
-      removeBtn.removeAttribute('hidden');
-      slotEl.querySelector('.bt-slot-thumb').src = song.thumbnail_url || '';
-      slotEl.querySelector('.bt-slot-title').textContent = song.title;
-      slotEl.querySelector('.bt-slot-meta').textContent =
-        `BPM ${song.bpm || '?'} · Key ${song.key || '?'} · ${song.composer || ''}`;
-      commentInput.value = slot.comment;
-    } else {
-      emptyZone.style.display = '';
-      songDiv.classList.remove('visible');
-      removeBtn.setAttribute('hidden', '');
-      commentInput.value = '';
-    }
-  });
+  lineupEl.querySelectorAll('.bt-slot').forEach((slotEl, i) => renderSlotEl(slotEl, state.slots[i]));
   syncPositionSelects();
 }
 
 // ===== Render Pitchers =====
 function renderPitchers() {
-  pitcherSlotsEl.querySelectorAll('.bt-pitcher-slot').forEach((slotEl, i) => {
-    const pitcher = state.pitchers[i];
-    const emptyZone = slotEl.querySelector('.bt-slot-empty-zone');
-    const songDiv = slotEl.querySelector('.bt-slot-song');
-    const removeBtn = slotEl.querySelector('.bt-slot-remove');
-    const commentInput = slotEl.querySelector('.bt-slot-comment');
-
-    if (pitcher.songId && songMap[pitcher.songId]) {
-      const song = songMap[pitcher.songId];
-      emptyZone.style.display = 'none';
-      songDiv.classList.add('visible');
-      removeBtn.removeAttribute('hidden');
-      slotEl.querySelector('.bt-slot-thumb').src = song.thumbnail_url || '';
-      slotEl.querySelector('.bt-slot-title').textContent = song.title;
-      slotEl.querySelector('.bt-slot-meta').textContent =
-        `BPM ${song.bpm || '?'} · Key ${song.key || '?'} · ${song.composer || ''}`;
-      commentInput.value = pitcher.comment;
-    } else {
-      emptyZone.style.display = '';
-      songDiv.classList.remove('visible');
-      removeBtn.setAttribute('hidden', '');
-      commentInput.value = '';
-    }
-  });
+  pitcherSlotsEl.querySelectorAll('.bt-pitcher-slot').forEach((slotEl, i) => renderSlotEl(slotEl, state.pitchers[i]));
 }
 
 // ===== Sync Position Selects =====
@@ -260,88 +243,97 @@ function syncPoolUsedState() {
   });
 }
 
-function clearSelectedSong() {
-  selectedSong = null;
-  poolListEl.querySelectorAll('.bt-song-chip').forEach(c => c.classList.remove('bt-selected'));
-}
-
-// ===== Assign to batting slot =====
-function assignSlot(targetIdx, songId, fromType, fromIdx) {
-  const displaced = state.slots[targetIdx].songId;
-
-  // Clear source
-  if (fromType === 'slot' && fromIdx !== null) {
-    state.slots[fromIdx].songId = displaced; // swap
-  } else if (fromType === 'pitcher' && fromIdx !== null) {
-    state.pitchers[fromIdx].songId = null;   // one-way move, displaced is cleared
-    if (displaced) { /* displaced batting song is just lost from slot */ }
-    // Actually place displaced back into pitcher slot if empty? No — keep it simple: displace clears.
+// ===== Assign to slot =====
+function assign(targetType, targetIdx, songId, fromType, fromIdx) {
+  const getArr = t => t === 'slot' ? state.slots : state.pitchers;
+  const displaced = getArr(targetType)[targetIdx].songId;
+  if (fromIdx !== null) {
+    if (fromType === targetType) {
+      getArr(fromType)[fromIdx].songId = displaced; // swap
+    } else if (fromType !== 'pool') {
+      getArr(fromType)[fromIdx].songId = null;      // one-way move
+    }
   }
-  // fromType === 'pool': no source to clear
-
-  state.slots[targetIdx].songId = songId;
+  getArr(targetType)[targetIdx].songId = songId;
   renderLineup();
   renderPitchers();
   syncPoolUsedState();
   syncURL();
-  clearSelectedSong();
 }
 
-// ===== Assign to pitcher slot =====
-function assignPitcher(targetIdx, songId, fromType, fromIdx) {
-  const displaced = state.pitchers[targetIdx].songId;
+// ===== URL State (LZ-String compressed) =====
+// Raw format: "{slotTokens}~{pitcherTokens}"
+//   slot token  : "{idx36}{posChar}:{comment}" or "" if empty
+//   pitcher token: "{idx36}:{comment}" or "" if empty
+// → whole string compressed with LZString.compressToEncodedURIComponent → ?d=...
 
-  if (fromType === 'pitcher' && fromIdx !== null) {
-    state.pitchers[fromIdx].songId = displaced; // swap
-  } else if (fromType === 'slot' && fromIdx !== null) {
-    state.slots[fromIdx].songId = null; // one-way move
-  }
+function buildRawState(st) {
+  const slotsStr = st.slots.map(s => {
+    if (!s.songId) return '';
+    const idx = allSongs.findIndex(x => x.id === s.songId);
+    if (idx < 0) return '';
+    const posChar = POS_CHAR[s.position || ''] ?? '_';
+    return idx.toString(36) + posChar + (s.comment ? ':' + s.comment : '');
+  }).join('|');
 
-  state.pitchers[targetIdx].songId = songId;
-  renderLineup();
-  renderPitchers();
-  syncPoolUsedState();
-  syncURL();
-  clearSelectedSong();
+  const pitchersStr = st.pitchers.map(p => {
+    if (!p.songId) return '';
+    const idx = allSongs.findIndex(x => x.id === p.songId);
+    if (idx < 0) return '';
+    return idx.toString(36) + (p.comment ? ':' + p.comment : '');
+  }).join('|');
+
+  return slotsStr + '~' + pitchersStr;
 }
 
-// ===== URL State =====
-function encodeState(state) {
-  const slots = state.slots.map(s => {
-    return `${s.songId || ''}:${s.position || ''}:${encodeURIComponent(s.comment || '')}`;
-  }).join('|');
-  const pitchers = state.pitchers.map(p => {
-    return `${p.songId || ''}:${encodeURIComponent(p.comment || '')}`;
-  }).join('|');
-  return `?v=2&s=${slots}&p=${pitchers}`;
+function parseRawState(raw) {
+  // 旧フォーマットのタイトルプレフィックス(\u001E)を除去
+  const rs   = raw.indexOf('\u001E');
+  const body = rs >= 0 ? raw.slice(rs + 1) : raw;
+
+  const tilde = body.indexOf('~');
+  const slotsRaw    = tilde >= 0 ? body.slice(0, tilde) : body;
+  const pitchersRaw = tilde >= 0 ? body.slice(tilde + 1) : '';
+
+  const slots = slotsRaw.split('|').slice(0, 9).map(token => {
+    if (!token) return { songId: null, position: '', comment: '' };
+    const colon = token.indexOf(':');
+    const fixed   = colon >= 0 ? token.slice(0, colon) : token;
+    const comment = colon >= 0 ? token.slice(colon + 1) : '';
+    const idx  = parseInt(fixed[0], 36);
+    const song = Number.isFinite(idx) ? (allSongs[idx] ?? null) : null;
+    return { songId: song?.id ?? null, position: CHAR_POS[fixed[1] ?? '_'] ?? '', comment };
+  });
+
+  const pitchers = pitchersRaw.split('|').slice(0, PITCHER_COUNT).map(token => {
+    if (!token) return { songId: null, comment: '' };
+    const colon   = token.indexOf(':');
+    const idxStr  = colon >= 0 ? token.slice(0, colon) : token;
+    const comment = colon >= 0 ? token.slice(colon + 1) : '';
+    const idx  = parseInt(idxStr, 36);
+    const song = Number.isFinite(idx) ? (allSongs[idx] ?? null) : null;
+    return { songId: song?.id ?? null, comment };
+  });
+
+  while (slots.length    < 9)             slots.push({ songId: null, position: '', comment: '' });
+  while (pitchers.length < PITCHER_COUNT) pitchers.push({ songId: null, comment: '' });
+  return { slots, pitchers };
+}
+
+function encodeState(st) {
+  const compressed = LZString.compressToEncodedURIComponent(buildRawState(st));
+  return '?d=' + compressed;
 }
 
 function decodeState(search) {
   try {
     const params = new URLSearchParams(search);
-    const rawS = params.get('s');
-    const rawP = params.get('p');
-    if (!rawS) return null;
-
-    const slots = rawS.split('|').slice(0, 9).map(p => {
-      const c1 = p.indexOf(':'), c2 = p.indexOf(':', c1 + 1);
-      const id = p.slice(0, c1) || null;
-      const pos = p.slice(c1 + 1, c2);
-      const cmt = decodeURIComponent(p.slice(c2 + 1) || '');
-      return { songId: id || null, position: FIELDING_POSITIONS.includes(pos) ? pos : '', comment: cmt };
-    });
-
-    const pitchers = rawP ? rawP.split('|').slice(0, 3).map(p => {
-      const c1 = p.indexOf(':');
-      const id = p.slice(0, c1) || null;
-      const cmt = decodeURIComponent(p.slice(c1 + 1) || '');
-      return { songId: id || null, comment: cmt };
-    }) : [{ songId: null, comment: '' }, { songId: null, comment: '' }, { songId: null, comment: '' }];
-
-    // Pad if needed
-    while (pitchers.length < 3) pitchers.push({ songId: null, comment: '' });
-
-    return { slots, pitchers };
+    const d = params.get('d');
+    if (d) {
+      const raw = LZString.decompressFromEncodedURIComponent(d);
+      return raw ? parseRawState(raw) : null;
+    }
+    return null;
   } catch {
     return null;
   }
@@ -369,7 +361,7 @@ function makeDragStartHandler(type, getIdx) {
   };
 }
 
-function makeDropHandler(targetType, getIdx, assignFn) {
+function makeDropHandler(targetType, getIdx) {
   return e => {
     e.preventDefault();
     const slotEl = e.target.closest('.bt-slot');
@@ -383,10 +375,9 @@ function makeDropHandler(targetType, getIdx, assignFn) {
     }
 
     const targetIdx = getIdx(slotEl);
-    // Prevent drop on same slot
     if (fromType === targetType && fromIdx === targetIdx) return;
 
-    assignFn(targetIdx, songId, fromType, fromIdx);
+    assign(targetType, targetIdx, songId, fromType, fromIdx);
     dragging = { songId: null, type: null, idx: null };
   };
 }
@@ -437,107 +428,94 @@ function attachDragHandlers() {
   });
 
   // Drop on lineup
-  lineupEl.addEventListener('drop', makeDropHandler(
-    'slot',
-    el => parseInt(el.dataset.slot),
-    assignSlot
-  ));
+  lineupEl.addEventListener('drop', makeDropHandler('slot', el => parseInt(el.dataset.slot)));
 
   // Drop on pitcher section
-  pitcherSlotsEl.addEventListener('drop', makeDropHandler(
-    'pitcher',
-    el => parseInt(el.dataset.pitcher),
-    assignPitcher
-  ));
+  pitcherSlotsEl.addEventListener('drop', makeDropHandler('pitcher', el => parseInt(el.dataset.pitcher)));
 }
 
-// ===== Click / Action Handlers =====
-function attachActionHandlers() {
-  // Pool chip click (select for click-to-assign)
-  poolListEl.addEventListener('click', e => {
-    const chip = e.target.closest('.bt-song-chip');
-    if (!chip || chip.classList.contains('bt-used')) return;
-    const songId = chip.dataset.songId;
-    if (selectedSong === songId) {
-      clearSelectedSong();
-    } else {
-      selectedSong = songId;
-      poolListEl.querySelectorAll('.bt-song-chip').forEach(c => c.classList.remove('bt-selected'));
-      chip.classList.add('bt-selected');
-    }
-  });
+// ===== Song Picker Modal =====
+function openPicker(type, idx) {
+  pickerTarget = { type, idx };
+  const label = type === 'slot' ? `${idx + 1}番` : '投手';
+  document.getElementById('btModalTitle').textContent = `${label} — 曲を選択`;
+  pickerSearchEl.value = '';
+  renderPickerList('');
+  pickerModalEl.removeAttribute('hidden');
+  pickerSearchEl.focus();
+}
 
-  // Empty zone click in lineup
-  lineupEl.addEventListener('click', e => {
-    const zone = e.target.closest('.bt-slot-empty-zone');
-    if (zone && selectedSong) {
-      const slotEl = zone.closest('.bt-slot');
-      assignSlot(parseInt(slotEl.dataset.slot), selectedSong, 'pool', null);
-    }
-  });
+function closePicker() {
+  pickerModalEl.setAttribute('hidden', '');
+  pickerTarget = null;
+}
 
-  // Empty zone click in pitcher section
-  pitcherSlotsEl.addEventListener('click', e => {
-    const zone = e.target.closest('.bt-slot-empty-zone');
-    if (zone && selectedSong) {
-      const slotEl = zone.closest('.bt-slot');
-      assignPitcher(parseInt(slotEl.dataset.pitcher), selectedSong, 'pool', null);
-    }
-  });
+function renderPickerList(query) {
+  const usedIds = getUsedSongIds();
+  const q = query.toLowerCase();
+  const available = allSongs.filter(s => !usedIds.has(s.id) && (!q || s.title.toLowerCase().includes(q)));
 
-  // Remove from batting
-  lineupEl.addEventListener('click', e => {
+  if (available.length === 0) {
+    pickerListEl.innerHTML = '<div class="bt-modal-empty">該当する曲がありません</div>';
+    return;
+  }
+
+  pickerListEl.innerHTML = '';
+  available.forEach(song => {
+    const item = document.createElement('div');
+    item.className = 'bt-modal-item';
+    item.dataset.songId = song.id;
+    item.innerHTML = `
+      <img class="bt-chip-thumb" src="${song.thumbnail_url || ''}" alt="" loading="lazy"
+        onerror="this.style.visibility='hidden'">
+      <div class="bt-chip-info">
+        <div class="bt-chip-title">${song.title}</div>
+        <div class="bt-chip-meta">BPM ${song.bpm || '?'} · ${song.key || ''}</div>
+      </div>
+    `;
+    pickerListEl.appendChild(item);
+  });
+}
+
+// ===== Slot Handlers (shared: click to open picker / remove / comment input) =====
+function attachSlotHandlers(containerEl, type, getIdx) {
+  containerEl.addEventListener('click', e => {
+    if (e.target.closest('.bt-slot-comment')) return;
+    const body = e.target.closest('.bt-slot-body');
+    if (body) { openPicker(type, getIdx(body.closest('.bt-slot'))); return; }
     const btn = e.target.closest('.bt-slot-remove');
     if (btn) {
-      const i = parseInt(btn.closest('.bt-slot').dataset.slot);
-      state.slots[i].songId = null;
-      state.slots[i].comment = '';
+      const i = getIdx(btn.closest('.bt-slot'));
+      const arr = type === 'slot' ? state.slots : state.pitchers;
+      arr[i].songId = null;
+      arr[i].comment = '';
       renderLineup();
-      syncPoolUsedState();
-      syncURL();
-    }
-  });
-
-  // Remove from pitcher
-  pitcherSlotsEl.addEventListener('click', e => {
-    const btn = e.target.closest('.bt-slot-remove');
-    if (btn) {
-      const i = parseInt(btn.closest('.bt-slot').dataset.pitcher);
-      state.pitchers[i].songId = null;
-      state.pitchers[i].comment = '';
       renderPitchers();
       syncPoolUsedState();
       syncURL();
     }
   });
+  containerEl.addEventListener('input', e => {
+    if (!e.target.matches('.bt-slot-comment')) return;
+    const i = getIdx(e.target.closest('.bt-slot'));
+    (type === 'slot' ? state.slots : state.pitchers)[i].comment = e.target.value;
+    clearTimeout(commentDebounceTimer);
+    commentDebounceTimer = setTimeout(syncURL, DEBOUNCE_MS);
+  });
+}
 
-  // Position change
+// ===== Click / Action Handlers =====
+function attachActionHandlers() {
+  attachSlotHandlers(lineupEl,       'slot',    el => parseInt(el.dataset.slot));
+  attachSlotHandlers(pitcherSlotsEl, 'pitcher', el => parseInt(el.dataset.pitcher));
+
+  // Position change (batting slots only)
   lineupEl.addEventListener('change', e => {
     if (e.target.matches('.bt-pos-select')) {
       const i = parseInt(e.target.closest('.bt-slot').dataset.slot);
       state.slots[i].position = e.target.value;
       syncPositionSelects();
       syncURL();
-    }
-  });
-
-  // Comment input (debounced) — batting
-  lineupEl.addEventListener('input', e => {
-    if (e.target.matches('.bt-slot-comment')) {
-      const i = parseInt(e.target.closest('.bt-slot').dataset.slot);
-      state.slots[i].comment = e.target.value;
-      clearTimeout(commentDebounceTimer);
-      commentDebounceTimer = setTimeout(syncURL, DEBOUNCE_MS);
-    }
-  });
-
-  // Comment input (debounced) — pitcher
-  pitcherSlotsEl.addEventListener('input', e => {
-    if (e.target.matches('.bt-slot-comment')) {
-      const i = parseInt(e.target.closest('.bt-slot').dataset.pitcher);
-      state.pitchers[i].comment = e.target.value;
-      clearTimeout(commentDebounceTimer);
-      commentDebounceTimer = setTimeout(syncURL, DEBOUNCE_MS);
     }
   });
 
@@ -553,7 +531,6 @@ function attachActionHandlers() {
     if (!confirm('打線をリセットしますか？')) return;
     state.slots.forEach(s => { s.songId = null; s.position = ''; s.comment = ''; });
     state.pitchers.forEach(p => { p.songId = null; p.comment = ''; });
-    clearSelectedSong();
     buildSlotDOM();
     buildPitcherDOM();
     attachDragHandlers();
@@ -565,7 +542,8 @@ function attachActionHandlers() {
 
   // Twitter share
   document.getElementById('btShareTwitter').addEventListener('click', () => {
-    window.open('https://twitter.com/intent/tweet?text=' + encodeURIComponent(buildShareText()), '_blank', 'noopener,width=600,height=450');
+    const params = new URLSearchParams({ text: buildShareText(), url: location.href });
+    window.open('https://twitter.com/intent/tweet?' + params, '_blank', 'noopener,width=600,height=450');
   });
 
   // Copy link
@@ -580,42 +558,55 @@ function attachActionHandlers() {
 
   // Download image
   document.getElementById('btDownloadImg').addEventListener('click', generateImage);
+
+  // Picker: song selection
+  pickerListEl.addEventListener('click', e => {
+    const item = e.target.closest('.bt-modal-item');
+    if (!item || !pickerTarget) return;
+    const songId = item.dataset.songId;
+    assign(pickerTarget.type, pickerTarget.idx, songId, 'pool', null);
+    closePicker();
+  });
+
+  // Picker: search
+  pickerSearchEl.addEventListener('input', () => renderPickerList(pickerSearchEl.value));
+
+  // Picker: close
+  document.getElementById('btModalClose').addEventListener('click', closePicker);
+  pickerModalEl.addEventListener('click', e => { if (e.target === pickerModalEl) closePicker(); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closePicker(); });
 }
 
 // ===== Share Text =====
 function buildShareText() {
-  const lines = ['【Hey!Mommy! 打線】'];
+  // Twitter: 280字 - t.co URL 23字 - 区切りスペース 1字 = 257字
+  const LIMIT = 257;
+  const header   = 'ヘイマミーの曲で打線組んでみた';
+  const hashtags = '#ヘイマミー #打線メーカー';
 
-  const hasSlots = state.slots.some(s => s.songId);
-  const hasPitchers = state.pitchers.some(p => p.songId);
+  const orderLines = [];
+  state.slots.forEach((slot, i) => {
+    if (!slot.songId) return;
+    const song = songMap[slot.songId];
+    const pos = slot.position ? `(${POSITION_LABEL[slot.position][0]})` : '';
+    orderLines.push(`${i + 1}${pos} ${song.title}`);
+  });
+  state.pitchers.forEach(p => {
+    if (!p.songId) return;
+    orderLines.push(`投 ${songMap[p.songId].title}`);
+  });
 
-  if (!hasSlots && !hasPitchers) {
-    lines.push('（空です）');
-  } else {
-    state.slots.forEach((slot, i) => {
-      if (!slot.songId) return;
-      const song = songMap[slot.songId];
-      const pos = slot.position ? `${POSITION_LABEL[slot.position] || slot.position} ` : '';
-      let cmt = slot.comment ? slot.comment.slice(0, 15) : '';
-      if (slot.comment && slot.comment.length > 15) cmt += '…';
-      lines.push(`${i + 1}番 ${pos}${song.title}${cmt ? ` 「${cmt}」` : ''}`);
-    });
+  const full = [header, ...orderLines, hashtags].join('\n');
+  if (full.length <= LIMIT) return full;
 
-    if (hasPitchers) {
-      lines.push('【投手陣】');
-      state.pitchers.forEach(p => {
-        if (!p.songId) return;
-        const song = songMap[p.songId];
-        let cmt = p.comment ? p.comment.slice(0, 15) : '';
-        if (p.comment && p.comment.length > 15) cmt += '…';
-        lines.push(`${p.role} ${song.title}${cmt ? ` 「${cmt}」` : ''}`);
-      });
-    }
+  // オーダー末尾から削って … を追加
+  while (orderLines.length > 0) {
+    orderLines.pop();
+    const trimmed = [header, ...orderLines, '…', hashtags].join('\n');
+    if (trimmed.length <= LIMIT) return trimmed;
   }
 
-  lines.push('#HeyMommy #打線メーカー');
-  lines.push(location.href);
-  return lines.join('\n');
+  return [header, '…', hashtags].join('\n');
 }
 
 // ===== Toast =====
@@ -688,7 +679,7 @@ function generateImage() {
     state.pitchers.forEach(p => {
       if (!p.songId) return;
       drawRow(ctx, pitchRow, pitchStartY + (pitchRow + 1) * rowH, rowH, {
-        label: p.role,
+        label: '投手',
         labelColor: '#f06c9c',
         sublabel: 'P（投手）',
         songId: p.songId,
@@ -704,7 +695,7 @@ function generateImage() {
   ctx.fillRect(0, H - footerH, W, footerH);
   ctx.font = '11px "Segoe UI", sans-serif';
   ctx.fillStyle = '#8888a0';
-  ctx.fillText('#HeyMommy #打線メーカー', 20, H - 10);
+  ctx.fillText('#ヘイマミー #打線メーカー', 20, H - 10);
 
   // Download
   try {
@@ -770,7 +761,7 @@ function drawRow(ctx, _rowIdx, y, rowH, { label, labelColor, sublabel, songId, c
       ctx.font = 'italic 12px "Segoe UI", "Noto Sans JP", sans-serif';
       ctx.fillStyle = '#f06c9c';
       ctx.textAlign = 'right';
-      ctx.fillText('「' + truncateTextWidth(ctx, comment, 380) + '」', 1176, y + rowH / 2 + 6);
+      ctx.fillText('「' + truncateText(ctx, comment, 380) + '」', 1176, y + rowH / 2 + 6);
       ctx.textAlign = 'left';
     }
   } else {
@@ -802,6 +793,3 @@ function truncateText(ctx, text, maxWidth) {
   return t + '…';
 }
 
-function truncateTextWidth(ctx, text, maxWidth) {
-  return truncateText(ctx, text, maxWidth);
-}

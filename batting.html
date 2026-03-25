@@ -60,7 +60,7 @@
 
 <div class="bt-page">
   <div class="bt-title">打線メーカー</div>
-  <div class="bt-subtitle">そろそろHey!Mommy!の楽曲で打線を組もうか。曲をドラッグして打順に配置、守備位置とコメントを設定してシェア</div>
+  <div class="bt-subtitle">Hey!Mommy! の楽曲で打線を組もう。曲をドラッグして打順に配置、守備位置とコメントを設定してシェア</div>
 
   <div class="bt-layout">
     <!-- 曲プール -->
@@ -78,8 +78,7 @@
 
       <!-- 投手陣 -->
       <div class="bt-pitcher-section">
-        <div class="bt-section-label">投手陣</div>
-        <div class="bt-pitcher-slots" id="btPitcherSlots">
+<div class="bt-pitcher-slots" id="btPitcherSlots">
           <!-- 3スロットはJSで生成 -->
         </div>
       </div>
@@ -107,8 +106,21 @@
   </div>
 </div>
 
+<!-- Song Picker Modal -->
+<div class="bt-modal-overlay" id="btModal" hidden>
+  <div class="bt-modal" role="dialog" aria-modal="true" aria-labelledby="btModalTitle">
+    <div class="bt-modal-header">
+      <span class="bt-modal-title" id="btModalTitle">曲を選択</span>
+      <button class="bt-modal-close" id="btModalClose" aria-label="閉じる">✕</button>
+    </div>
+    <input type="text" class="bt-modal-search" id="btModalSearch" placeholder="曲名で検索...">
+    <div class="bt-modal-list" id="btModalList"></div>
+  </div>
+</div>
+
 <div class="bt-toast" id="btToast"></div>
 
+<script src="scripts/lz-string.min.js"></script>
 <script src="scripts/batting.js"></script>
 </body>
 </html>
