@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>セトリジェネレーター — Hey!Mommy! Song Analysis</title>
+  <title>セトリメーカー — Hey!Mommy! Song Analysis</title>
   <!-- OGP -->
-  <meta property="og:title" content="セトリジェネレーター — Hey!Mommy! Song Analysis">
+  <meta property="og:title" content="セトリメーカー — Hey!Mommy! Song Analysis">
   <meta property="og:description" content="Hey!Mommy! の楽曲データからテーマ別セットリストを自動生成">
   <meta property="og:image" content="https://harapeko-wanchi.github.io/hm-song-analysis/img/og-setlist.png">
   <meta property="og:url" content="https://harapeko-wanchi.github.io/hm-song-analysis/setlist.html">
@@ -59,34 +59,47 @@
 </nav>
 
 <div class="sl-page">
-  <div class="sl-title">セトリジェネレーター</div>
-  <div class="sl-subtitle">テーマ・曲数を選んで「生成」— BPMの緩急と雰囲気の流れを考慮した最適セトリを自動生成</div>
+  <div class="sl-title">セトリメーカー</div>
+  <div class="sl-subtitle">曲を追加してセットリストを自由に組もう。自動生成でBPM・雰囲気の流れを考慮したセトリも作れます</div>
 
-  <!-- Controls -->
-  <div class="sl-controls">
-    <div class="sl-ctrl-group">
-      <label class="sl-label">テーマ</label>
-      <div class="sl-themes" id="themeList"></div>
-    </div>
-    <div class="sl-ctrl-group">
-      <label class="sl-label" for="countSlider">曲数: <span id="countVal">8</span></label>
-      <input type="range" id="countSlider" min="4" max="15" value="8" class="sl-slider">
-    </div>
-    <button id="generateBtn" class="sl-generate-btn">🎤 セトリ生成</button>
-  </div>
+  <!-- Editor -->
+  <div class="sl-editor">
+    <input type="text" id="slTitleInput" class="sl-title-input"
+      maxlength="30" placeholder="タイトルを入力：ヘイマミーのセトリ" aria-label="セトリタイトル">
 
-  <!-- Result -->
-  <div class="sl-result" id="slResult" style="display:none">
-    <!-- Setlist cards -->
+    <div class="sl-editor-toolbar">
+      <span class="sl-count-badge" id="slCountBadge">0曲</span>
+      <div class="sl-editor-actions">
+        <button class="sl-btn sl-btn-add" id="slAddSongBtn">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2"><line x1="7" y1="2" x2="7" y2="12"/><line x1="2" y1="7" x2="12" y2="7"/></svg>
+          曲を追加
+        </button>
+        <button class="sl-btn sl-btn-encore" id="slAddEncoreBtn">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 7h10M9 4l3 3-3 3"/></svg>
+          アンコール
+        </button>
+        <button class="sl-btn sl-btn-auto" id="slAutoGenBtn">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M7 1l1.5 3.5L12 6l-3.5 1.5L7 11l-1.5-3.5L2 6l3.5-1.5z"/></svg>
+          自動生成
+        </button>
+      </div>
+    </div>
+
     <div class="sl-list" id="slList"></div>
 
-    <!-- BPM flow chart -->
+    <div class="sl-empty" id="slEmpty">
+      <div class="sl-empty-icon">🎶</div>
+      <p>「曲を追加」でセトリを組もう。<br>「自動生成」でBPM・雰囲気を考慮したセトリを自動で作ることもできます。</p>
+    </div>
+  </div>
+
+  <!-- Charts (hidden until first song) -->
+  <div class="sl-charts" id="slCharts" hidden>
     <div class="sl-flow-section">
       <div class="sl-flow-title">BPM フロー</div>
       <canvas id="bpmCanvas" height="160"></canvas>
     </div>
 
-    <!-- Mood flow chart -->
     <div class="sl-flow-section">
       <div class="sl-flow-title">ムード推移</div>
       <canvas id="moodCanvas" height="160"></canvas>
@@ -96,16 +109,81 @@
       </div>
     </div>
 
-    <!-- Stats summary -->
     <div class="sl-stats" id="slStats"></div>
-  </div>
 
-  <div class="sl-empty" id="slEmpty">
-    <div class="sl-empty-icon">🎶</div>
-    <p>テーマを選んで「セトリ生成」を押すと、<br>BPMや雰囲気の緩急を考慮したセットリストを生成します</p>
+    <div class="sl-share-bar">
+      <button class="sl-btn sl-btn-twitter" id="slShareTwitter">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.733-8.835L1.254 2.25H8.08l4.259 5.63 5.905-5.63Zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+        Xでシェア
+      </button>
+      <button class="sl-btn sl-btn-copy" id="slCopyLink">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg>
+        リンクをコピー
+      </button>
+      <button class="sl-btn sl-btn-reset" id="slResetBtn">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 102.13-9.36L1 10"/></svg>
+        リセット
+      </button>
+    </div>
   </div>
 </div>
 
+<!-- Auto-generation dialog -->
+<div class="sl-dialog-overlay" id="slAutoDialog" hidden>
+  <div class="sl-dialog" role="dialog" aria-modal="true" aria-labelledby="slDialogTitle">
+    <div class="sl-dialog-header">
+      <span class="sl-dialog-title" id="slDialogTitle">自動生成</span>
+      <button class="sl-dialog-close" id="slDialogClose" aria-label="閉じる">✕</button>
+    </div>
+    <div class="sl-dialog-body">
+      <div class="sl-ctrl-group">
+        <label class="sl-label">テーマ</label>
+        <div class="sl-themes" id="themeList"></div>
+      </div>
+      <div class="sl-ctrl-group">
+        <label class="sl-label" for="countSlider">曲数: <span id="countVal">8</span></label>
+        <input type="range" id="countSlider" min="4" max="15" value="8" class="sl-slider">
+      </div>
+      <button id="generateBtn" class="sl-generate-btn">🎤 セトリ生成</button>
+    </div>
+  </div>
+</div>
+
+<!-- Song picker modal -->
+<div class="sl-modal-overlay" id="slPickerModal" hidden>
+  <div class="sl-modal" role="dialog" aria-modal="true" aria-labelledby="slPickerTitle">
+    <div class="sl-modal-header">
+      <span class="sl-modal-title" id="slPickerTitle">曲を追加</span>
+      <button class="sl-modal-close" id="slPickerClose" aria-label="閉じる">✕</button>
+    </div>
+    <input type="text" class="sl-modal-search" id="slPickerSearch" placeholder="曲名で検索...">
+    <div class="sl-modal-list" id="slPickerList"></div>
+  </div>
+</div>
+
+<!-- Fixed item control panel (shown when item is selected) -->
+<div class="sl-ctrl-panel" id="slCtrlPanel" hidden>
+  <span class="sl-ctrl-panel-label" id="slCtrlPanelLabel"></span>
+  <div class="sl-ctrl-panel-actions">
+    <button class="sl-ctrl-btn sl-ctrl-up" id="slCtrlUp" title="上へ" aria-label="上へ">
+      <svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="2,9 6.5,4 11,9"/></svg>
+    </button>
+    <button class="sl-ctrl-btn sl-ctrl-down" id="slCtrlDown" title="下へ" aria-label="下へ">
+      <svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="2,4 6.5,9 11,4"/></svg>
+    </button>
+    <button class="sl-ctrl-btn sl-ctrl-remove" id="slCtrlRemove" title="削除" aria-label="削除">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a1 1 0 011-1h4a1 1 0 011 1v2"/></svg>
+    </button>
+    <div class="sl-ctrl-divider"></div>
+    <button class="sl-ctrl-btn sl-ctrl-close" id="slCtrlClose" title="閉じる" aria-label="閉じる">
+      <svg width="11" height="11" viewBox="0 0 11 11" fill="none" stroke="currentColor" stroke-width="2"><line x1="1" y1="1" x2="10" y2="10"/><line x1="10" y1="1" x2="1" y2="10"/></svg>
+    </button>
+  </div>
+</div>
+
+<div class="sl-toast" id="slToast"></div>
+
+<script src="scripts/lz-string.min.js"></script>
 <script src="scripts/setlist.js"></script>
 </body>
 </html>

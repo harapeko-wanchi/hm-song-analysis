@@ -2,7 +2,9 @@
   "permissions": {
     "allow": [
       "WebSearch",
-      "WebFetch(domain:www.youtube.com)"
+      "WebFetch(domain:www.youtube.com)",
+      "Read(//c/hm-song-analysis//**)",
+      "Bash(node -e \":*)"
     ]
   }
 }

@@ -45,7 +45,7 @@ const THEMES = [
     id: 'balanced',
     label: '⚖️ バランス',
     desc: '全ジャンルから満遍なく選曲。緩急のある理想的なセトリ',
-    weights: {},          // all equal
+    weights: {},
     curveType: 'wave',
   },
   {
@@ -57,46 +57,46 @@ const THEMES = [
   },
 ];
 
+/* ===== State ===== */
+const DEFAULT_TITLE = 'ヘイマミーのセトリ';
+let state = { title: DEFAULT_TITLE, items: [] };
 let allSongs = [];
+let songMap = {};
 let activeTheme = 'hype';
+let dragSrcIdx = null;
+let selectedIdx = null;
 
-/* ---- Scoring for theme ---- */
+/* ===== Core algorithm functions (unchanged) ===== */
+
 function themeScore(song, themeId) {
   const theme = THEMES.find(t => t.id === themeId);
   const w = theme.weights;
   const keys = Object.keys(w);
   if (keys.length === 0) {
-    // balanced — sum all axes equally
     return AXES.reduce((sum, ax) => sum + (song.scores[ax.key] || 0), 0);
   }
   return keys.reduce((sum, k) => sum + (song.scores[k] || 0) * w[k], 0);
 }
 
-/* ---- BPM target curve generation ---- */
 function bpmCurve(n, type, minBPM, maxBPM) {
   const targets = [];
   for (let i = 0; i < n; i++) {
-    const t = i / (n - 1); // 0..1
+    const t = i / (n - 1);
     let factor;
     switch (type) {
       case 'peak-mid':
-        // Rise to peak at ~60%, then slight dip, final burst
         factor = Math.sin(t * Math.PI * 0.9) * 0.7 + (t > 0.85 ? 0.3 : 0);
         break;
       case 'valley':
-        // Start medium, dip to emotional valley mid, rise at end
         factor = 1 - 0.6 * Math.sin(t * Math.PI);
         break;
       case 'steady-up':
-        // Gradual climb
         factor = 0.3 + 0.7 * t;
         break;
       case 'wave':
-        // Wave pattern — up/down/up
         factor = 0.5 + 0.4 * Math.sin(t * Math.PI * 2);
         break;
       case 'all-high':
-        // Start strong, stay high
         factor = 0.7 + 0.3 * Math.sin(t * Math.PI * 0.8);
         break;
       default:
@@ -107,33 +107,21 @@ function bpmCurve(n, type, minBPM, maxBPM) {
   return targets;
 }
 
-/* ---- Generate setlist ---- */
 function generateSetlist(themeId, count) {
   const pool = allSongs.filter(s => s.scores && s.bpm);
-
-  // Score all songs for theme
   const scored = pool.map(s => ({ song: s, score: themeScore(s, themeId) }));
   scored.sort((a, b) => b.score - a.score);
-
-  // Take top candidates (2x count to have room for BPM matching)
   const candidates = scored.slice(0, Math.min(count * 3, pool.length));
-
-  // Get BPM range from candidates
   const bpms = candidates.map(c => c.song.bpm);
   const minBPM = Math.min(...bpms);
   const maxBPM = Math.max(...bpms);
-
   const theme = THEMES.find(t => t.id === themeId);
   const targetBPMs = bpmCurve(count, theme.curveType, minBPM, maxBPM);
-
-  // Greedy assignment: for each slot, pick from top-k candidates with randomness
   const used = new Set();
   const setlist = [];
-
   for (let slot = 0; slot < count; slot++) {
     const target = targetBPMs[slot];
     const ranked = [];
-
     for (let i = 0; i < candidates.length; i++) {
       if (used.has(i)) continue;
       const s = candidates[i].song;
@@ -142,10 +130,8 @@ function generateSetlist(themeId, count) {
       ranked.push({ idx: i, combined });
     }
     ranked.sort((a, b) => b.combined - a.combined);
-
-    // Pick randomly from top 3 candidates (weighted toward higher scores)
     const topK = ranked.slice(0, Math.min(3, ranked.length));
-    const weights = topK.map((_, i) => Math.pow(0.5, i)); // 1, 0.5, 0.25
+    const weights = topK.map((_, i) => Math.pow(0.5, i));
     const totalW = weights.reduce((a, b) => a + b, 0);
     let r = Math.random() * totalW;
     let pick = topK[0];
@@ -153,36 +139,31 @@ function generateSetlist(themeId, count) {
       r -= weights[i];
       if (r <= 0) { pick = topK[i]; break; }
     }
-
     if (pick) {
       used.add(pick.idx);
       setlist.push(candidates[pick.idx].song);
     }
   }
-
   return setlist;
 }
 
-/* ---- Assign roles ---- */
 function assignRoles(setlist) {
   const n = setlist.length;
   return setlist.map((s, i) => {
     if (i === 0) return 'OPENER';
     if (i === n - 1) return 'CLOSER';
-    // Peak: highest party+speed in middle section
     const energy = (s.scores.party || 0) + (s.scores.speed || 0);
     const prevE = i > 0 ? (setlist[i-1].scores.party || 0) + (setlist[i-1].scores.speed || 0) : 0;
     const nextE = i < n-1 ? (setlist[i+1].scores.party || 0) + (setlist[i+1].scores.speed || 0) : 0;
-    if (energy > prevE && energy > nextE && i > 0 && i < n - 1) return 'PEAK';
-    // Breather: lowest energy
+    if (energy > prevE && energy > nextE) return 'PEAK';
     const emo = (s.scores.emo || 0);
     if (emo > 6 && energy < 10) return 'BREATHER';
     return null;
   });
 }
 
-/* ---- Draw line chart ---- */
-function drawLineChart(canvas, labels, datasets, yMin, yMax, yLabel) {
+/* ===== Draw line chart ===== */
+function drawLineChart(canvas, labels, datasets, yMin, yMax, yLabel, encorePositions = []) {
   const dpr = window.devicePixelRatio || 1;
   const w = canvas.clientWidth;
   const h = 160;
@@ -194,6 +175,7 @@ function drawLineChart(canvas, labels, datasets, yMin, yMax, yLabel) {
   const pad = { top: 20, right: 20, bottom: 30, left: 48 };
   const cw = w - pad.left - pad.right;
   const ch = h - pad.top - pad.bottom;
+  const n = labels.length;
 
   ctx.clearRect(0, 0, w, h);
 
@@ -229,20 +211,18 @@ function drawLineChart(canvas, labels, datasets, yMin, yMax, yLabel) {
   ctx.textAlign = 'center'; ctx.textBaseline = 'top';
   ctx.font = '11px "Segoe UI", sans-serif';
   ctx.fillStyle = '#8888a0';
-  const n = labels.length;
   for (let i = 0; i < n; i++) {
-    const x = pad.left + (cw * i) / (n - 1);
+    const x = n > 1 ? pad.left + (cw * i) / (n - 1) : pad.left + cw / 2;
     ctx.fillText(labels[i], x, h - pad.bottom + 6);
   }
 
-  // Draw datasets
+  // Datasets
   datasets.forEach(ds => {
     const pts = ds.data.map((v, i) => ({
-      x: pad.left + (cw * i) / (n - 1),
+      x: n > 1 ? pad.left + (cw * i) / (n - 1) : pad.left + cw / 2,
       y: pad.top + ch * (1 - (v - yMin) / (yMax - yMin)),
     }));
 
-    // Area fill
     if (ds.fill) {
       ctx.beginPath();
       ctx.moveTo(pts[0].x, pad.top + ch);
@@ -253,7 +233,6 @@ function drawLineChart(canvas, labels, datasets, yMin, yMax, yLabel) {
       ctx.fill();
     }
 
-    // Line
     ctx.beginPath();
     pts.forEach((p, i) => i === 0 ? ctx.moveTo(p.x, p.y) : ctx.lineTo(p.x, p.y));
     ctx.strokeStyle = ds.color;
@@ -261,7 +240,6 @@ function drawLineChart(canvas, labels, datasets, yMin, yMax, yLabel) {
     ctx.lineJoin = 'round';
     ctx.stroke();
 
-    // Dots + value labels
     pts.forEach((p, i) => {
       ctx.beginPath();
       ctx.arc(p.x, p.y, 4, 0, Math.PI * 2);
@@ -279,93 +257,288 @@ function drawLineChart(canvas, labels, datasets, yMin, yMax, yLabel) {
       }
     });
   });
+
+  // Encore position markers
+  if (encorePositions.length > 0 && n > 1) {
+    ctx.save();
+    ctx.setLineDash([4, 4]);
+    ctx.strokeStyle = 'rgba(255,255,255,.25)';
+    ctx.lineWidth = 1.5;
+    encorePositions.forEach(k => {
+      if (k <= 0 || k >= n) return;
+      const x = pad.left + (cw * (k - 0.5)) / (n - 1);
+      ctx.beginPath();
+      ctx.moveTo(x, pad.top);
+      ctx.lineTo(x, pad.top + ch);
+      ctx.stroke();
+    });
+    ctx.setLineDash([]);
+    ctx.font = '600 9px "Segoe UI", sans-serif';
+    ctx.fillStyle = 'rgba(255,255,255,.35)';
+    ctx.textAlign = 'center'; ctx.textBaseline = 'top';
+    encorePositions.forEach(k => {
+      if (k <= 0 || k >= n) return;
+      const x = pad.left + (cw * (k - 0.5)) / (n - 1);
+      ctx.fillText('ENC', x, pad.top + 2);
+    });
+    ctx.restore();
+  }
 }
 
-/* ---- Display setlist ---- */
-function displaySetlist(setlist) {
-  document.getElementById('slEmpty').style.display = 'none';
-  document.getElementById('slResult').style.display = '';
+/* ===== URL encoding ===== */
 
-  const roles = assignRoles(setlist);
-  const n = setlist.length;
+function buildRawState(st) {
+  const titlePart = (st.title && st.title !== DEFAULT_TITLE) ? st.title : '';
+  const itemParts = st.items.map(item => {
+    if (item.type === 'encore') return 'E';
+    const idx = allSongs.findIndex(s => s.id === item.songId);
+    if (idx === -1) return null;
+    const token = idx.toString(36);
+    return item.comment ? token + ':' + item.comment : token;
+  }).filter(t => t !== null);
+  return titlePart + '~' + itemParts.join('|');
+}
 
-  const bpmLabels = setlist.map((_, i) => `M${i + 1}`);
-  const bpmData = setlist.map(s => s.bpm);
+function parseRawState(raw) {
+  const tildeIdx = raw.indexOf('~');
+  if (tildeIdx === -1) return { title: DEFAULT_TITLE, items: [] };
+  const titlePart = raw.slice(0, tildeIdx);
+  const itemsStr = raw.slice(tildeIdx + 1);
+  const title = titlePart || DEFAULT_TITLE;
+  const items = [];
+  if (itemsStr) {
+    itemsStr.split('|').forEach(token => {
+      if (!token) return;
+      if (token === 'E') { items.push({ type: 'encore' }); return; }
+      const colonIdx = token.indexOf(':');
+      const idxStr = colonIdx === -1 ? token : token.slice(0, colonIdx);
+      const comment = colonIdx === -1 ? '' : token.slice(colonIdx + 1);
+      const idx = parseInt(idxStr, 36);
+      if (!isNaN(idx) && idx >= 0 && idx < allSongs.length) {
+        items.push({ type: 'song', songId: allSongs[idx].id, comment });
+      }
+    });
+  }
+  return { title, items };
+}
 
-  // Setlist cards (render first, above charts)
-  const list = document.getElementById('slList');
-  list.innerHTML = '';
-  setlist.forEach((s, i) => {
-    const card = document.createElement('div');
-    card.className = 'sl-card';
+function encodeState(st) {
+  const raw = buildRawState(st);
+  return LZString.compressToEncodedURIComponent(raw);
+}
 
-    const thumbHTML = s.thumbnail_url
-      ? `<a href="${s.youtube_url || '#'}" target="_blank" rel="noopener" class="sl-card-thumb">
-          <img src="${s.thumbnail_url}" alt="${s.title}" loading="lazy">
-          <div class="play-icon">▶</div>
-        </a>`
-      : '';
+function decodeState(search) {
+  const params = new URLSearchParams(search);
+  const d = params.get('d');
+  if (!d) return null;
+  const raw = LZString.decompressFromEncodedURIComponent(d);
+  if (!raw) return null;
+  return parseRawState(raw);
+}
 
-    const role = roles[i];
-    const roleMap = {
-      OPENER:   { label: 'OPENER', cls: 'role-opener' },
-      CLOSER:   { label: 'CLOSER', cls: 'role-closer' },
-      PEAK:     { label: 'PEAK',   cls: 'role-peak' },
-      BREATHER: { label: 'BREATHER', cls: 'role-breather' },
-    };
-    const roleBadge = role && roleMap[role]
-      ? `<span class="sl-badge ${roleMap[role].cls}">${roleMap[role].label}</span>`
-      : '';
+function syncURL() {
+  const encoded = encodeState(state);
+  const url = encoded ? '?d=' + encoded : location.pathname;
+  history.replaceState(null, '', url);
+}
 
-    card.innerHTML = `
-      <div class="sl-num">${i + 1}</div>
-      ${thumbHTML}
-      <div class="sl-card-body">
-        <div class="sl-card-title">${s.title}</div>
-        <div class="sl-card-meta">
-          <span>BPM ${s.bpm}</span>
-          <span>Key: ${s.key}</span>
-          <span>♪ ${s.composer}</span>
-        </div>
-        <div class="sl-card-badges">
-          ${roleBadge}
-        </div>
-      </div>
-    `;
-    list.appendChild(card);
+/* ===== Utilities ===== */
+
+function debounce(fn, ms) {
+  let timer;
+  return (...args) => { clearTimeout(timer); timer = setTimeout(() => fn(...args), ms); };
+}
+
+function escapeHtml(str) {
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+}
+
+function escapeAttr(str) {
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/"/g, '&quot;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+}
+
+function songCount() {
+  return state.items.filter(i => i.type === 'song').length;
+}
+
+function showToast(msg) {
+  const toast = document.getElementById('slToast');
+  toast.textContent = msg;
+  toast.classList.add('visible');
+  setTimeout(() => toast.classList.remove('visible'), 2000);
+}
+
+/* ===== Item selection ===== */
+
+function selectItem(idx) {
+  selectedIdx = idx;
+  updateSelection();
+}
+
+function deselectItem() {
+  selectedIdx = null;
+  updateSelection();
+}
+
+function updateSelection() {
+  document.querySelectorAll('.sl-item').forEach(el => {
+    el.classList.toggle('sl-item--selected', parseInt(el.dataset.idx) === selectedIdx);
   });
 
-  // BPM chart
+  const panel = document.getElementById('slCtrlPanel');
+  if (selectedIdx === null || selectedIdx >= state.items.length) {
+    panel.hidden = true;
+    return;
+  }
+  panel.hidden = false;
+
+  const item = state.items[selectedIdx];
+  const labelEl = document.getElementById('slCtrlPanelLabel');
+  if (item.type === 'encore') {
+    labelEl.textContent = 'アンコール';
+  } else {
+    const song = songMap[item.songId];
+    labelEl.textContent = song ? song.title : '—';
+  }
+  document.getElementById('slCtrlUp').disabled = selectedIdx === 0;
+  document.getElementById('slCtrlDown').disabled = selectedIdx === state.items.length - 1;
+}
+
+/* ===== Rendering ===== */
+
+function renderItemEl(item, idx, songNum) {
+  const el = document.createElement('div');
+  el.dataset.idx = idx;
+
+  if (item.type === 'encore') {
+    el.className = 'sl-item sl-item--encore';
+    el.innerHTML = `
+      <div class="sl-item-encore-bar">
+        <span class="sl-encore-label">── アンコール ──</span>
+      </div>
+    `;
+    return el;
+  }
+
+  el.className = 'sl-item sl-item--song';
+  el.draggable = true;
+
+  const song = songMap[item.songId];
+  if (!song) return el;
+
+  const thumbHTML = song.thumbnail_url
+    ? `<img src="${escapeAttr(song.thumbnail_url)}" alt="${escapeAttr(song.title)}" class="sl-item-thumb" loading="lazy">`
+    : `<div class="sl-item-thumb sl-item-thumb--empty"></div>`;
+
+  el.innerHTML = `
+    <div class="sl-item-header">
+      <span class="sl-drag-handle" aria-hidden="true">⠿</span>
+      <span class="sl-item-num">${songNum}</span>
+      ${thumbHTML}
+      <div class="sl-item-info">
+        <div class="sl-item-title">${escapeHtml(song.title)}</div>
+        <div class="sl-item-meta">BPM ${song.bpm} · ${escapeHtml(song.key)} · ${escapeHtml(song.composer)}</div>
+      </div>
+    </div>
+    <div class="sl-item-body">
+      <input type="text" class="sl-item-comment" data-idx="${idx}"
+        maxlength="40" placeholder="コメントを追加（任意）"
+        value="${escapeAttr(item.comment || '')}">
+    </div>
+  `;
+  return el;
+}
+
+function renderEditor() {
+  const list = document.getElementById('slList');
+  const empty = document.getElementById('slEmpty');
+  const badge = document.getElementById('slCountBadge');
+  const addBtn = document.getElementById('slAddSongBtn');
+
+  const count = songCount();
+  badge.textContent = count + '曲';
+  addBtn.disabled = count >= 30;
+
+  if (state.items.length === 0) {
+    list.innerHTML = '';
+    empty.hidden = false;
+    document.getElementById('slCharts').hidden = true;
+    return;
+  }
+
+  empty.hidden = true;
+  list.innerHTML = '';
+  let songNum = 0;
+  state.items.forEach((item, idx) => {
+    if (item.type === 'song') songNum++;
+    list.appendChild(renderItemEl(item, idx, songNum));
+  });
+
+  renderCharts();
+  attachDragHandlers();
+  updateSelection();
+}
+
+function renderCharts() {
+  const songs = state.items
+    .filter(i => i.type === 'song')
+    .map(i => songMap[i.songId])
+    .filter(Boolean);
+
+  const chartsEl = document.getElementById('slCharts');
+  if (songs.length === 0) {
+    chartsEl.hidden = true;
+    return;
+  }
+  chartsEl.hidden = false;
+
+  // Calculate encore positions (index in songs array where encore appears before)
+  const encorePositions = [];
+  let sIdx = 0;
+  state.items.forEach(item => {
+    if (item.type === 'encore') { encorePositions.push(sIdx); }
+    else if (item.type === 'song') { sIdx++; }
+  });
+
+  const n = songs.length;
+  const labels = songs.map((_, i) => `M${i + 1}`);
+  const bpmData = songs.map(s => s.bpm);
   const bpmMin = Math.min(...bpmData) - 15;
   const bpmMax = Math.max(...bpmData) + 15;
+
   drawLineChart(
     document.getElementById('bpmCanvas'),
-    bpmLabels,
+    labels,
     [{ data: bpmData, color: '#f06c6c', fill: true, showValues: true }],
-    bpmMin, bpmMax, 'BPM'
+    bpmMin, bpmMax, 'BPM',
+    encorePositions
   );
 
-  // Mood chart — party + happy as "盛り上がり", emo as "エモ"
-  const hypeData = setlist.map(s => ((s.scores.party || 0) + (s.scores.happy || 0) + (s.scores.speed || 0)) / 3);
-  const emoData = setlist.map(s => s.scores.emo || 0);
+  const hypeData = songs.map(s => ((s.scores.party || 0) + (s.scores.happy || 0) + (s.scores.speed || 0)) / 3);
+  const emoData = songs.map(s => s.scores.emo || 0);
   drawLineChart(
     document.getElementById('moodCanvas'),
-    bpmLabels,
+    labels,
     [
       { data: hypeData, color: '#fcb040', fill: true, showValues: false },
       { data: emoData, color: '#b06cf0', fill: false, showValues: false },
     ],
-    0, 10, 'Score'
+    0, 10, 'Score',
+    encorePositions
   );
 
-  // Legend is now HTML-based (see #moodLegend in setlist.html)
-
-  // Stats
   const avgBPM = (bpmData.reduce((a, b) => a + b, 0) / n).toFixed(0);
   const bpmRange = `${Math.min(...bpmData)}–${Math.max(...bpmData)}`;
-  const composers = [...new Set(setlist.map(s => s.composer))];
-  const avgParty = (setlist.reduce((sum, s) => sum + (s.scores.party || 0), 0) / n).toFixed(1);
-  const avgEmo = (setlist.reduce((sum, s) => sum + (s.scores.emo || 0), 0) / n).toFixed(1);
+  const composers = [...new Set(songs.map(s => s.composer))];
+  const avgParty = (songs.reduce((sum, s) => sum + (s.scores.party || 0), 0) / n).toFixed(1);
+  const avgEmo = (songs.reduce((sum, s) => sum + (s.scores.emo || 0), 0) / n).toFixed(1);
 
   document.getElementById('slStats').innerHTML = `
     <div class="sl-stat-item"><span class="sl-stat-label">曲数</span><span class="sl-stat-val">${n}曲</span></div>
@@ -377,11 +550,300 @@ function displaySetlist(setlist) {
   `;
 }
 
-/* ---- Init ---- */
+/* ===== State mutations ===== */
+
+function addSong(songId) {
+  if (songCount() >= 30) return;
+  state.items.push({ type: 'song', songId, comment: '' });
+  renderEditor();
+  syncURL();
+}
+
+function addEncore() {
+  state.items.push({ type: 'encore' });
+  renderEditor();
+  syncURL();
+}
+
+function removeItem(idx) {
+  state.items.splice(idx, 1);
+  if (selectedIdx === idx) selectedIdx = null;
+  else if (selectedIdx !== null && selectedIdx > idx) selectedIdx--;
+  renderEditor();
+  syncURL();
+}
+
+function moveItem(idx, dir) {
+  const newIdx = idx + dir;
+  if (newIdx < 0 || newIdx >= state.items.length) return;
+  const tmp = state.items[idx];
+  state.items[idx] = state.items[newIdx];
+  state.items[newIdx] = tmp;
+  if (selectedIdx === idx) selectedIdx = newIdx;
+  renderEditor();
+  syncURL();
+  requestAnimationFrame(() => {
+    const el = document.querySelector(`[data-idx="${newIdx}"]`);
+    if (el) el.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+  });
+}
+
+/* ===== Song picker modal ===== */
+
+function openPicker() {
+  const modal = document.getElementById('slPickerModal');
+  modal.hidden = false;
+  const search = document.getElementById('slPickerSearch');
+  search.value = '';
+  renderPickerList('');
+  if (window.matchMedia('(pointer: fine)').matches) search.focus();
+}
+
+function closePicker() {
+  document.getElementById('slPickerModal').hidden = true;
+}
+
+function renderPickerList(query) {
+  const list = document.getElementById('slPickerList');
+  const q = query.toLowerCase();
+  const filtered = q ? allSongs.filter(s => s.title.toLowerCase().includes(q)) : allSongs;
+
+  if (filtered.length === 0) {
+    list.innerHTML = '<div class="sl-modal-empty">見つかりません</div>';
+    return;
+  }
+
+  list.innerHTML = '';
+  filtered.forEach(song => {
+    const item = document.createElement('div');
+    item.className = 'sl-modal-item';
+    const thumb = song.thumbnail_url
+      ? `<img src="${escapeAttr(song.thumbnail_url)}" alt="" width="36" height="36" style="object-fit:cover;border-radius:4px;flex-shrink:0">`
+      : '';
+    item.innerHTML = `
+      ${thumb}
+      <div style="flex:1;min-width:0">
+        <div style="font-size:.8rem;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${escapeHtml(song.title)}</div>
+        <div style="font-size:.65rem;color:var(--muted)">BPM ${song.bpm} · ${escapeHtml(song.composer)}</div>
+      </div>
+    `;
+    item.addEventListener('click', () => {
+      addSong(song.id);
+      closePicker();
+    });
+    list.appendChild(item);
+  });
+}
+
+/* ===== Auto-generation dialog ===== */
+
+function openAutoDialog() {
+  document.getElementById('slAutoDialog').hidden = false;
+}
+
+function closeAutoDialog() {
+  document.getElementById('slAutoDialog').hidden = true;
+}
+
+/* ===== Share text ===== */
+
+function buildShareText() {
+  const LIMIT = 257;
+  const header = state.title || DEFAULT_TITLE;
+  const hashtags = '#ヘイマミー #セトリメーカー';
+  const orderLines = [];
+  let songNum = 0;
+  state.items.forEach(item => {
+    if (item.type === 'encore') { orderLines.push('— アンコール —'); return; }
+    songNum++;
+    const song = songMap[item.songId];
+    if (!song) return;
+    const label = item.comment ? `${song.title} / ${item.comment}` : song.title;
+    orderLines.push(`${songNum} ${label}`);
+  });
+  const full = [header, ...orderLines, hashtags].join('\n');
+  if (full.length <= LIMIT) return full;
+  while (orderLines.length > 0) {
+    orderLines.pop();
+    while (orderLines.length > 0 && orderLines[orderLines.length - 1] === '— アンコール —') {
+      orderLines.pop();
+    }
+    const trimmed = [header, ...orderLines, '…', hashtags].join('\n');
+    if (trimmed.length <= LIMIT) return trimmed;
+  }
+  return [header, '…', hashtags].join('\n');
+}
+
+/* ===== Drag & Drop ===== */
+
+function attachDragHandlers() {
+  const list = document.getElementById('slList');
+  list.querySelectorAll('.sl-item--song[draggable]').forEach(el => {
+    el.addEventListener('dragstart', e => {
+      dragSrcIdx = parseInt(el.dataset.idx);
+      e.dataTransfer.effectAllowed = 'move';
+      el.classList.add('sl-dragging');
+    });
+    el.addEventListener('dragend', () => {
+      el.classList.remove('sl-dragging');
+      list.querySelectorAll('.sl-item').forEach(e => e.classList.remove('sl-drag-over'));
+      dragSrcIdx = null;
+    });
+    el.addEventListener('dragover', e => {
+      e.preventDefault();
+      e.dataTransfer.dropEffect = 'move';
+      list.querySelectorAll('.sl-item').forEach(e => e.classList.remove('sl-drag-over'));
+      el.classList.add('sl-drag-over');
+    });
+    el.addEventListener('drop', e => {
+      e.preventDefault();
+      const targetIdx = parseInt(el.dataset.idx);
+      if (dragSrcIdx === null || dragSrcIdx === targetIdx) return;
+      const tmp = state.items[dragSrcIdx];
+      state.items[dragSrcIdx] = state.items[targetIdx];
+      state.items[targetIdx] = tmp;
+      renderEditor();
+      syncURL();
+    });
+  });
+}
+
+/* ===== Event handlers ===== */
+
+function attachEditorHandlers() {
+  const list = document.getElementById('slList');
+
+  list.addEventListener('click', e => {
+    if (e.target.closest('input')) return; // コメント入力時は選択しない
+    const itemEl = e.target.closest('.sl-item');
+    if (itemEl) selectItem(parseInt(itemEl.dataset.idx));
+  });
+
+  const syncCommentDebounced = debounce((idx, value) => {
+    if (state.items[idx] && state.items[idx].type === 'song') {
+      state.items[idx].comment = value;
+      syncURL();
+    }
+  }, 400);
+
+  list.addEventListener('input', e => {
+    const commentEl = e.target.closest('.sl-item-comment');
+    if (commentEl) {
+      syncCommentDebounced(parseInt(commentEl.dataset.idx), commentEl.value);
+    }
+  });
+}
+
+function attachActionHandlers() {
+  // Title input
+  const titleInput = document.getElementById('slTitleInput');
+  const syncTitleDebounced = debounce(() => {
+    state.title = titleInput.value.trim() || DEFAULT_TITLE;
+    syncURL();
+  }, 400);
+  titleInput.addEventListener('input', syncTitleDebounced);
+
+  // Add song
+  document.getElementById('slAddSongBtn').addEventListener('click', openPicker);
+
+  // Encore
+  document.getElementById('slAddEncoreBtn').addEventListener('click', addEncore);
+
+  // Auto-gen
+  document.getElementById('slAutoGenBtn').addEventListener('click', openAutoDialog);
+
+  // Dialog close
+  document.getElementById('slDialogClose').addEventListener('click', closeAutoDialog);
+  document.getElementById('slAutoDialog').addEventListener('click', e => {
+    if (e.target === document.getElementById('slAutoDialog')) closeAutoDialog();
+  });
+
+  // Picker close
+  document.getElementById('slPickerClose').addEventListener('click', closePicker);
+  document.getElementById('slPickerModal').addEventListener('click', e => {
+    if (e.target === document.getElementById('slPickerModal')) closePicker();
+  });
+  document.getElementById('slPickerSearch').addEventListener('input', e => {
+    renderPickerList(e.target.value);
+  });
+
+  // Escape key
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') { closeAutoDialog(); closePicker(); deselectItem(); }
+  });
+
+  // Item control panel
+  document.getElementById('slCtrlUp').addEventListener('click', () => {
+    if (selectedIdx !== null) moveItem(selectedIdx, -1);
+  });
+  document.getElementById('slCtrlDown').addEventListener('click', () => {
+    if (selectedIdx !== null) moveItem(selectedIdx, 1);
+  });
+  document.getElementById('slCtrlRemove').addEventListener('click', () => {
+    if (selectedIdx !== null) removeItem(selectedIdx);
+  });
+  document.getElementById('slCtrlClose').addEventListener('click', deselectItem);
+
+  // クリック外しで選択解除
+  document.addEventListener('click', e => {
+    if (!e.target.closest('.sl-item') && !e.target.closest('#slCtrlPanel')) {
+      deselectItem();
+    }
+  });
+
+  // Generate
+  document.getElementById('generateBtn').addEventListener('click', () => {
+    const count = parseInt(document.getElementById('countSlider').value, 10);
+    const proceed = () => {
+      const setlist = generateSetlist(activeTheme, count);
+      state.items = setlist.map(s => ({ type: 'song', songId: s.id, comment: '' }));
+      closeAutoDialog();
+      renderEditor();
+      syncURL();
+    };
+    if (state.items.length > 0) {
+      if (confirm('現在のセトリを上書きしますか？')) proceed();
+    } else {
+      proceed();
+    }
+  });
+
+  // X share
+  document.getElementById('slShareTwitter').addEventListener('click', () => {
+    const text = buildShareText();
+    const url = location.href;
+    window.open(
+      `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`,
+      '_blank', 'noopener'
+    );
+  });
+
+  // Copy link
+  document.getElementById('slCopyLink').addEventListener('click', async () => {
+    try {
+      await navigator.clipboard.writeText(location.href);
+      showToast('リンクをコピーしました');
+    } catch {
+      showToast('コピーできませんでした');
+    }
+  });
+
+  // Reset
+  document.getElementById('slResetBtn').addEventListener('click', () => {
+    if (!confirm('セトリをリセットしますか？')) return;
+    state = { title: DEFAULT_TITLE, items: [] };
+    document.getElementById('slTitleInput').value = '';
+    renderEditor();
+    syncURL();
+  });
+}
+
+/* ===== Init ===== */
 fetch('songs.json')
   .then(r => r.json())
   .then(data => {
     allSongs = data.songs.filter(s => s.scores && s.bpm);
+    allSongs.forEach(s => { songMap[s.id] = s; });
 
     // Build theme buttons
     const themeList = document.getElementById('themeList');
@@ -403,11 +865,17 @@ fetch('songs.json')
     const countVal = document.getElementById('countVal');
     slider.addEventListener('input', () => { countVal.textContent = slider.value; });
 
-    // Generate
-    document.getElementById('generateBtn').addEventListener('click', () => {
-      const count = parseInt(slider.value, 10);
-      const setlist = generateSetlist(activeTheme, count);
-      displaySetlist(setlist);
-    });
+    // Restore state from URL
+    const restored = decodeState(location.search);
+    if (restored) {
+      state = restored;
+      if (state.title !== DEFAULT_TITLE) {
+        document.getElementById('slTitleInput').value = state.title;
+      }
+    }
+
+    renderEditor();
+    attachEditorHandlers();
+    attachActionHandlers();
   })
   .catch(err => console.error('Failed to load songs.json', err));
