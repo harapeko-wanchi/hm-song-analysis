@@ -625,14 +625,25 @@ function moveItem(idx, dir) {
 
 /* ===== Song picker modal ===== */
 
-let pickerAxis = 'all';
+let pickerAxis = 'release';
+let pickerOrder = 'desc';
+
+function updatePickerChips() {
+  document.querySelectorAll('#slPickerChips .sl-picker-chip').forEach(c => {
+    const active = c.dataset.axis === pickerAxis;
+    c.classList.toggle('active', active);
+    c.textContent = active
+      ? `${c.dataset.label} ${pickerOrder === 'desc' ? '▼' : '▲'}`
+      : c.dataset.label;
+  });
+}
 
 function openPicker() {
   const modal = document.getElementById('slPickerModal');
   modal.hidden = false;
-  pickerAxis = 'all';
-  document.querySelectorAll('#slPickerChips .sl-picker-chip').forEach(c =>
-    c.classList.toggle('active', c.dataset.axis === 'all'));
+  pickerAxis = 'release';
+  pickerOrder = 'desc';
+  updatePickerChips();
   renderPickerList();
 }
 
@@ -642,14 +653,34 @@ function closePicker() {
 
 function renderPickerList() {
   const list = document.getElementById('slPickerList');
+  const desc = pickerOrder === 'desc';
   let filtered = [...allSongs];
-  if (pickerAxis === 'bpm') {
-    filtered.sort((a, b) => (b.bpm || 0) - (a.bpm || 0));
-  } else if (pickerAxis !== 'all') {
+
+  if (pickerAxis === 'release') {
     filtered.sort((a, b) => {
-      const sa = a.scores ? (a.scores[pickerAxis] || 0) : -1;
-      const sb = b.scores ? (b.scores[pickerAxis] || 0) : -1;
-      return sb - sa;
+      // null = newest: top in desc, bottom in asc
+      if (!a.release_date && !b.release_date) return 0;
+      if (!a.release_date) return desc ? -1 : 1;
+      if (!b.release_date) return desc ? 1 : -1;
+      return desc
+        ? b.release_date.localeCompare(a.release_date)
+        : a.release_date.localeCompare(b.release_date);
+    });
+  } else if (pickerAxis === 'bpm') {
+    filtered.sort((a, b) => {
+      if (!a.bpm && !b.bpm) return 0;
+      if (!a.bpm) return 1;
+      if (!b.bpm) return -1;
+      return desc ? b.bpm - a.bpm : a.bpm - b.bpm;
+    });
+  } else {
+    filtered.sort((a, b) => {
+      const sa = a.scores ? (a.scores[pickerAxis] ?? -1) : -1;
+      const sb = b.scores ? (b.scores[pickerAxis] ?? -1) : -1;
+      if (sa < 0 && sb < 0) return 0;
+      if (sa < 0) return 1;
+      if (sb < 0) return -1;
+      return desc ? sb - sa : sa - sb;
     });
   }
 
@@ -811,9 +842,13 @@ function attachActionHandlers() {
   document.getElementById('slPickerChips').addEventListener('click', e => {
     const chip = e.target.closest('.sl-picker-chip');
     if (!chip) return;
-    pickerAxis = chip.dataset.axis;
-    document.querySelectorAll('#slPickerChips .sl-picker-chip').forEach(c =>
-      c.classList.toggle('active', c === chip));
+    if (chip.dataset.axis === pickerAxis) {
+      pickerOrder = pickerOrder === 'desc' ? 'asc' : 'desc';
+    } else {
+      pickerAxis = chip.dataset.axis;
+      pickerOrder = 'desc';
+    }
+    updatePickerChips();
     renderPickerList();
   });
 

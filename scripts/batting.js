@@ -50,7 +50,18 @@ const searchEl = document.getElementById('btSearch');
 const toastEl = document.getElementById('btToast');
 const pickerModalEl = document.getElementById('btModal');
 const pickerListEl = document.getElementById('btModalList');
-let pickerAxis = 'all';
+let pickerAxis = 'release';
+let pickerOrder = 'desc';
+
+function updatePickerChips() {
+  document.querySelectorAll('#btPickerChips .bt-picker-chip').forEach(c => {
+    const active = c.dataset.axis === pickerAxis;
+    c.classList.toggle('active', active);
+    c.textContent = active
+      ? `${c.dataset.label} ${pickerOrder === 'desc' ? '▼' : '▲'}`
+      : c.dataset.label;
+  });
+}
 
 // ===== Init =====
 fetch('songs.json')
@@ -439,9 +450,9 @@ function openPicker(type, idx) {
   pickerTarget = { type, idx };
   const label = type === 'slot' ? `${idx + 1}番` : '投手';
   document.getElementById('btModalTitle').textContent = `${label} — 曲を選択`;
-  pickerAxis = 'all';
-  document.querySelectorAll('#btPickerChips .bt-picker-chip').forEach(c =>
-    c.classList.toggle('active', c.dataset.axis === 'all'));
+  pickerAxis = 'release';
+  pickerOrder = 'desc';
+  updatePickerChips();
   renderPickerList();
   pickerModalEl.removeAttribute('hidden');
 }
@@ -453,14 +464,33 @@ function closePicker() {
 
 function renderPickerList() {
   const usedIds = getUsedSongIds();
+  const desc = pickerOrder === 'desc';
   let available = allSongs.filter(s => !usedIds.has(s.id));
-  if (pickerAxis === 'bpm') {
-    available.sort((a, b) => (b.bpm || 0) - (a.bpm || 0));
-  } else if (pickerAxis !== 'all') {
+
+  if (pickerAxis === 'release') {
     available.sort((a, b) => {
-      const sa = a.scores ? (a.scores[pickerAxis] || 0) : -1;
-      const sb = b.scores ? (b.scores[pickerAxis] || 0) : -1;
-      return sb - sa;
+      if (!a.release_date && !b.release_date) return 0;
+      if (!a.release_date) return desc ? -1 : 1;
+      if (!b.release_date) return desc ? 1 : -1;
+      return desc
+        ? b.release_date.localeCompare(a.release_date)
+        : a.release_date.localeCompare(b.release_date);
+    });
+  } else if (pickerAxis === 'bpm') {
+    available.sort((a, b) => {
+      if (!a.bpm && !b.bpm) return 0;
+      if (!a.bpm) return 1;
+      if (!b.bpm) return -1;
+      return desc ? b.bpm - a.bpm : a.bpm - b.bpm;
+    });
+  } else {
+    available.sort((a, b) => {
+      const sa = a.scores ? (a.scores[pickerAxis] ?? -1) : -1;
+      const sb = b.scores ? (b.scores[pickerAxis] ?? -1) : -1;
+      if (sa < 0 && sb < 0) return 0;
+      if (sa < 0) return 1;
+      if (sb < 0) return -1;
+      return desc ? sb - sa : sa - sb;
     });
   }
 
@@ -581,9 +611,13 @@ function attachActionHandlers() {
   document.getElementById('btPickerChips').addEventListener('click', e => {
     const chip = e.target.closest('.bt-picker-chip');
     if (!chip) return;
-    pickerAxis = chip.dataset.axis;
-    document.querySelectorAll('#btPickerChips .bt-picker-chip').forEach(c =>
-      c.classList.toggle('active', c === chip));
+    if (chip.dataset.axis === pickerAxis) {
+      pickerOrder = pickerOrder === 'desc' ? 'asc' : 'desc';
+    } else {
+      pickerAxis = chip.dataset.axis;
+      pickerOrder = 'desc';
+    }
+    updatePickerChips();
     renderPickerList();
   });
 
