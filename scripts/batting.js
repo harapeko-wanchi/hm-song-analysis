@@ -629,10 +629,10 @@ function attachActionHandlers() {
 
 // ===== Share Text =====
 function buildShareText() {
-  // Twitter: 280字 - t.co URL 23字 - 区切りスペース 1字 = 257字
-  const LIMIT = 257;
+  // Twitter: 280字 - t.co URL 23字 - 区切りスペース 2字 = 256字
+  const LIMIT = 256;
   const header   = 'ヘイマミーの曲で打線組んでみた';
-  const hashtags = '#ヘイマミー #打線メーカー';
+  const hashtags = '#へいまみ打線メーカー';
 
   const orderLines = [];
   state.slots.forEach((slot, i) => {
