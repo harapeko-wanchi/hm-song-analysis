@@ -233,27 +233,52 @@ function drawLineChart(canvas, labels, datasets, yMin, yMax, yLabel, encorePosit
       ctx.fill();
     }
 
-    ctx.beginPath();
-    pts.forEach((p, i) => i === 0 ? ctx.moveTo(p.x, p.y) : ctx.lineTo(p.x, p.y));
-    ctx.strokeStyle = ds.color;
-    ctx.lineWidth = 2.5;
-    ctx.lineJoin = 'round';
-    ctx.stroke();
+    // Line（noData 区間は破線）
+    for (let i = 0; i < pts.length - 1; i++) {
+      const seg = ds.noData && (ds.noData[i] || ds.noData[i + 1]);
+      ctx.beginPath();
+      ctx.moveTo(pts[i].x, pts[i].y);
+      ctx.lineTo(pts[i + 1].x, pts[i + 1].y);
+      ctx.strokeStyle = seg ? ds.color + '50' : ds.color;
+      ctx.lineWidth = 2.5;
+      ctx.lineJoin = 'round';
+      if (seg) ctx.setLineDash([4, 3]);
+      ctx.stroke();
+      ctx.setLineDash([]);
+    }
 
     pts.forEach((p, i) => {
-      ctx.beginPath();
-      ctx.arc(p.x, p.y, 4, 0, Math.PI * 2);
-      ctx.fillStyle = ds.color;
-      ctx.fill();
-      ctx.strokeStyle = '#0f0f14';
-      ctx.lineWidth = 2;
-      ctx.stroke();
-
-      if (ds.showValues) {
-        ctx.font = '600 10px "Segoe UI", sans-serif';
-        ctx.fillStyle = ds.color;
+      const isNoData = ds.noData && ds.noData[i];
+      if (isNoData) {
+        // 中央プロット：破線の空白円＋「データなし」
+        ctx.save();
+        ctx.setLineDash([3, 2]);
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, 5, 0, Math.PI * 2);
+        ctx.strokeStyle = ds.color + '70';
+        ctx.lineWidth = 1.5;
+        ctx.stroke();
+        ctx.setLineDash([]);
+        ctx.font = '9px "Segoe UI", sans-serif';
+        ctx.fillStyle = ds.color + 'aa';
         ctx.textAlign = 'center'; ctx.textBaseline = 'bottom';
-        ctx.fillText(Math.round(ds.data[i]), p.x, p.y - 7);
+        ctx.fillText('データなし', p.x, p.y - 8);
+        ctx.restore();
+      } else {
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, 4, 0, Math.PI * 2);
+        ctx.fillStyle = ds.color;
+        ctx.fill();
+        ctx.strokeStyle = '#0f0f14';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+
+        if (ds.showValues) {
+          ctx.font = '600 10px "Segoe UI", sans-serif';
+          ctx.fillStyle = ds.color;
+          ctx.textAlign = 'center'; ctx.textBaseline = 'bottom';
+          ctx.fillText(Math.round(ds.data[i]), p.x, p.y - 7);
+        }
       }
     });
   });
@@ -444,7 +469,7 @@ function renderItemEl(item, idx, songNum) {
       ${thumbHTML}
       <div class="sl-item-info">
         <div class="sl-item-title">${escapeHtml(song.title)}</div>
-        <div class="sl-item-meta">BPM ${song.bpm} · ${escapeHtml(song.key)} · ${escapeHtml(song.composer)}</div>
+        <div class="sl-item-meta">${song.bpm ? `BPM ${song.bpm}` : 'BPM —'} · ${escapeHtml(song.key || '—')} · ${escapeHtml(song.composer || '—')}</div>
       </div>
     </div>
     <div class="sl-item-body">
@@ -509,36 +534,46 @@ function renderCharts() {
 
   const n = songs.length;
   const labels = songs.map((_, i) => `M${i + 1}`);
-  const bpmData = songs.map(s => s.bpm);
-  const bpmMin = Math.min(...bpmData) - 15;
-  const bpmMax = Math.max(...bpmData) + 15;
+
+  // BPM chart — songs without BPM plotted at center of range
+  const songsWithBpm = songs.filter(s => s.bpm);
+  const bpmMin = songsWithBpm.length ? Math.min(...songsWithBpm.map(s => s.bpm)) - 15 : 60;
+  const bpmMax = songsWithBpm.length ? Math.max(...songsWithBpm.map(s => s.bpm)) + 15 : 200;
+  const midBpm = (bpmMin + bpmMax) / 2;
+  const bpmNoData = songs.map(s => !s.bpm);
+  const bpmData = songs.map(s => s.bpm || midBpm);
 
   drawLineChart(
     document.getElementById('bpmCanvas'),
     labels,
-    [{ data: bpmData, color: '#f06c6c', fill: true, showValues: true }],
+    [{ data: bpmData, color: '#f06c6c', fill: true, showValues: true, noData: bpmNoData }],
     bpmMin, bpmMax, 'BPM',
     encorePositions
   );
 
-  const hypeData = songs.map(s => ((s.scores.party || 0) + (s.scores.happy || 0) + (s.scores.speed || 0)) / 3);
-  const emoData = songs.map(s => s.scores.emo || 0);
+  // Mood chart — songs without scores plotted at center (5)
+  const moodNoData = songs.map(s => !s.scores);
+  const hypeData = songs.map(s => s.scores ? ((s.scores.party || 0) + (s.scores.happy || 0) + (s.scores.speed || 0)) / 3 : 5);
+  const emoData  = songs.map(s => s.scores ? (s.scores.emo || 0) : 5);
   drawLineChart(
     document.getElementById('moodCanvas'),
     labels,
     [
-      { data: hypeData, color: '#fcb040', fill: true, showValues: false },
-      { data: emoData, color: '#b06cf0', fill: false, showValues: false },
+      { data: hypeData, color: '#fcb040', fill: true,  showValues: false, noData: moodNoData },
+      { data: emoData,  color: '#b06cf0', fill: false, showValues: false, noData: moodNoData },
     ],
     0, 10, 'Score',
     encorePositions
   );
 
-  const avgBPM = (bpmData.reduce((a, b) => a + b, 0) / n).toFixed(0);
-  const bpmRange = `${Math.min(...bpmData)}–${Math.max(...bpmData)}`;
-  const composers = [...new Set(songs.map(s => s.composer))];
-  const avgParty = (songs.reduce((sum, s) => sum + (s.scores.party || 0), 0) / n).toFixed(1);
-  const avgEmo = (songs.reduce((sum, s) => sum + (s.scores.emo || 0), 0) / n).toFixed(1);
+  // Stats — データのある曲のみで集計
+  const songsWithData = songs.filter(s => s.bpm && s.scores);
+  const nd = songsWithData.length;
+  const avgBPM = nd ? (songsWithData.reduce((a, s) => a + s.bpm, 0) / nd).toFixed(0) : '—';
+  const bpmRange = nd ? `${Math.min(...songsWithData.map(s => s.bpm))}–${Math.max(...songsWithData.map(s => s.bpm))}` : '—';
+  const composers = [...new Set(songs.map(s => s.composer).filter(Boolean))];
+  const avgParty = nd ? (songsWithData.reduce((sum, s) => sum + (s.scores.party || 0), 0) / nd).toFixed(1) : '—';
+  const avgEmo   = nd ? (songsWithData.reduce((sum, s) => sum + (s.scores.emo   || 0), 0) / nd).toFixed(1) : '—';
 
   document.getElementById('slStats').innerHTML = `
     <div class="sl-stat-item"><span class="sl-stat-label">曲数</span><span class="sl-stat-val">${n}曲</span></div>
@@ -624,7 +659,7 @@ function renderPickerList(query) {
       ${thumb}
       <div style="flex:1;min-width:0">
         <div style="font-size:.8rem;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${escapeHtml(song.title)}</div>
-        <div style="font-size:.65rem;color:var(--muted)">BPM ${song.bpm} · ${escapeHtml(song.composer)}</div>
+        <div style="font-size:.65rem;color:var(--muted)">${song.bpm ? `BPM ${song.bpm}` : 'BPM —'} · ${escapeHtml(song.composer || '—')}</div>
       </div>
     `;
     item.addEventListener('click', () => {
@@ -842,7 +877,7 @@ function attachActionHandlers() {
 fetch('songs.json')
   .then(r => r.json())
   .then(data => {
-    allSongs = data.songs.filter(s => s.scores && s.bpm);
+    allSongs = data.songs;
     allSongs.forEach(s => { songMap[s.id] = s; });
 
     // Build theme buttons
