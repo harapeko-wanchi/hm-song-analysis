@@ -745,7 +745,7 @@ function generateImage() {
   ctx.fillRect(0, H - footerH, W, footerH);
   ctx.font = '11px "Segoe UI", sans-serif';
   ctx.fillStyle = '#8888a0';
-  ctx.fillText('#ヘイマミー #打線メーカー', 20, H - 10);
+  ctx.fillText('#へいまみ打線メーカー', 20, H - 10);
 
   // Download
   try {

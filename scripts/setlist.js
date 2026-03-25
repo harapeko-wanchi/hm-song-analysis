@@ -726,7 +726,7 @@ function closeAutoDialog() {
 function buildShareText() {
   const LIMIT = 257;
   const header = state.title || DEFAULT_TITLE;
-  const hashtags = '#ヘイマミー #セトリメーカー';
+  const hashtags = '#へいまみセトリメーカー';
   const orderLines = [];
   let songNum = 0;
   state.items.forEach(item => {
