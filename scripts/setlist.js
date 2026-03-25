@@ -724,7 +724,7 @@ function closeAutoDialog() {
 /* ===== Share text ===== */
 
 function buildShareText() {
-  const LIMIT = 257;
+  const LIMIT = 256;
   const header = state.title || DEFAULT_TITLE;
   const hashtags = '#へいまみセトリメーカー';
   const orderLines = [];
