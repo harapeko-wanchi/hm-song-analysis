@@ -625,23 +625,33 @@ function moveItem(idx, dir) {
 
 /* ===== Song picker modal ===== */
 
+let pickerAxis = 'all';
+
 function openPicker() {
   const modal = document.getElementById('slPickerModal');
   modal.hidden = false;
-  const search = document.getElementById('slPickerSearch');
-  search.value = '';
-  renderPickerList('');
-  if (window.matchMedia('(pointer: fine)').matches) search.focus();
+  pickerAxis = 'all';
+  document.querySelectorAll('#slPickerChips .sl-picker-chip').forEach(c =>
+    c.classList.toggle('active', c.dataset.axis === 'all'));
+  renderPickerList();
 }
 
 function closePicker() {
   document.getElementById('slPickerModal').hidden = true;
 }
 
-function renderPickerList(query) {
+function renderPickerList() {
   const list = document.getElementById('slPickerList');
-  const q = query.toLowerCase();
-  const filtered = q ? allSongs.filter(s => s.title.toLowerCase().includes(q)) : allSongs;
+  let filtered = [...allSongs];
+  if (pickerAxis === 'bpm') {
+    filtered.sort((a, b) => (b.bpm || 0) - (a.bpm || 0));
+  } else if (pickerAxis !== 'all') {
+    filtered.sort((a, b) => {
+      const sa = a.scores ? (a.scores[pickerAxis] || 0) : -1;
+      const sb = b.scores ? (b.scores[pickerAxis] || 0) : -1;
+      return sb - sa;
+    });
+  }
 
   if (filtered.length === 0) {
     list.innerHTML = '<div class="sl-modal-empty">見つかりません</div>';
@@ -798,8 +808,13 @@ function attachActionHandlers() {
   document.getElementById('slPickerModal').addEventListener('click', e => {
     if (e.target === document.getElementById('slPickerModal')) closePicker();
   });
-  document.getElementById('slPickerSearch').addEventListener('input', e => {
-    renderPickerList(e.target.value);
+  document.getElementById('slPickerChips').addEventListener('click', e => {
+    const chip = e.target.closest('.sl-picker-chip');
+    if (!chip) return;
+    pickerAxis = chip.dataset.axis;
+    document.querySelectorAll('#slPickerChips .sl-picker-chip').forEach(c =>
+      c.classList.toggle('active', c === chip));
+    renderPickerList();
   });
 
   // Escape key

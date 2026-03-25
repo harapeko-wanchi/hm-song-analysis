@@ -49,8 +49,8 @@ const pitcherSlotsEl = document.getElementById('btPitcherSlots');
 const searchEl = document.getElementById('btSearch');
 const toastEl = document.getElementById('btToast');
 const pickerModalEl = document.getElementById('btModal');
-const pickerSearchEl = document.getElementById('btModalSearch');
 const pickerListEl = document.getElementById('btModalList');
+let pickerAxis = 'all';
 
 // ===== Init =====
 fetch('songs.json')
@@ -439,10 +439,11 @@ function openPicker(type, idx) {
   pickerTarget = { type, idx };
   const label = type === 'slot' ? `${idx + 1}番` : '投手';
   document.getElementById('btModalTitle').textContent = `${label} — 曲を選択`;
-  pickerSearchEl.value = '';
-  renderPickerList('');
+  pickerAxis = 'all';
+  document.querySelectorAll('#btPickerChips .bt-picker-chip').forEach(c =>
+    c.classList.toggle('active', c.dataset.axis === 'all'));
+  renderPickerList();
   pickerModalEl.removeAttribute('hidden');
-  pickerSearchEl.focus();
 }
 
 function closePicker() {
@@ -450,10 +451,18 @@ function closePicker() {
   pickerTarget = null;
 }
 
-function renderPickerList(query) {
+function renderPickerList() {
   const usedIds = getUsedSongIds();
-  const q = query.toLowerCase();
-  const available = allSongs.filter(s => !usedIds.has(s.id) && (!q || s.title.toLowerCase().includes(q)));
+  let available = allSongs.filter(s => !usedIds.has(s.id));
+  if (pickerAxis === 'bpm') {
+    available.sort((a, b) => (b.bpm || 0) - (a.bpm || 0));
+  } else if (pickerAxis !== 'all') {
+    available.sort((a, b) => {
+      const sa = a.scores ? (a.scores[pickerAxis] || 0) : -1;
+      const sb = b.scores ? (b.scores[pickerAxis] || 0) : -1;
+      return sb - sa;
+    });
+  }
 
   if (available.length === 0) {
     pickerListEl.innerHTML = '<div class="bt-modal-empty">該当する曲がありません</div>';
@@ -568,8 +577,15 @@ function attachActionHandlers() {
     closePicker();
   });
 
-  // Picker: search
-  pickerSearchEl.addEventListener('input', () => renderPickerList(pickerSearchEl.value));
+  // Picker: axis chips
+  document.getElementById('btPickerChips').addEventListener('click', e => {
+    const chip = e.target.closest('.bt-picker-chip');
+    if (!chip) return;
+    pickerAxis = chip.dataset.axis;
+    document.querySelectorAll('#btPickerChips .bt-picker-chip').forEach(c =>
+      c.classList.toggle('active', c === chip));
+    renderPickerList();
+  });
 
   // Picker: close
   document.getElementById('btModalClose').addEventListener('click', closePicker);
