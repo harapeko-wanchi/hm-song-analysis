@@ -628,9 +628,17 @@ function attachActionHandlers() {
 }
 
 // ===== Share Text =====
+
+// Twitter重み付き文字数（CJK=2、ASCII/Latin=1）
+function twitterLength(text) {
+  let len = 0;
+  for (const ch of text) len += ch.codePointAt(0) <= 0x10FF ? 1 : 2;
+  return len;
+}
+
 function buildShareText() {
-  // Twitter: 280字 - t.co URL 23字 - 区切りスペース 2字 = 256字
-  const LIMIT = 256;
+  // Twitter: 280字 - t.co URL 23字 - 区切りスペース 1字 = 257字
+  const LIMIT = 257;
   const header   = 'ヘイマミーの曲で打線組んでみた';
   const hashtags = '#へいまみ打線メーカー';
 
@@ -647,13 +655,13 @@ function buildShareText() {
   });
 
   const full = [header, ...orderLines, hashtags].join('\n');
-  if (full.length <= LIMIT) return full;
+  if (twitterLength(full) <= LIMIT) return full;
 
   // オーダー末尾から削って … を追加
   while (orderLines.length > 0) {
     orderLines.pop();
     const trimmed = [header, ...orderLines, '…', hashtags].join('\n');
-    if (trimmed.length <= LIMIT) return trimmed;
+    if (twitterLength(trimmed) <= LIMIT) return trimmed;
   }
 
   return [header, '…', hashtags].join('\n');

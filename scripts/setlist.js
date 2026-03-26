@@ -723,8 +723,15 @@ function closeAutoDialog() {
 
 /* ===== Share text ===== */
 
+// Twitter重み付き文字数（CJK=2、ASCII/Latin=1）
+function twitterLength(text) {
+  let len = 0;
+  for (const ch of text) len += ch.codePointAt(0) <= 0x10FF ? 1 : 2;
+  return len;
+}
+
 function buildShareText() {
-  const LIMIT = 256;
+  const LIMIT = 257;
   const header = state.title || DEFAULT_TITLE;
   const hashtags = '#へいまみセトリメーカー';
   const orderLines = [];
@@ -738,14 +745,14 @@ function buildShareText() {
     orderLines.push(`${songNum} ${label}`);
   });
   const full = [header, ...orderLines, hashtags].join('\n');
-  if (full.length <= LIMIT) return full;
+  if (twitterLength(full) <= LIMIT) return full;
   while (orderLines.length > 0) {
     orderLines.pop();
     while (orderLines.length > 0 && orderLines[orderLines.length - 1] === '— アンコール —') {
       orderLines.pop();
     }
     const trimmed = [header, ...orderLines, '…', hashtags].join('\n');
-    if (trimmed.length <= LIMIT) return trimmed;
+    if (twitterLength(trimmed) <= LIMIT) return trimmed;
   }
   return [header, '…', hashtags].join('\n');
 }
