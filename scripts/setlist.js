@@ -489,7 +489,7 @@ function renderEditor() {
 
   const count = songCount();
   badge.textContent = count + '曲';
-  addBtn.disabled = count >= 31;
+  addBtn.disabled = count >= 33;
 
   if (state.items.length === 0) {
     list.innerHTML = '';
@@ -588,7 +588,7 @@ function renderCharts() {
 /* ===== State mutations ===== */
 
 function addSong(songId) {
-  if (songCount() >= 31) return;
+  if (songCount() >= 33) return;
   state.items.push({ type: 'song', songId, comment: '' });
   renderEditor();
   syncURL();
