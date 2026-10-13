@@ -171,12 +171,12 @@
         "vi-IV-I-Vシグネチャー循環",
         "C#dimパッシングディミニッシュ",
         "Fトニック・ペダル（Gm7(omit3)/F↔Ddim/F）",
-        "マイナー・ペンタトニック上行ベース",
+        "ペンタトニック上行ベース（D-F-G-Bb-C）",
         "カウントアップ・コール",
         "ナンセンスワード「もきゅもきゅ」",
         "勇者モチーフ"
       ],
-      "harmony_note": "Dm→Bb→F→C→C#dim（vi→IV→I→V→#V°）の循環がIntro・Aメロ・Dメロを貫き、C#dimがベースを半音上行させてDmへ戻す。プレサビはC→Am→Bb→BbM7/A→Gm7→C（V→iii→IV→IV/3→ii7→V）でBb→A→Gと内声を下降。「This is the DANCE」はFペダル上のGm7(omit3)/F↔Ddim/Fの揺動で、DdimのAbが同主短調の影を落とす。サビはDm→F→Gm→Bb→C（vi→I→ii→IV→V）でベースがD-F-G-Bb-Cのマイナー・ペンタトニックを上行する。",
+      "harmony_note": "Dm→Bb→F→C→C#dim（vi→IV→I→V→#V°）の循環がIntro・Aメロ・Dメロを貫き、C#dimがベースを半音上行させてDmへ戻す。プレサビはC→Am→Bb→BbM7/A→Gm7→C（V→iii→IV→IV/3→ii7→V）でBb→A→Gと内声を下降。「This is the DANCE」はFペダル上のGm7(omit3)/F↔Ddim/Fの揺動で、DdimのAbが同主短調の影を落とす。サビはDm→F→Gm→Bb→C（vi→I→ii→IV→V）でベースがD-F-G-Bb-C（Gマイナー・ペンタトニックの構成音）を上行する。",
       "lyrics_hooks": [
         "楽しみが あふれる Future",
         "立ち上がるよ 名もなき勇者さ",
@@ -274,13 +274,13 @@
         "カタログ最遅BPM100",
         "IV-V-vi-Iシグネチャー循環",
         "テンションコード多用",
-        "ドミナントペダルF/G",
+        "F/G分数コード（V/V）",
         "ピアノ＋シンセ",
         "NNBS.バラード",
         "Dreams with you",
         "シンガロング"
       ],
-      "harmony_note": "Bb→C→Dm→F（IV→V→vi→I）のシグネチャー循環がIntro・サビ・アウトロを貫く。add9/sus4/M7/6thのテンションコードを多用したドリーミーな響き。Aメロ・DメロのF/Gドミナントペダルで浮遊感を、Bメロのiii(Am)とCメロのii(Gm)の使い分けで感情の層を描く。NNBS.初の本格バラード。",
+      "harmony_note": "Bb→C→Dm→F（IV→V→vi→I）のシグネチャー循環がIntro・サビ・アウトロを貫く。add9/sus4/M7/6thのテンションコードを多用したドリーミーな響き。Aメロ・DメロのF/G（G9sus4的に響くV/V）で浮遊感を、Bメロのiii(Am)とCメロのii(Gm)の使い分けで感情の層を描く。NNBS.初の本格バラード。",
       "lyrics_hooks": [
         "夜空またたく 星のもとで",
         "たくさんの夢を光らせる つかもう",
@@ -550,7 +550,7 @@
         "エレクトロポップ",
         "セルフリファレンス"
       ],
-      "harmony_note": "Em(b9)Phrygian♭9フレーム(Intro/Outro) / E↔G(♭III)クロマティックメディアント揺動 / B7ピボット(V7=III7)転調ヒンジ / C#→F#→B五度圏連鎖(Chorus A) / G7/F(I7/♭7)GALAXY!共通デバイス / I-IV-V 3コード基盤(Verse B) / NNBS.最多17コード",
+      "harmony_note": "Em(b9)Phrygian♭9フレーム(Intro/Outro) / E↔G(♭III)クロマティックメディアント揺動 / B7ピボット(V7=III7)転調ヒンジ / C#→F#→B五度圏連鎖(Chorus A) / G7/F(I7/♭7)GALAXY!共通デバイス / I-IV-V 3コード基盤(Verse B) / リリース時点でNNBS.最多17コード",
       "lyrics_hooks": [
         "POJI POJI GO",
         "MECHA HIT MECHA LOVER Z",
@@ -562,7 +562,7 @@
         "超Z DANCE DANCE SUPER SUPER",
         "WE ARE Hey!Mommy!"
       ],
-      "summary": "NNBS.最多17コードを擁するエレクトロポップ。コール映えとブライトさを軸に、Phrygian♭9やクロマティックメディアントなど複雑な和声を楽しげに使いこなす。",
+      "summary": "リリース時点でNNBS.最多の17コードを擁するエレクトロポップ。コール映えとブライトさを軸に、Phrygian♭9やクロマティックメディアントなど複雑な和声を楽しげに使いこなす。",
       "mapC": {
         "x": 4.8,
         "y": 3.5
@@ -983,7 +983,7 @@
         "ナンセンスワード洪水",
         "冒険"
       ],
-      "harmony_note": "198BPM(カタログ第2位) / I-IV 2コードループ(サビ) / I-Vシャトル(ヴァース) / C#(VI)唯一の色彩和音 / vi→V→IV→I逆行ウォーク",
+      "harmony_note": "198BPM(リリース時点でカタログ第2位) / I-IV 2コードループ(サビ) / I-Vシャトル(ヴァース) / C#(VI)唯一の色彩和音 / vi→V→IV→I逆行ウォーク",
       "lyrics_hooks": [
         "もちもち",
         "ぷるぷる",
@@ -1861,7 +1861,7 @@
         "ティアラ",
         "夜の冒険"
       ],
-      "summary": "全楽曲最低速118BPMのシアトリカルなファンタジー楽曲。マイナー基調でおとぎ話の世界観を構築し、カタログ内で独特の立ち位置を占める。",
+      "summary": "BPM118（夜空ウィズユーに次ぐカタログ2番目の遅さ）のシアトリカルなファンタジー楽曲。マイナー基調でおとぎ話の世界観を構築し、カタログ内で独特の立ち位置を占める。",
       "mapC": {
         "x": 1.4,
         "y": -2.0

@@ -2,20 +2,6 @@
 
 let allSongs = [];
 
-/* ---- Cosine similarity ---- */
-function cosineSim(a, b) {
-  let dot = 0, magA = 0, magB = 0;
-  for (const ax of AXES) {
-    const va = a.scores[ax.key] || 0;
-    const vb = b.scores[ax.key] || 0;
-    dot  += va * vb;
-    magA += va * va;
-    magB += vb * vb;
-  }
-  if (magA === 0 || magB === 0) return 0;
-  return dot / (Math.sqrt(magA) * Math.sqrt(magB));
-}
-
 function findSimilar(song, n = 5) {
   return allSongs
     .filter(s => s.id !== song.id && s.scores)
@@ -104,7 +90,7 @@ function showResult(songId) {
   src.innerHTML = `
     ${thumbHTML}
     <div class="rec-source-info">
-      <div class="rec-source-title">${song.title}</div>
+      <a class="rec-source-title song-link" href="${songUrl(song.id)}">${song.title}</a>
       <div class="rec-source-meta">
         ${song.release_date ? `<span>${song.release_date}</span>` : ''}
         ${song.key ? `<span>Key: ${song.key}</span>` : ''}
@@ -156,7 +142,7 @@ function showResult(songId) {
       <div class="rec-rank${rankClass}">${idx + 1}</div>
       ${thumbHTML}
       <div class="rec-card-body">
-        <div class="rec-card-title">${s.title}</div>
+        <a class="rec-card-title song-link" href="${songUrl(s.id)}">${s.title}</a>
         <div class="rec-card-meta">
           ${s.release_date ? `<span>${s.release_date}</span>` : ''}
           ${s.key ? `<span>Key: ${s.key}</span>` : ''}

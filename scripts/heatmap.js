@@ -72,7 +72,7 @@ function render() {
 
   sorted.forEach(song => {
     bodyHTML += `<tr>`;
-    bodyHTML += `<td title="${song.composer || ''}">${song.title}</td>`;
+    bodyHTML += `<td title="${song.composer || ''}"><a class="song-link" href="${songUrl(song.id)}">${song.title}</a></td>`;
     AXES.forEach(ax => {
       const val = song.scores?.[ax.key];
       if (val == null) {

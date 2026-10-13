@@ -1,301 +1,172 @@
-# ビスケットケース
+# ビスケットケース — 楽曲分析
+
+BPM 206 で駆け抜けるギターロックは、リリース時点ではカタログ最速の一曲だった。「怖くて できない ことや」「弱くて 小さい心でも」と弱さをそのまま認め、凸凹な仲間と一緒に前へ進む。ブルージーなギターリフ、定番の循環、ナナナの合唱、そして最後の最後に取っておいた B7→E の完全終止。飾らない和声で、潔く押し切る曲である。
 
 ## 基本情報
-- **Key**: E（旧データ「B」から修正。V7→I終止 B7→E、Verse I→ii→iii→IV = E→F#m→G#m→A）
-- **BPM**: 206
-- **サウンド**: ギターロック、バンドサウンド
-- **作詞/作曲**: NNBS.
 
-## コード進行
+| 項目 | 値 |
+|------|-----|
+| リリース | 2022-07-08 |
+| 作詞 | NNBS. |
+| 作曲 | NNBS. |
+| Key | E major |
+| BPM | 206 |
+| 編成 | ギターロック（バンドサウンド） |
+
+## ブルージーなリフで回る A→E7 のループ
+
+曲の枠を作るのは、Intro、Interlude、Outro で鳴るギターリフである。
+
+```
+guitar (loop): ラシミレ（A-B-E-D）
+A → E7      （×16 小節）
+B
+```
+
+A→E7 は E major の IV→I7。トニックの E に短 7 度の D を加えた E7 が、泥臭いブルースの味わいを持ち込む。リフの音名 A-B-E-D にもこの D が含まれていて、長調の曲に少しだけ荒っぽいロックの手触りを与えている。Intro と Outro では 16 小節、Interlude では 8 小節。このループが鳴るたびに、曲はライブハウスのような熱気に引き戻される。
+
+## 定番の循環と、一度だけ長三和音に変わる C#
+
+曲の大部分は、ポップロックの定番進行で組まれている。プレサビ「HOW ARE YOU?」とサビ前半（Chorus A）の骨格は A→B→C#m→E、IV→V→vi→I の循環だ。定番だからこそ、反復すると中毒性が生まれる。
+
+その循環に、一か所だけ仕掛けがある。
+
+```
+A → B → C#m → E       「怖くて できない ことや…」
+A → B → C#m → E       「弱くて 小さい心でも」
+A → B → C#m → C#      「負けちゃうとは限らないんだ」
+A → B → A → B → E → B 「フルフル NO NO FULL FULL SETで」
+```
+
+3 行目、C#m（vi）のすぐ後に、同じ根音の C# が長三和音で鳴る。ダイアトニックの外にあるこの VI は、続く F#m（ii）への二次ドミナントの響きも帯びていて、短三和音の翳りが一瞬で明るさに反転する。**「負けちゃうとは限らないんだ」という強い意志の表明が、この 1 音の変化に託されている**。最後は A→B を繰り返して押し、E→B で次のセクションへ送り出す。
+
+サビ後半（Chorus B「I WANNA BE」）は、同じ和音を並べ替えた A→E→B→C#m、IV→I→V→vi の循環になる。I の E が 2 番目に来ることで、着地してすぐに跳び上がるようなリズムが生まれる。各ブロックの締めに置かれた C#m7（vi7）は、7 度の甘さを持つエモーショナルな着地点として「ワクワクだ」「素敵だね」を受け止める。
+
+## 最後の最後に取っておいた B7→E
+
+この曲は、属七の和音による完全終止を最後まで温存している。
+
+1 番・2 番のサビ後半は A→B→E、つまり IV→V→I で解決するが、B は三和音のままだ。プレサビの終わりの F#→B（V/V→V）も、B に着いたところで止まる。B7→E という、V7 から I への最も強い解決が現れるのは、最後のサビの最終フレーズだけである。
+
+```
+A → B → C#m7     「キミがいて ボクがいて」
+A → B            「FALLIN LOVEだ」
+B7 → E           「これから…」
+```
+
+「これから れから れからだ」と言葉を畳み掛ける最後の一行で、ようやく B に 7 度が加わり、E へ解決する。凝った和声を使わない曲だからこそ、この教科書どおりの完全終止が圧倒的な終結感を持つ。
+
+## 楽曲を追う
 
 ### Intro
-```
-guiter: (roop) ラシミレ  ← ギターリフ（音名: A-B-E-D）
-A  E7  ×16小節
-B
-```
-A-E7ループ（IV-I7）のロックグルーヴ。E7の♭7(D音)がブルージー。
 
-### Verse 1a
-```
-E    F#m    G#m
-でもでもね 笑顔 で語って
-A
-それでやってみても
-A  B    E    C#m
-上みてばかりだと
-F#    B
-何かコケるね
-```
-I→ii→iii上行ライン → IV→V→I→vi → V/V→V
+前述のギターリフと A→E7 のループ。
 
-### Verse 1b
+### Verse 1a（でもでもね 笑顔 で語って）
+
 ```
-E    F#m    G#m
-そもそもね 心 を隠して
-A
-近い距離だと
-A  B    E    C#m
-すれ違う心は
-A    B    E
-とんでも 無駄だよ
+E → F#m → G#m      「でもでもね…」
+A                  「それでやってみても」
+A → B → E → C#m    「上みてばかりだと」
+F# → B             「何かコケるね」
 ```
 
-### Pre-chorus「HOW ARE YOU?」
+I→ii→iii の上行から IV へ。ベースが E→F#→G#→A と段階的に上がり、「でもでもね」の語りかけに期待感を加える。続く IV→V→I→vi を経て、最後は F#（V への二次ドミナント）から B へ進む。
+
+### Verse 1b（そもそもね 心 を隠して）
+
 ```
-A    B    C#m       E
-なんでもないこの 日々が（この日々が）
-A    B    C#m    E
-突然輝くかがいて きたんだ
-A    B    C#m       E
-クルクルで（回って） ユメユメで（描いて）
-F#         B
-全部まとめて SU PER SUPER NOW
+E → F#m → G#m      「そもそもね…」
+A                  「近い距離だと」
+A → B → E → C#m    「すれ違う心は」
+A → B → E          「とんでも 無駄だよ」
 ```
-IV→V→vi→I の循環 ×3 → V/V→V で高揚。「SUPER NOW」でドミナントへ着地。
+
+1a と同じ上行から始まり、今度は IV→V→I で解決する。
+
+### Pre-chorus（HOW ARE YOU?）
+
+```
+A → B → C#m → E    （×3）「なんでもないこの 日々が…」「クルクルで…」
+F# → B             「全部まとめて SU PER SUPER NOW」
+```
+
+IV→V→vi→I の循環を 3 回重ね、F#→B（V/V→V）で高揚させる。「SUPER NOW」でドミナントに着地し、サビを呼び込む。なんでもない日々が突然輝き出す瞬間が、ここで歌われる。
 
 ### Chorus A
-```
-A    B    C#m         E
-怖くて できない ことや（一人<ひとり>とか）
-A    B    C#m    E
-弱くて 小さい心でも
-A    B    C#m       C#
-負けちゃうとは限らないんだ
-A    B    A    B    E  B
-フルフル NO NO FULL FULL SETで
-```
-IV→V→vi→I ×2 → IV→V→vi→**III**(C#メジャー) ← 借用でサプライズ → IV→V→IV→V→I→V プッシュ
 
-### Chorus B「I WANNA BE」
+前述の IV→V→vi→I と、長三和音に変わる C#。
+
+### Chorus B（I WANNA BE）
+
 ```
-A  E       B       C#m
-I WANNA BE GIVE YOU  FALLIN STAR
-A       E       B       C#m
-GOOD GOOD DAYだから WAKE UP  WAKE UP
-A    E    B       C#m
-遊ぼう ボクと一緒に
-A    B    C#m7
-今すぐさ ワクワクだ
-A  E       B       C#m
-I WANNA BE GIVE YOU  HAPPY TIME
-A    E    B       C#m
-キミ トキメク WAKE UP  WAKE UP
-A    E    B       C#m
-踊ろうよ いつもの READY?
-A  B    C#m7
-誰よりも 素敵だね
-A    B       E
-FALLIN LOVEだ これからだ
+A → E → B → C#m     （×3）「I WANNA BE…」「GOOD GOOD DAYだから…」「遊ぼう ボクと一緒に」
+A → B → C#m7        「今すぐさ ワクワクだ」
+A → E → B → C#m     （×3）「I WANNA BE…」「キミ トキメク…」「踊ろうよ…」
+A → B → C#m7        「誰よりも 素敵だね」
+A → B → E           「FALLIN LOVEだ これからだ」
 ```
-IV→I→V→vi のポップロック定番循環。C#m7(vi7)がエモーショナルな着地点。最終 IV→V→I で解決。
+
+前述の IV→I→V→vi の循環。最後は IV→V→I で解決する。
 
 ### Interlude
+
 ```
-guiter: (roop) ラシミレ
-A  E7  ×8小節
-B
+A → E7      （×8 小節）
 ```
 
-### Verse 2a
-```
-E    F#m    G#m
-凸凹な ボクら 集まって
-A
-それでやってみたら
-A  B    E    C#m
-上みてばかりだし
-F#    B
-やっぱイケるね
-```
+ギターリフのループ。
 
-### Verse 2b
-```
-E    F#m    G#m
-そうやって 心 を許して
-A
-髪の毛いじる
-A  B  E  C#m
-まっすぐすぐ 進む
-A    B    E
-跳んでも ウケるよ
-```
+### Verse 2a / 2b（凸凹な ボクら 集まって）
 
-### Pre-chorus 2「HOW ARE YOU?」
-```
-A    B    C#m       E
-なんでもないこの 日々に（この日々に）
-A    B    C#m    E
-夢見る 景色ぶつければ
-A    B    C#m       E
-涙とか（消えて） 寂しさとか（超えて）
-F#         B
-全部まとめて SU PER SUPER NOW
-```
+1 番と同じ進行。「何かコケるね」が「やっぱイケるね」に変わり、凸凹な仲間が集まれば最強だという、曲のテーマがはっきりする。
 
-### Chorus A（2回目）
-```
-A    B    C#m       E
-怖くて 逃げたい 夜も（一人でも）
-A    B    C#m    E
-誰にも 言えない言葉でも
-A    B    C#m       C#
-待ってたんじゃ変わらないんだ
-A    B    A    B    E  B
-フルフル NO NO FULL FULL SETで
-```
+### Pre-chorus 2 → Chorus A → Chorus B（2 回目）
 
-### Chorus B（2回目）
-```
-A  E       B       C#m
-LUCKYが どんな ふうに
-A       E       B       C#m
-GOOD GOOD DAYだから WELCOME  WELCOME
-A    E    B       C#m
-歌おう ボクと一緒に
-A    B    C#m7
-ご機嫌さ ワクワクだ
-A  E       B       C#m
-LUCKYが たくさん あるじゃん
-A    E    B       C#m
-キミ トキメク WELCOME  WELCOME
-A    E    B       C#m
-飛びだそう 一緒に READY?
-A  B    C#m7
-今よりも 素敵だね
-A    B       E
-FALLIN LOVEだ これからだ
-```
+同じ進行。プレサビでは「涙とか（消えて） 寂しさとか（超えて）」、Chorus A では「待ってたんじゃ変わらないんだ」と、弱さを抱えたまま踏み出す言葉が続く。Chorus B は「LUCKY」「WELCOME」の言葉に入れ替わる。
 
 ### ナナナ Section
+
 ```
 F#
-
-B    A    E
-NA NA  NA NA  NA NA NA NA
-B    A    E
-MA MA  MA MA  MA  ビスケット
-B    A    E
-NA NA  NA NA  NA NA NA NA
-B    A    E
-YAH YAH  YAH YAH  YAH  ビスケット
-
-B    A    E
-NA NA  NA NA  NA NA NA NA
-B    A    E
-MA MA  MA MA  MA  パクパクパクパク
-B    A    E
-NA NA  NA NA  NA NA NA NA
-B    A    E
-YAH YAH  YAH YAH  YAH  ビスケット
-
-F#
-DO DO DO DO DO DO
+B → A → E    （×8）「NA NA NA NA…」「MA MA MA MA MA ビスケット」「パクパクパクパク」
+F#           「DO DO DO DO DO DO」
 ```
-V→IV→I の下行ロックケーデンス ×8。F#(V/V)で区切り。
+
+B→A→E は V→IV→I、ロックの定番の下行カデンツ（終止の型）で、合唱にこれ以上ない進行だ。8 回の繰り返しの前後を F#（V/V）で区切る。「ビスケット」「パクパク」と、タイトルのおやつのモチーフが無邪気に弾ける。
 
 ### Final Chorus B
+
 ```
 E
-A  E       B       C#m
-I WANNA BE GIVE YOU  FALLIN STAR
-A       E       B       C#m
-GOOD GOOD DAYだから WAKE UP  WAKE UP
-A    E    B       C#m
-遊ぼう ボクと一緒に
-A    B    C#m7
-どこまでも いつまでも
-A  E    B       C#m
-HAPPYが たくさん あるじゃん
-A    E    B       C#m
-キミ トキメク WAKE UP  WAKE UP
-A    E    B       C#m
-踊ろうよ いつもの READY?
-A  B    C#m7
-誰よりも 素敵だね
-A    B    C#m7
-キミがいて ボクがいて
-A    B
-FALLIN LOVEだ
-B7         E
-これから れから れからだ    ← ★ B7→E 完全終止
+A → E → B → C#m     （×3）「I WANNA BE…」
+A → B → C#m7        「どこまでも いつまでも」
+A → E → B → C#m     （×3）「HAPPYが…」
+A → B → C#m7        「誰よりも 素敵だね」
+A → B → C#m7        「キミがいて ボクがいて」
+A → B               「FALLIN LOVEだ」
+B7 → E              「これから…」
 ```
+
+前述の B7→E の完全終止で締めくくる。
 
 ### Outro
+
 ```
-guiter: (roop) ラシミレ
-A  E7  ×16小節
-
-(GO GO GO GO GO GO GO GO
-HEY HEY HEY HEY
-GO GO GO GO GO GO GO GO
-HEY HEY HEY HEY)
-
+A → E7      （×16 小節）「GO GO GO… HEY HEY HEY…」
 E
 ```
 
-## コード特徴
-- **A-E7ループ**: Intro/Interlude/Outro の核。IV-I7のブルージーなロックグルーヴ。E7の♭7(D音)が泥臭い味わい
-- **E→F#m→G#m 上行ライン**: I→ii→iii。ベースE→F#→G#の段階的上昇。「でもでもね」「そもそもね」の語りかけに期待感を付加
-- **IV→V→vi→I 循環**: Pre-chorus/Chorus Aの骨格。ポップロック定番だが反復で中毒性
-- **IV→I→V→vi**: Chorus Bの循環。I(E)が2番目に来ることで「着地→跳躍」のリズム
-- **C#メジャー(III)**: Chorus Aの「負けちゃうとは限らないんだ」で借用。vi(C#m)から一瞬メジャーに転じ、強い意志の表明
-- **F#(V/V)**: 二次ドミナント。「SUPER SUPER NOW」「DO DO DO」で使用。B(V)への強い引力
-- **B→A→E (V→IV→I)**: ナナナセクション。ロック定番の下行ケーデンス。合唱に最適
-- **C#m7(vi7)**: Chorus B中の「ワクワクだ」「素敵だね」の着地点。7thの甘さ
-- **B7→E 完全終止**: 最終フレーズ「これから れから れからだ」。V7→Iの完全な解決で圧倒的な終結感
+ギターリフに「GO GO」「HEY HEY」の掛け声を乗せ、E で終わる。
 
-## 歌詞テーマ分析
-- **凸凹な仲間**: 「凸凹なボクら集まって」「やっぱイケるね」— 不完全だけど一緒なら最強
-- **弱さの肯定**: 「怖くて できない ことや」「弱くて 小さい心でも」「負けちゃうとは限らないんだ」— 弱さを認めた上での前進
-- **日常の輝き**: 「なんでもないこの日々が 突然輝くかがいてきた」— 日常が特別に変わる瞬間
-- **ビスケット/パクパク**: 「MA MA MA MA MA ビスケット」「パクパクパクパク」— おやつモチーフの無邪気さ
-- **FULL FULL SET**: 「フルフル NO NO FULL FULL SETで」— 弱さを否定せず全力装備で挑む
-- **一緒に遊ぼう**: 「遊ぼう ボクと一緒に」「踊ろうよ いつもの READY?」「飛びだそう 一緒に」
-- **FALLIN LOVE**: 「FALLIN LOVEだ これからだ」— 仲間/ファンへの愛
-- **GO GO / HEY HEY**: Outroの掛け声。ライブ最高潮
+## カタログの中で
 
-## 構成
-Intro(guitar riff ラシミレ, A-E7 ×16, B) → Verse1a(E-F#m-G#m-A) → Verse1b → Pre-chorus "HOW ARE YOU?"(A-B-C#m-E, F#-B) → Chorus A(A-B-C#m-E/C#, "FULL FULL SET") → Chorus B "I WANNA BE"(A-E-B-C#m, C#m7, A-B-E) → Interlude(riff ×8) → Verse2a → Verse2b → Pre-chorus2 → Chorus A(2nd) → Chorus B(2nd LUCKY/WELCOME) → ナナナ Section(F#, B-A-E ×8, F#) → Final Chorus B(B7→E完全終止) → Outro(riff ×16, GO GO/HEY HEY, E)
+BPM 206 は、リリース時点ではカタログ最速だった。その後 Hey! get up kids（210）、Happy Go Round と MY FIRST LOVE SONG（ともに 220）に抜かれ、現在はカタログ 36 曲中 4 位である。それでもバンド 8.8 は Hey! get up kids に次ぐ 2 位、疾走感 8.8 は MY FIRST LOVE SONG と並ぶ 3 位タイで、バンドで速く押し切る曲としては今もカタログの最前線にいる。Map B でも右上、バンドかつハイパーの領域に大きく張り出している。
 
-## 9軸スコア（probit正規化）
+1 週間後にリリースされた NNBS. の LOVE ME DO DO とは、ギターリフ、A→E7 のループ、最後のサビ、そして「GO GO」「HEY HEY」のアウトロを共有する姉妹曲である。LOVE ME DO DO は D major で始まり、大サビで E major に転調して、本作の最後のサビとコード進行も歌詞も同じフレーズへたどり着く。本作が元気と仲間の歌なら、LOVE ME DO DO は同じ素材で作った恋の歌だ。
 
-### 表現
-| 軸 | スコア |
-|----|--------|
-| キュート | 6.1 |
-| クール | 3.4 |
-| エモ | 3.2 |
+Verse の I→ii→iii の上行は、後の HELLO!! Hey!! WORLD!! で曲全体の背骨となる I-ii-iii-V の原型とも聴ける。本作では iii から素直に IV へ進むが、HELLO!! Hey!! WORLD!! は IV を飛ばして V へ跳ぶ。「パクパク」の造語コールは、恋するとちゅうの「POOGIE」や CANDY POP の「ラタタ」へと続く、Hey!Mommy! のオノマトペの系譜の一つでもある。
 
-### サウンド
-| 軸 | スコア |
-|----|--------|
-| バンド | 8.8 |
-| 疾走感 | 8.8 |
-| 複雑さ | 4.3 |
+## 総評
 
-### キャラクター
-| 軸 | スコア |
-|----|--------|
-| 子供心 | 5.5 |
-| お祭り感 | 5.1 |
-| ハッピー | 6.1 |
-
-## ポジションマップ
-
-### ステージ・バイブスマップ（かわいい ↔ かっこいい × 聴かせる ↔ 沸かせる）
-- **x = cool(3.4) − cute(6.1) = -2.7**
-- **y = (party(5.1) − 5) × 2 = +0.2**
-
-### サウンド・エンジンマップ（エレクトロ ↔ バンド × グルーヴィ ↔ ハイパー）
-- **x = (band(8.8) − 5) × 2 = +7.6**
-- **y = (speed(8.8) − 5) × 2 = +7.6**
-
-### エモーション・マップ（大人っぽい ↔ 子供心 × エモーショナル ↔ ハッピー）
-- **x = (childlike(5.5) − 5) × 2 = +1.0**
-- **y = happy(6.1) − emo(3.2) = +2.9**
-
----
-
-## タグ
-ポジティブ, 元気, 前向き, 日常, 仲間, 一緒に, ビスケットモチーフ, パクパク, ワクワク, FALLIN LOVE, LUCKY, HOW ARE YOU?, コール＆レスポンス, ナナナ合唱, WAKE UP, ギターロック, バンドサウンド, ギターリフループ, 超疾走感, メジャー基調, FULL FULL SET, I WANNA BE, GO GO HEY HEY, B7完全終止
+IV→V→vi→I と IV→I→V→vi の定番循環、ブルージーな I7、合唱のための V→IV→I。どの和音も新しくはないが、206 の速度とバンドの音圧で鳴らすと、それが最も強い武器になる。凝った仕掛けは C# の一瞬と、最後まで温存した B7→E の完全終止だけ。弱さを認めたうえで「FULL FULL SET」で挑むという歌詞と、飾らずに正面から押し切る和声が、同じ潔さで結ばれている。

@@ -1,10 +1,11 @@
 # Happy Go Round — 楽曲分析
 
+BPM 220、MY FIRST LOVE SONG と並ぶカタログ最速タイの一曲は、メリーゴーラウンドを回し続ける装置として設計されている。vi-IV-I-V の循環に一瞬だけ外の音を差し込み、終盤では調ごと別世界へ連れ出してから、何事もなかったように元の調へ戻る。聴きどころは、その「傾き」と「帰還」だ。
+
 ## 基本情報
 
 | 項目 | 値 |
 |------|-----|
-| タイトル | Happy Go Round |
 | リリース | 2026-09-01 |
 | 作詞 | NNBS. |
 | 作曲 | NNBS. |
@@ -13,168 +14,87 @@
 | BPM | 220 |
 | 編成 | ギターカッティング ＋ シンセ（要所でメロディ） |
 
-## 構成とコード進行
+## 回り続ける循環と、一瞬だけ傾く ♭VI
+
+サビの骨格は Em→C→G→D、つまり **vi→IV→I→V** の循環である。BABY BABY BABY、カラフルポップレジスタンスに続き、NNBS. が 3 作続けて採った vi 始まりのループで、短調の和音から始まる分だけ、明るい曲の中にも少しだけ陰りが残る。
+
+この循環には仕掛けがひとつある。「new world」「only」の語尾で鳴る Eb5、すなわち **♭VI のパワーコード**だ。G major の外にある和音で、D→Eb→Em とベースが半音ずつ上がり、次の Em へ滑り込む。回転木馬が一瞬だけ傾いて、すぐ元の軌道に戻るような感覚である。パワーコードで鳴らすのはギターの質感を前に出すためでもあり、ラストのサビでは Eb の三和音に厚みを増して再登場する。
+
+## 調ごと別世界へ — E major への転調と直接の帰還
+
+2 番のサビが終わると、間奏の E→A→F#→B（I→IV→II→V）で曲は **E major へ短 3 度下に転調**する。II の F# は E major ではセカンダリードミナント（V の V）の響きを持ち、ここで一気に視界が明るく開ける。歌われるのは「絵本の中のような」「夢にみたこの場所」。タイトルを回収する「Happy Happy Happy Go Round」はこのセクションにしか現れない。
+
+E major でもサビのフレーズは再現されるが、形は少し変わっている。頭に B（V）を置き、C#m→A→E→B の vi-IV-I-V へドミナントから入る。Eb5 の差し込みもない。夢の場所には傾きがない、ということだろう。そして直後、準備なしに G major の Em→C→G→D→Eb へ戻る。E から G へ短 3 度上がる直接の転調は、夢の場所から現実のメリーゴーラウンドへ引き戻される瞬間として聴こえる。
+
+## 楽曲を追う
 
 ### Intro（Right now! Brand new world!）
+
 ```
-Em7(omit3)                "（イントロ）"
-（リズムのみ）            "Right now! Brand new world!"
-                          "Come on everybody body"
-                          "Welcome to the MITETE showtime"
-                          "Step right up! Come and see!"
-                          "Do what you Do what you wanna do! do!"
-                          "Here we go! Follow follow me!"
-                          "Welcome to the wonderland!"
+Em7(omit3)                「Right now! Brand new world!」…
+（リズムのみ）            「Welcome to the wonderland!」まで
 ```
-- **Em7(omit3)**（E-B-D）の3度抜きの響きで始まる。長調とも短調とも決まらない開いた響きから、英語の呼び込み口上へ
-- 「Step right up! Come and see!」はサーカスや見世物小屋の呼び込みの決まり文句。曲全体の「遊園地／カーニバル」の舞台設定をここで提示する
+
+3 度を抜いた Em7(omit3)（E-B-D）で幕を開ける。長調とも短調とも決まらない開いた響きの上で、「Step right up! Come and see!」とサーカスの呼び込み口上が始まる。曲全体の舞台設定がここで示される。
 
 ### サビ（I'm Mommy this way）
-```
-Em → C                    "I'm Mommy this way / Mecha Yeah"
-G                         "Get freedom / Dream on Never end"
-D → Eb5                   "Mommy mommy new world"
-Em → C                    "Yeah / LaLa Live Let's dance"
-G                         "Pika day Kira day"
-D → Eb5                   "Love you love you only"
-C → D                     "Get Chu ready / Merry merry go round"
-Em → G                    "Get Chu ready / Mommy go go run"
-C → D                     "We are happy / Wanna wanna super E jump"
-G                         "Welcome to the Happy Go Round"
-```
-- **Em→C→G→D = vi→IV→I→V** — BABY BABY BABY・カラフルポップレジスタンスに続く NNBS. の vi 始動シグネチャー循環
-- **Eb5（♭VI、パワーコード）** が「new world」「only」の語尾で鳴る。D→Eb→Em とベースが半音ずつ上がり、次の Em へ滑り込む。G major の外の和音で、メリーゴーラウンドが一瞬傾くような浮遊感
-- 後半は **C→D→Em→G / C→D→G（IV→V→vi→I / IV→V→I）** の王道ストロークで「Welcome to the Happy Go Round」へ着地
-- 最後のサビでは Eb5 が **Eb（3和音）** になり、響きが厚くなる
 
-### 間奏
 ```
-G → C → Am → D
+Em → C → G → D → Eb5      「I'm Mommy this way」…「new world」
+Em → C → G → D → Eb5      「Yeah」…「only」
+C → D → Em → G            「Get Chu ready」…
+C → D → G                 「We are happy」…「Welcome to the Happy Go Round」
 ```
-- **I→IV→ii→V** のシンプルな循環でAメロへ
 
-### Aメロ（みえるお城の中 ミステリーで）
+前半は前述の vi-IV-I-V ＋ ♭VI。後半は C→D→Em→G、C→D→G（IV→V→vi→I、IV→V→I）の王道のストロークに切り替わり、「Welcome to the Happy Go Round」でトニックに着地する。「Wanna wanna super E jump」は BABY BABY BABY の「E jump jump」と同系統のジャンプのコールだ。
+
+### 間奏〜Aメロ（みえるお城の中…）
+
 ```
-G → D                     "みえるお城の中 ミステリーで"
-F → C → D                 "歩く道の色 空が逆な んか絵になる"
-G                         "どこに何があるかも WHAT'S A 謎謎"
-D                         "かわいい人形キュート キュン"
-F                         "さあさようこそ！言葉から"
-C → D                     "不思議が はじまる"
+G → C → Am → D            （間奏）
+G → D → F → C → D         「みえるお城の中…」「歩く道の色…」
+G → D → F → C → D         「どこに何があるかも…」「さあさようこそ！…」
 ```
-- **G→D→F→C→D = I→V→♭VII→IV→V** — **F（♭VII）** のミクソリディアン借用が「空が逆な」「さあさようこそ！」で鳴る。「逆さまの世界」の歌詞と借用和音の非日常感が重なる
-- 2番Aメロ（昨日も明日もない この場所で）も同じ進行
+
+Aメロは G→D→F→C→D（I→V→♭VII→IV→V）。**F（♭VII）のミクソリディアン借用**が「空が逆な」「さあさようこそ！」で鳴り、逆さまの世界という歌詞と借用和音の非日常感が重なる。2 番の Aメロも同じ進行だ。
 
 ### プレサビ（カーニバルが はじまった時計を止めて）
+
 ```
-C → Dadd9 → Em → G        "カーニバルが はじまった時計を止めて 歩いていこう"
-C → Dadd9 → Em → G        "恋も変もNO もYESも何も 素敵だね ぴかりん降るよ"
-C → D → Em                "青い木の扉（ポン ポン）"
-G                         "目のまえに揺れる"
-C → D → Em                "Let's walk this way together with my friends / Let's get set"
+C → Dadd9 → Em → G        「カーニバルが…」
+C → Dadd9 → Em → G        「恋も変もNO…」
+C → D → Em → G            「青い木の扉（ポン ポン）…」
+C → D → Em                「Let's walk this way…」「Let's get set」
 ```
-- **C→Dadd9→Em→G = IV→Vadd9→vi→I** の上行進行。Dadd9 の9度（E）が次の Em を先取りする
-- 「（ポン ポン）」の合いの手、「ぴかりん降るよ」のきらめき系ワードで、サビ前の期待を高める
-- 「Let's get set」の Em（vi）で止めて、vi 始動のサビへそのままつなぐ
+
+C→Dadd9→Em→G（IV→Vadd9→vi→I）の上行。Dadd9 の 9 度（E）が次の Em を先取りし、段差のない上り坂を作る。「（ポン ポン）」の合いの手を挟み、最後は「Let's get set」の Em（vi）で止めて、vi から始まるサビへそのままつなぐ。
 
 ### E major セクション（どこまでも浮かぶ道広がる）
+
 ```
-E → A → F# → B            "（間奏）"
-E → A                     "どこまでも浮かぶ道広がる"
-F#                        "絵本の中のような"
-B                         "Welcome to Happy Happy Happy Go Round"
-E → A                     "キミを星の光が照らす"
-F#                        "夢にみたこの場所"
-B → E                     "Welcome to Happy Happy Happy Go Round Happy day"
-B → C#m → A               "I'm Mommy this way / Mecha Yeah"
-E → B                     "Get freedom / Dream on Never end / Mommy mommy new world"
-C#m → A                   "Yeah / LaLa Live Let's dance"
-E → B                     "Pika day Kira day / Love you love you only"
+E → A → F# → B            （間奏）
+E → A → F# → B            「どこまでも…」「Welcome to Happy Happy Happy Go Round」
+B → C#m → A → E → B       「I'm Mommy this way」…（E major でのサビ）
 ```
-- 2サビ後の間奏 **E→A→F#→B（I→IV→II→V）** で **G major → E major へ短3度下に転調**。F#（II = V/V）の明るい響きで、絵本のような別世界が開ける
-- 「Happy Happy Happy Go Round」はこのセクションだけに現れる、タイトル回収のフレーズ
-- E major でサビのフレーズを再現する。ただし **C#m→A→E→B（vi→IV→I→V）** の頭に B（V）を置き、ドミナントから入る形に変わる。Eb5 の差し込みもない
-- 直後に **G major の Em→C→G→D→Eb** へ何の準備もなく戻る（E → G は短3度上）。夢の場所から現実のメリーゴーラウンドへ引き戻されるような転換
+
+前述のとおり、短 3 度下の E major でタイトルを歌い上げ、そのまま G major のサビへ戻る。
 
 ### ラストサビ〜アウトロ
+
 ```
-Em → C → G → D → Eb       "I'm Mommy this way ..."
-C → D → Em → G → C → D → G "Get Chu ready ... Welcome to the Happy Go Round"
-G → C → A → D             "（oh oh oh oh）"
-（リズムのみ）            "Right now! Brand new world! ... Do what you wanna do! do!"
-G7                        "Here we go! Follow follow me! / Welcome to the wonderland!"
+Em → C → G → D → Eb       （ラストサビ）
+G → C → A → D             「（oh oh oh oh）」
+G7                        「Here we go! Follow follow me!」「Welcome to the wonderland!」
 ```
-- アウトロの間奏は **G→C→A→D**。冒頭の間奏の Am（ii）が **A（II = V/V）** に変わり、E major セクションの F#（II）と同じ「II メジャー化」で明るさが増す
-- 最後の **G7（I7）** は NNBS. の**署名コード**。「Here we go!」で、トニックをドミナント化した響きのまま「wonderland」へ送り出す。終わらずに次の周回へ続くメリーゴーラウンドのようなエンディング
 
-## 楽曲の特徴
+アウトロの間奏は G→C→A→D。冒頭の間奏では Am（ii）だった和音が、**A（II）に変わっている**。E major セクションの F# と同じ「II をメジャーにする」処理で、明るさが最後まで持ち越される。締めくくりは G7。トニックを I7 にして、解決しきらない響きのまま「wonderland」へ送り出す。終わらずに次の周回へ続く、メリーゴーラウンドらしいエンディングである。
 
-### コード面
-1. **vi→IV→I→V（Em-C-G-D）シグネチャー循環** — サビの背骨。BABY BABY BABY から3作連続で使われる vi 始動ループ
-2. **Eb5 / Eb（♭VI）借用** — D→Eb→Em の半音上行でサビに浮遊感を加える。パワーコードで鳴らし、ギターの質感を前に出す
-3. **F（♭VII）ミクソリディアン借用** — Aメロの「逆さま」の世界観に寄り添う
-4. **E major への短3度下転調と直接復帰** — E→A→F#→B の間奏で別世界へ移り、準備なしで G major に戻る
-5. **II メジャー化**（F# in E、A in G） — セカンダリードミナント的な明るさをアウトロまで持ち込む
-6. **G7（I7）エンディング** — NNBS. の署名コードで終わる
+## カタログの中で
 
-### リズム・サウンド面
-- **BPM 220 はカタログ最速タイ**（MY FIRST LOVE SONG と並ぶ）。Hey! get up kids（210）、ビスケットケース（206）を上回る
-- ギターの**カッティング**が全編を刻み、要所でシンセのメロディが前に出る。MY FIRST LOVE SONG がバンド・ロック寄りなのに対し、こちらはカッティング主体の軽快なダンス寄り
-- Eb5 をパワーコードで鳴らすなど、ギターの質感を和声の色付けにも使っている
+カタログ最速の 2 曲（BPM 220）は、どちらも NNBS. の作品だ。MY FIRST LOVE SONG は C→Ab の長 3 度下転調を見せ場にしたバンドロックで、本作も G→E の短 3 度下転調を山場に置く。NNBS. の高速曲では、3 度関係の転調が見せ場の定番になりつつある。ただしサウンドは対照的で、MY FIRST LOVE SONG がバンドで押し切るのに対し、こちらはギターのカッティングとシンセのメロディで軽快に回す。
 
-### 歌詞面
-- 「**Welcome to the MITETE showtime**」「**Step right up! Come and see!**」「**Welcome to the wonderland!**」— サーカスや遊園地の呼び込み口上
-- 「**みえるお城の中**」「**かわいい人形**」「**サーカスの団員と**」「**Merry merry go round**」— お城・人形・サーカス・メリーゴーラウンドの遊園地モチーフ
-- 「**カーニバルが はじまった時計を止めて**」「**昨日も明日もない この場所で**」— 時間が止まった夢の世界
-- 「**WHAT'S A 謎謎**」「**（ポン ポン）**」「**ぴかりん降るよ**」— 謎かけ・合いの手・きらめき系ワード
-- 「**I'm Mommy this way**」「**Mommy go go run**」— "Mommy" を織り込むセルフ・リファレンス
-- 「**Wanna wanna super E jump**」— ジャンプを煽るライブ・コール。BABY BABY BABY の「E jump jump」と同系統
-- 「**Let's walk this way together with my friends**」— 仲間と一緒に進むメッセージ
+アウトロの G7 は、GALAXY! GALAXY!、POJI POJI GO、PLAYFUL ROMANTIC で使われてきた NNBS. の署名コード、I7 の再登場でもある。お城、人形、サーカス、メリーゴーラウンドと遊園地のモチーフを並べる歌詞は、GALAXY! GALAXY! の宇宙や Tickey Luppy Doo のシンデレラと並ぶ、非日常の舞台を設定するタイプの曲だ。子供心のスコア 8.0 は、もちぷる、GALAXY! GALAXY!、7777777 に次ぐ。
 
-## 9軸スコア
+## 総評
 
-### 表現
-| 軸 | スコア |
-|----|--------|
-| キュート | 6.5 |
-| クール | 3.5 |
-| エモ | 2.5 |
-
-### サウンド
-| 軸 | スコア |
-|----|--------|
-| バンド | 6.0 |
-| 疾走感 | 9.5 |
-| 複雑さ | 6.5 |
-
-### キャラクター
-| 軸 | スコア |
-|----|--------|
-| 子供心 | 8.0 |
-| お祭り感 | 9.0 |
-| ハッピー | 8.5 |
-
-## ポジションマップ
-
-### ステージ・バイブスマップ（かわいい ↔ かっこいい × 聴かせる ↔ 沸かせる）
-- **x = cool(3.5) − cute(6.5) = -3.0**
-- **y = (party(9.0) − 5) × 2 = +8.0**
-
-### サウンド・エンジンマップ（エレクトロ ↔ バンド × グルーヴィ ↔ ハイパー）
-- **x = (band(6.0) − 5) × 2 = +2.0**
-- **y = (speed(9.5) − 5) × 2 = +9.0**
-
-### エモーション・マップ（大人っぽい ↔ 子供心 × エモーショナル ↔ ハッピー）
-- **x = (childlike(8.0) − 5) × 2 = +6.0**
-- **y = happy(8.5) − emo(2.5) = +6.0**
-
----
-
-## Hey!Mommy! 楽曲群での位置づけ
-
-- **BPM 220 で MY FIRST LOVE SONG と並ぶカタログ最速タイ**。どちらも NNBS. 作で、最速の2曲を NNBS. が独占する
-- MY FIRST LOVE SONG（C→Ab 長3度下転調）に続き、本曲でも**3度関係の転調**（G→E 短3度下）を使う。NNBS. の高速曲では3度転調が見せ場の定番になりつつある
-- **vi-IV-I-V ループ**は BABY BABY BABY → カラフルポップレジスタンス → 本曲と3作連続。キーは G → F → G
-- **G7（I7）エンディング**は GALAXY! GALAXY!・POJI POJI GO・PLAYFUL ROMANTIC で使われてきた NNBS. の署名コードの再登場
-- Map A では BABY BABY BABY（-2.5, +9.0）のすぐ近くに位置する「かわいい×沸かせる」の象限。Map C の子供心 8.0 は もちぷる（9.9）、GALAXY! GALAXY!（8.8）、7777777（8.2）に次ぐ高水準
-- 遊園地・サーカス・お城の**ワンダーランド・モチーフ**は、GALAXY! GALAXY! の宇宙や Tickey Luppy Doo のシンデレラと並ぶ「非日常の舞台設定」型の楽曲
+vi-IV-I-V という NNBS. の近作の定番に、♭VI と ♭VII の借用、3 度転調、I7 のエンディングと、これまでの引き出しを総動員した一曲である。それでいて 220 の速度で聴くと、どの仕掛けも遊園地のアトラクションのように一瞬で通り過ぎていく。凝った和声を「難しさ」ではなく「楽しさ」として聴かせる NNBS. の手腕が、いちばん分かりやすく出た曲といえる。

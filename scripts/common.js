@@ -43,3 +43,26 @@ const DEFAULT_COMPOSER_COLOR = { stroke: '#a0a0b8', fill: 'rgba(160,160,184,.2)'
 function composerColorOf(composer) {
   return COMPOSER_COLORS[composerKeyOf(composer)] || DEFAULT_COMPOSER_COLOR;
 }
+
+/* Cosine similarity of two songs' 9-axis scores (recommend.html, song.html) */
+function cosineSim(a, b) {
+  let dot = 0, magA = 0, magB = 0;
+  for (const ax of AXES) {
+    const va = a.scores[ax.key] || 0;
+    const vb = b.scores[ax.key] || 0;
+    dot  += va * vb;
+    magA += va * va;
+    magB += vb * vb;
+  }
+  if (magA === 0 || magB === 0) return 0;
+  return dot / (Math.sqrt(magA) * Math.sqrt(magB));
+}
+
+function escapeHtml(s) {
+  return String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+
+/* Link to a song's detail page */
+function songUrl(id) {
+  return 'song.html?id=' + encodeURIComponent(id);
+}

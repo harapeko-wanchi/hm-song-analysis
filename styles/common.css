@@ -162,6 +162,11 @@ a:hover { text-decoration: underline; }
 
 .card-body { padding: 1rem 1.2rem 1.2rem; }
 
+/* Song title linking to song.html */
+.song-link { color: inherit; display: block; }
+.song-link:hover { color: var(--accent); text-decoration: none; }
+.hm-table .song-link { display: inline; }
+.card-detail-link { display: inline-block; margin-top: .7rem; font-size: .75rem; font-weight: 600; }
 .card-title {
   font-size: 1.25rem; font-weight: 700;
   margin-bottom: .3rem;
@@ -432,7 +437,8 @@ a:hover { text-decoration: underline; }
   justify-content: center;
   background: rgba(0,0,0,.45);
   color: #fff;
-  font-size: 1.1rem;
+  font-size: .72rem;
+  font-weight: 700;
   opacity: 0;
   transition: opacity .2s;
   pointer-events: none;
@@ -505,6 +511,9 @@ a:hover { text-decoration: underline; }
   text-decoration: underline;
 }
 .touch .map-tooltip .tt-youtube { display: inline-block; }
+.map-tooltip .tt-hint { margin-top: .3rem; font-size: .68rem; color: var(--accent); }
+.touch .map-tooltip .tt-hint { display: none; }
+.map-tooltip .tt-youtube + .tt-youtube { margin-left: .8rem; }
 
 /* ===== Map Tabs ===== */
 /* (map-tabs removed — A/B switching is now in nav) */

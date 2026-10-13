@@ -60,7 +60,7 @@ function buildCard(song) {
   card.innerHTML = `
     ${thumbHTML}
     <div class="card-body">
-      <div class="card-title">${song.title}</div>
+      <a class="card-title song-link" href="${songUrl(song.id)}">${song.title}</a>
       <div class="card-meta">
         ${song.release_date ? `<span>${song.release_date}</span>` : ''}
         ${song.key ? `<span>Key: ${song.key}</span>` : ''}
@@ -73,6 +73,7 @@ function buildCard(song) {
       ${song.harmony_note ? `<details class="card-details"><summary class="card-details-summary">🎵 和声解析</summary><div class="harmony-note">${song.harmony_note}</div></details>` : ''}
       ${hooksHTML ? `<details class="card-details"><summary class="card-details-summary">🎤 歌詞フック</summary><div class="hooks-section">${hooksHTML}</div></details>` : ''}
       <div class="tags">${tagsHTML}</div>
+      <a class="card-detail-link" href="${songUrl(song.id)}">詳しい分析を読む →</a>
     </div>`;
   return card;
 }
