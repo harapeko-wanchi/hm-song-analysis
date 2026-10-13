@@ -5,9 +5,9 @@
 | 項目 | 値 |
 |------|------|
 | キー | D major |
-| BPM | 210（**カタログ最速**） |
+| BPM | 210（**カタログ第3位**。MY FIRST LOVE SONG・Happy Go Round の 220 に次ぐ） |
 | 作詞・作曲 | NNBS. |
-| サウンド | ギター＋バンドサウンド（**NNBS. 唯一**） |
+| サウンド | ギター＋バンドサウンド（**NNBS. 最強のバンド色**） |
 | リリース | 2025-09-22 |
 | 備考 | Live Documentary MV / 夜バゲットED |
 | YouTube | https://youtu.be/RPCMCgRU4J8 |
@@ -169,19 +169,19 @@ D → A → D → A → D:        (fadeout)
 
 ## 特徴分析
 
-### 1. 全楽曲最速 210BPM — カタログの天井を破る
+### 1. 超高速 210BPM — カタログ第3位
 
 | 順位 | 曲 | BPM | 作曲 |
 |------|-----|-----|------|
-| **1** | **Hey! get up kids** | **210** | **NNBS.** |
-| 2 | もちぷる | 198 | NNBS. |
-| 3 | POJI POJI GO | 196 | NNBS. |
-| 4 | GALAXY! GALAXY! | 192 | NNBS. |
-| 4 | SUPER MOMMY GIRLS | 192 | NNBS. |
+| 1 | Happy Go Round | 220 | NNBS. |
+| 1 | MY FIRST LOVE SONG | 220 | NNBS. |
+| **3** | **Hey! get up kids** | **210** | **NNBS.** |
+| 4 | ビスケットケース | 206 | NNBS. |
+| 5 | BABY BABY BABY | 200 | NNBS. |
 
-BPM 上位5曲が **すべて NNBS. 作品**。210BPM は もちぷる（198）から +12 の大幅更新。ポップスとしては「パンク/スカ」領域の速度であり、バンドサウンドの選択と完全に合致する。
+BPM 上位5曲が **すべて NNBS. 作品**。リリース時点では ビスケットケース（206）を上回るカタログ最速で、その後 MY FIRST LOVE SONG と Happy Go Round（220）に更新された。ポップスとしては「パンク/スカ」領域の速度であり、バンドサウンドの選択と完全に合致する。
 
-### 2. NNBS. 唯一のバンドサウンド主体
+### 2. NNBS. 作品で最もバンド色の強いサウンド
 
 NNBS. のカタログ（全11曲）における サウンドタイプ:
 

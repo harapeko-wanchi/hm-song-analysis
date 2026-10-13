@@ -1,6 +1,9 @@
 # Playwright MCP artifacts
 .playwright-mcp/
 
+# ChordWiki screenshots (local reference only)
+chordWiki/
+
 # Python
 *.py
 __pycache__/

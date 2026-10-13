@@ -27,6 +27,7 @@ const COMPOSER_HUES = {
   '古橋勇紀':            { hBase: 340, hRange: 30, label: '古橋勇紀' },         // rose
   '早川博隆/柿迫ヒカル': { hBase: 50,  hRange: 30, label: '早川博隆/柿迫ヒカル' }, // gold
   '徳田光希、大竹智之':  { hBase: 160, hRange: 40, label: '徳田光希、大竹智之' }, // cyan
+  '草川瞬、RUSH EYE':   { hBase: 85,  hRange: 15, label: '草川瞬、RUSH EYE' },   // chartreuse
 };
 const DEFAULT_HUE = { hBase: 260, hRange: 80 };
 

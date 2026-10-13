@@ -133,7 +133,7 @@ Em                        "Hey! Brand new sunset"
 6. **add9 / M9 / 7th テンションの多用**（Cadd9, CM9, Em7, Bm7） — 高速パーティーチューンにきらめく音響を付与
 
 ### リズム・サウンド面
-- **BPM 200 はカタログ最速クラス** — PLAYFUL ROMANTIC（196）、POJI POJI GO（196）を上回り、MY FIRST LOVE SONG（220）に次ぐ高速域
+- **BPM 200 はカタログ最速クラス** — PLAYFUL ROMANTIC（196）、POJI POJI GO（196）を上回り、MY FIRST LOVE SONG・Happy Go Round（220）、Hey! get up kids（210）、ビスケットケース（206）に次ぐ第5位
 - シンセ＋ギターの編成。ギターのカッティングとシンセのきらめきが BPM 200 の疾走を駆動
 - コール＆レスポンスとオノマトペ連打を高速ビートに乗せる、ライブ最大瞬間風速型の設計
 
@@ -187,7 +187,7 @@ Em                        "Hey! Brand new sunset"
 
 ## Hey!Mommy! 楽曲群での位置づけ
 
-- **BPM 200 はカタログ最速クラス** — MY FIRST LOVE SONG（220）に次ぐ第2位タイ級。PLAYFUL ROMANTIC（196）・POJI POJI GO（196）を上回る超高速パーティーチューン
+- **BPM 200 はカタログ最速クラス** — MY FIRST LOVE SONG・Happy Go Round（220）、Hey! get up kids（210）、ビスケットケース（206）に次ぐ第5位。PLAYFUL ROMANTIC（196）・POJI POJI GO（196）を上回る超高速パーティーチューン
 - **お祭り感 9.5** は PLAYFUL ROMANTIC（9.9）に迫るカタログ最高クラス。Map A 上で「沸かせる」極北に位置する
 - **vi-IV-I-V のシグネチャー循環**は、I-IV-V や IV-V-vi-I を好む NNBS. の引き出しに「vi 始動ループ」を加える一手。哀愁を明るさで包む手法
 - **王道進行 IV-V-iii-vi** をプレサビで使用 — NNBS. は普段ミニマルな循環を好むが、本曲ではあえて J-POP 王道を取り入れ、M9 テンションで自分色に染めている
