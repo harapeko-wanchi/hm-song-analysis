@@ -104,7 +104,7 @@ const COMPOSER_PROFILES = {
   },
 };
 
-/* Composer name alias for handling varied keys like "徳田光希、大竹智之" */
+/* Composer name alias for handling varied keys like "徳田光希、大竹智之" (also duplicated in index.js) */
 const COMPOSER_NAME_MAP = {
   '徳田光希、大竹智之': '徳田光希',
   '草川瞬、RUSH EYE': '草川瞬',

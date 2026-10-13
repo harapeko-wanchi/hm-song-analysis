@@ -1,0 +1,86 @@
+/* ===== Index: filter & sort toolbar ===== */
+.list-toolbar {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 1.5rem 1.5rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: .6rem;
+}
+.lt-row { display: flex; align-items: center; gap: .6rem; flex-wrap: wrap; }
+
+.lt-search {
+  flex: 1 1 260px;
+  min-width: 0;
+  padding: .5rem .8rem;
+  font: inherit; font-size: .85rem;
+  color: var(--text);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+.lt-search:focus { outline: none; border-color: var(--accent); }
+
+.lt-sort { display: flex; gap: .35rem; }
+.lt-select, .lt-order {
+  padding: .45rem .7rem;
+  font: inherit; font-size: .8rem;
+  color: var(--text);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  cursor: pointer;
+}
+.lt-order { min-width: 4.5rem; }
+.lt-select:hover, .lt-order:hover,
+.lt-select:focus, .lt-order:focus { outline: none; border-color: var(--accent); }
+
+.lt-chips-row { align-items: flex-start; flex-wrap: nowrap; }
+.lt-label {
+  flex-shrink: 0;
+  width: 4.2rem;
+  padding-top: .2rem;
+  font-size: .72rem; font-weight: 600;
+  color: var(--muted);
+}
+.lt-chips { display: flex; flex-wrap: wrap; gap: .35rem; }
+.lt-chip {
+  padding: .2rem .65rem;
+  font: inherit; font-size: .72rem;
+  color: var(--muted);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background .15s, color .15s, border-color .15s;
+}
+.lt-chip:hover { color: var(--text); border-color: var(--accent); }
+.lt-chip[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: #fff; }
+.lt-chip-count { margin-left: .3rem; opacity: .7; }
+
+.lt-status { min-height: 1.6rem; }
+.lt-count { font-size: .75rem; color: var(--muted); }
+.lt-reset {
+  padding: .15rem .6rem;
+  font: inherit; font-size: .72rem;
+  color: var(--accent);
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  cursor: pointer;
+}
+.lt-reset:hover { border-color: var(--accent); }
+
+.list-toolbar + .cards-grid { padding-top: 1rem; }
+.lt-empty { text-align: center; color: var(--muted); font-size: .85rem; padding: 3rem 1rem; }
+
+/* Highlight the axis currently used for sorting */
+.score-row.sorted .score-label { color: var(--text); font-weight: 700; }
+
+@media (max-width: 600px) {
+  .list-toolbar { padding: 1rem 1rem 0; }
+  .lt-sort { width: 100%; }
+  .lt-select { flex: 1; }
+  .lt-label { width: 3.6rem; }
+}

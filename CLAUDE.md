@@ -25,16 +25,17 @@ Hey!Mommy!（6人組アイドルグループ）の楽曲を 9 軸スコア・3 �
 
 **JS 内にハードコードされた楽曲依存データ（新曲・新作曲家追加時に要確認）:**
 
-- `scripts/composer.js`: `COMPOSER_PROFILES`（作曲家ごとの長文プロフィール、担当曲数など数値を含む文章）、`COMPOSER_PALETTE`、`COMPOSER_NAME_MAP`（複数名表記の正規化）。
+- `scripts/composer.js`: `COMPOSER_PROFILES`（作曲家ごとの長文プロフィール、担当曲数など数値を含む文章）、`COMPOSER_PALETTE`、`COMPOSER_NAME_MAP`（複数名表記の正規化。`scripts/index.js` にも同じものがあるので両方そろえる）。
 - `scripts/heatmap.js`: `COMPOSER_HUES`（`songs.json` の `composer` 文字列そのものをキーにする）。
 - `README.md` の「全 33 曲」等の記述、`prompt.md` の気分別候補リスト。
 
-**曲の並び順:** `songs` 配列は新しい曲が先頭の順で、`index.js` はその順のまま一覧表示する。新曲は配列の先頭に追加する。
+**曲の並び順:** `songs` 配列は新しい曲が先頭の順で、`index.js` の既定表示（リリース日の新しい順）は同じ日付・同じ値の曲をこの配列順で並べる。新曲は配列の先頭に追加する。
 
 **URL 共有状態:** どのページも曲は `songs.json` の `id` で参照するので、配列の並び順や曲数に依存しない。`id` を変えると共有済み URL が壊れる。
 
 - setlist / batting: 状態を JSON 配列にし、LZ-String（`scripts/lz-string.min.js`）で圧縮して `?d=...` に格納する（各ファイルの `serializeState` / `deserializeState` の直前のコメントに形式を記載）。URL 由来の値は `deserializeState` で型・曲 id・守備位置・文字数を検証してから state に入れる。
 - compare: `?s1=<id>&s2=...`、recommend: `#<id>`。
+- index（一覧）: `?q=&sort=&order=&composer=&year=` で絞り込み・並び替えを保持（`composer` / `year` は複数指定可、既定値は省略）。
 
 batting の X シェア文は 257 文字上限に収まるよう末尾から自動カットされる。
 
