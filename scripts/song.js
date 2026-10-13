@@ -82,6 +82,15 @@ function renderPositions(song, data) {
     </section>`;
 }
 
+function renderHooks(song) {
+  if (!song.lyrics_hooks?.length) return '';
+  return `
+    <section class="sd-card">
+      <h2 class="sd-h2">歌詞フック</h2>
+      <div class="sd-hooks">${song.lyrics_hooks.map(h => `<span class="hook">${escapeHtml(h)}</span>`).join('')}</div>
+    </section>`;
+}
+
 function renderSimilar(song, songs) {
   const similar = songs
     .filter(s => s.id !== song.id && s.scores)
@@ -180,6 +189,7 @@ fetch('songs.json')
         ${renderScores(song)}
         ${renderPositions(song, data)}
       </div>
+      ${renderHooks(song)}
       ${renderSimilar(song, data.songs)}
       <section class="sd-card sd-analysis">
         <h2 class="sd-h2">和声分析</h2>

@@ -63,6 +63,20 @@ a:hover { text-decoration: underline; }
 .nav-btn:hover { background: var(--card); color: var(--text); text-decoration: none; }
 .nav-btn.active { background: var(--accent); color: #fff; text-decoration: none; }
 
+/* Menu button: only shown in the mobile layout */
+.nav-toggle {
+  display: none; align-items: center; justify-content: center;
+  width: 40px; height: 40px;
+  color: var(--text); background: none;
+  border: 1px solid var(--border); border-radius: 8px;
+  cursor: pointer;
+}
+.nav-toggle:hover { background: var(--card); }
+.nav-toggle line { transition: transform .2s, opacity .2s; transform-origin: 10px 10px; }
+.nav-open .nav-toggle-l1 { transform: translateY(4px) rotate(45deg); }
+.nav-open .nav-toggle-l2 { opacity: 0; }
+.nav-open .nav-toggle-l3 { transform: translateY(-4px) rotate(-45deg); }
+
 /* ===== Nav Dropdown ===== */
 .nav-dropdown {
   position: relative;
@@ -247,54 +261,7 @@ a:hover { text-decoration: underline; }
   border-top: 1px solid var(--border);
 }
 
-/* Collapsible details sections */
-.card-details {
-  margin-top: .5rem;
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  overflow: hidden;
-}
-.card-details-summary {
-  display: flex; align-items: center; gap: .3rem;
-  padding: .35rem .7rem;
-  font-size: .72rem; font-weight: 600;
-  color: var(--muted);
-  cursor: pointer;
-  user-select: none;
-  background: var(--surface);
-  list-style: none;           /* hide default marker */
-}
-.card-details-summary::-webkit-details-marker { display: none; }
-.card-details-summary::after {
-  content: '▸';
-  margin-left: auto;
-  font-size: .65rem;
-  transition: transform .2s;
-}
-.card-details[open] > .card-details-summary::after {
-  transform: rotate(90deg);
-}
-
-/* Harmony note */
-.harmony-note {
-  padding: .5rem .7rem;
-  font-size: .72rem;
-  line-height: 1.6;
-  color: var(--muted);
-  border-top: 1px solid var(--border);
-}
-
-/* Lyrics hooks */
-.hooks-section {
-  padding: .4rem .7rem;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: .3rem;
-  font-size: .68rem;
-  color: var(--muted);
-  border-top: 1px solid var(--border);
-}
+/* Lyrics hook chip (song.html) */
 .hook {
   padding: .1rem .4rem;
   border-radius: 4px;
@@ -575,11 +542,30 @@ a:hover { text-decoration: underline; }
 
 /* ===== Responsive ===== */
 @media (max-width: 600px) {
-  .nav { gap: .15rem; padding: .35rem .5rem; }
-  .nav-title { font-size: .78rem; line-height: 1.3; }
-  .nav-github { margin-left: .25rem; }
-  .nav-btn { padding: .3rem .3rem; }
-  .nav-btn span { white-space: nowrap; }
+  /* Nav collapses behind the menu button (scripts/nav.js) */
+  .nav { flex-wrap: wrap; gap: 0 .5rem; padding: .45rem .75rem; }
+  .nav-toggle { display: flex; }
+  .nav > .nav-btn, .nav > .nav-dropdown { display: none; }
+  .nav.nav-open { padding-bottom: .6rem; }
+  .nav.nav-open > .nav-btn, .nav.nav-open > .nav-dropdown { flex-basis: 100%; }
+  .nav.nav-open > .nav-dropdown { display: block; }
+  .nav.nav-open > .nav-btn:first-of-type { margin-top: .45rem; border-top: 1px solid var(--border); border-radius: 0 0 8px 8px; }
+  .nav.nav-open .nav-btn {
+    display: flex; flex-direction: row; gap: .7rem;
+    padding: .65rem .6rem;
+    font-size: .88rem; letter-spacing: 0;
+  }
+  .nav.nav-open .nav-btn svg { width: 18px; height: 18px; flex-shrink: 0; }
+  /* Dropdown parents become section labels with their links listed under them */
+  .nav.nav-open .nav-dropdown > .nav-btn { cursor: default; pointer-events: none; color: var(--text); }
+  .nav.nav-open .nav-dropdown > .nav-btn::after { display: none; }
+  .nav.nav-open .nav-dropdown-menu {
+    display: grid; grid-template-columns: repeat(2, 1fr);
+    position: static; transform: none;
+    min-width: 0; padding: 0 0 .3rem 2.1rem;
+    background: none; border: none; box-shadow: none;
+  }
+  .nav.nav-open .nav-dropdown-menu a { padding: .5rem .6rem; font-size: .85rem; border-radius: 6px; }
   .cards-grid { grid-template-columns: 1fr; padding: 1rem; }
   .map-title { margin: .2rem 0 0; font-size: .88rem; }
   .map-subtitle { margin: .1rem 0 .15rem; font-size: .7rem; }
