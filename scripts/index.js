@@ -1,30 +1,9 @@
+/* Card score sections: axis keys refer to AXES in common.js */
 const SCORE_GROUPS = [
-  {
-    label: '表現',
-    axes: [
-      { key: 'cute',        label: 'キュート',   color: '#f06c9c' },
-      { key: 'cool',        label: 'クール',     color: '#6cacf0' },
-      { key: 'emo',         label: 'エモ',       color: '#b06cf0' },
-    ]
-  },
-  
-  {
-    label: 'キャラクター',
-    axes: [
-      { key: 'childlike',   label: '子供心',     color: '#f0d860' },
-      { key: 'happy',      label: 'ハッピー度',   color: '#6cf0b0' },
-      { key: 'party',       label: 'お祭り感',   color: '#fcb040' },
-    ]
-  },
-  {
-    label: 'サウンド',
-    axes: [
-      { key: 'band',        label: 'バンド',     color: '#d08040' },
-      { key: 'speed',       label: '疾走感',     color: '#f06c6c' },
-      { key: 'complexity',  label: '複雑度',     color: '#a080f0' },
-    ]
-  }
-];
+  { label: '表現',         keys: ['cute', 'cool', 'emo'] },
+  { label: 'キャラクター', keys: ['childlike', 'happy', 'party'] },
+  { label: 'サウンド',     keys: ['band', 'speed', 'complexity'] },
+].map(g => ({ label: g.label, axes: g.keys.map(k => AXES.find(a => a.key === k)) }));
 
 function buildCard(song) {
   const card = document.createElement('div');
@@ -100,12 +79,7 @@ function buildCard(song) {
 
 /* ====== Filter & sort ====== */
 
-/* Same aliases as COMPOSER_NAME_MAP in composer.js — keep both in sync */
-const COMPOSER_NAME_MAP = {
-  '徳田光希、大竹智之': '徳田光希',
-  '草川瞬、RUSH EYE': '草川瞬',
-};
-const composerKey = song => COMPOSER_NAME_MAP[song.composer] || song.composer || '';
+const composerKey = song => composerKeyOf(song.composer);
 const releaseYear = song => (song.release_date || '').slice(0, 4);
 
 const AXIS_LIST = SCORE_GROUPS.flatMap(g => g.axes);

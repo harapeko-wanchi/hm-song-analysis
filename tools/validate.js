@@ -128,29 +128,32 @@ const mdIds = fs.readdirSync(path.join(ROOT, 'analysis')).filter(f => f.endsWith
 songs.forEach(s => { if (s.id && !mdIds.includes(s.id)) error(`analysis/${s.id}.md がありません`); });
 mdIds.filter(id => !ids.has(id)).forEach(id => error(`analysis/${id}.md に対応する曲が songs.json にありません`));
 
-/* ====== JS 内にハードコードされたデータ ====== */
-const nameMap = readConst('scripts/composer.js', 'COMPOSER_NAME_MAP') || {};
+/* ====== 共通定義（scripts/common.js）と JS 内にハードコードされたデータ ====== */
+// common.js は宣言だけのファイルなので、そのまま評価して定数を取り出す
+const common = vm.runInNewContext(read('scripts/common.js') + ';({ AXES, COMPOSER_NAME_MAP, COMPOSER_COLORS })');
+const nameMap = common.COMPOSER_NAME_MAP;
+const colors = common.COMPOSER_COLORS;
 const profiles = readConst('scripts/composer.js', 'COMPOSER_PROFILES') || {};
-const palette = readConst('scripts/composer.js', 'COMPOSER_PALETTE') || [];
-const hues = readConst('scripts/heatmap.js', 'COMPOSER_HUES') || {};
-const indexNameMap = readConst('scripts/index.js', 'COMPOSER_NAME_MAP');
+const keyOf = c => nameMap[c] || c;
 
 const composers = [...new Set(songs.map(s => s.composer).filter(Boolean))];
+const composerKeys = [...new Set(composers.map(keyOf))];
 composers.forEach(c => {
-  const key = nameMap[c] || c;
-  if (!profiles[key]) error(`scripts/composer.js: COMPOSER_PROFILES に「${key}」がありません${key !== c ? `（作曲「${c}」）` : ''}`);
-  if (!hues[c]) error(`scripts/heatmap.js: COMPOSER_HUES に「${c}」がありません（songs.json の composer 文字列そのままがキー）`);
+  const key = keyOf(c);
+  const note = key !== c ? `（作曲「${c}」）` : '';
+  if (!profiles[key]) error(`scripts/composer.js: COMPOSER_PROFILES に「${key}」がありません${note}`);
+  if (!colors[key]) error(`scripts/common.js: COMPOSER_COLORS に「${key}」がありません${note}`);
 });
-Object.keys(hues).filter(c => !composers.includes(c)).forEach(c => warn(`scripts/heatmap.js: COMPOSER_HUES の「${c}」はどの曲にも使われていません`));
-if (composers.length > palette.length) error(`scripts/composer.js: COMPOSER_PALETTE が ${palette.length} 色しかありません（作曲家 ${composers.length} 組）`);
-
-if (indexNameMap && JSON.stringify(indexNameMap) !== JSON.stringify(nameMap)) {
-  error('scripts/index.js と scripts/composer.js の COMPOSER_NAME_MAP が一致しません');
-}
+Object.keys(colors).filter(k => !composerKeys.includes(k)).forEach(k => warn(`scripts/common.js: COMPOSER_COLORS の「${k}」はどの曲にも使われていません`));
+Object.keys(profiles).filter(k => !composerKeys.includes(k)).forEach(k => warn(`scripts/composer.js: COMPOSER_PROFILES の「${k}」はどの曲にも使われていません`));
+Object.entries(nameMap).forEach(([from, to]) => {
+  if (!composers.includes(from)) warn(`scripts/common.js: COMPOSER_NAME_MAP の「${from}」はどの曲にも使われていません`);
+  if (composers.includes(to)) warn(`scripts/common.js: COMPOSER_NAME_MAP で「${from}」を「${to}」にまとめていますが、「${to}」単独の表記の曲もあります（両方まとめて扱われます）`);
+});
 
 // プロフィール中の「全N曲中M曲」
 const countByKey = {};
-songs.forEach(s => { if (s.composer) { const k = nameMap[s.composer] || s.composer; countByKey[k] = (countByKey[k] || 0) + 1; } });
+songs.forEach(s => { if (s.composer) { const k = keyOf(s.composer); countByKey[k] = (countByKey[k] || 0) + 1; } });
 for (const [key, prof] of Object.entries(profiles)) {
   for (const text of Object.values(prof)) {
     for (const m of String(text).matchAll(/全(\d+)曲中(\d+)曲/g)) {
@@ -161,21 +164,16 @@ for (const [key, prof] of Object.entries(profiles)) {
   }
 }
 
-// AXES: 各ファイルの軸キー・色がそろっているか
-const axesFiles = ['compare', 'composer', 'heatmap', 'recommend', 'setlist'].map(f => `scripts/${f}.js`);
-const axesDefs = axesFiles.map(f => [f, readConst(f, 'AXES')]).filter(([, v]) => v);
-const groups = readConst('scripts/index.js', 'SCORE_GROUPS');
-if (groups) axesDefs.push(['scripts/index.js (SCORE_GROUPS)', groups.flatMap(g => g.axes)]);
-axesDefs.forEach(([f, axes]) => {
-  const keys = axes.map(a => a.key).sort().join(',');
-  if (keys !== [...axisKeys].sort().join(',')) error(`${f}: 軸が scoring_scale.axes と一致しません`);
+// AXES: scoring_scale.axes と同じ軸がそろっているか、他のファイルに定義が残っていないか
+const axesKeys = common.AXES.map(a => a.key);
+if ([...axesKeys].sort().join(',') !== [...axisKeys].sort().join(',')) error('scripts/common.js: AXES の軸が scoring_scale.axes と一致しません');
+common.AXES.forEach(a => ['label', 'shortLabel', 'color'].forEach(k => { if (!a[k]) error(`scripts/common.js: AXES の ${a.key} に ${k} がありません`); }));
+fs.readdirSync(path.join(ROOT, 'scripts')).filter(f => f.endsWith('.js') && f !== 'common.js').forEach(f => {
+  const src = read('scripts/' + f);
+  ['AXES', 'COMPOSER_NAME_MAP', 'COMPOSER_COLORS'].forEach(name => {
+    if (new RegExp(`^const ${name}\\b`, 'm').test(src)) error(`scripts/${f}: ${name} は scripts/common.js にまとめてください`);
+  });
 });
-const colorOf = {};
-axesDefs.forEach(([f, axes]) => axes.forEach(a => {
-  if (!a.color) return;
-  if (colorOf[a.key] && colorOf[a.key].color !== a.color) warn(`${f}: 軸 ${a.key} の色 ${a.color} が ${colorOf[a.key].file} の ${colorOf[a.key].color} と違います`);
-  else colorOf[a.key] = { color: a.color, file: f };
-}));
 
 /* ====== README ====== */
 for (const m of read('README.md').matchAll(/全 ?(\d+) ?曲/g)) {

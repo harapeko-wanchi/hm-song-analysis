@@ -1,29 +1,4 @@
-/* ====== Config ====== */
-const AXES = [
-  { key: 'cute',       label: 'キュート',  color: '#f06c9c' },
-  { key: 'cool',       label: 'クール',    color: '#6cacf0' },
-  { key: 'emo',        label: 'エモ',      color: '#b06cf0' },
-  { key: 'childlike',  label: '子供心',    color: '#f0d860' },
-  { key: 'happy',      label: 'ハッピー',  color: '#6cf0b0' },
-  { key: 'party',      label: 'お祭り感',  color: '#fcb040' },
-  { key: 'band',       label: 'バンド',    color: '#d08040' },
-  { key: 'speed',      label: '疾走感',    color: '#f06c6c' },
-  { key: 'complexity', label: '複雑度',    color: '#a080f0' },
-];
 const MAX_VAL = 10;
-
-/* Composer visual palette — stroke colors chosen to be distinguishable on dark bg */
-const COMPOSER_PALETTE = [
-  { stroke: '#b080f0', fill: 'rgba(176,128,240,.2)' },  // NNBS. — purple
-  { stroke: '#50c8e8', fill: 'rgba(80,200,232,.2)' },   // AILI — teal
-  { stroke: '#f0a040', fill: 'rgba(240,160,64,.2)' },   // しえりーほ — orange
-  { stroke: '#60d880', fill: 'rgba(96,216,128,.2)' },   // 山崎あおい — green
-  { stroke: '#f06060', fill: 'rgba(240,96,96,.2)' },    // 阿久津健太郎 — red
-  { stroke: '#f080a8', fill: 'rgba(240,128,168,.2)' },  // 古橋勇紀 — rose
-  { stroke: '#d8c050', fill: 'rgba(216,192,80,.2)' },   // 早川博隆 — gold
-  { stroke: '#a8d840', fill: 'rgba(168,216,64,.2)' },   // 草川瞬 — chartreuse
-  { stroke: '#50d8c0', fill: 'rgba(80,216,192,.2)' },   // 徳田光希 — cyan
-];
 
 /* ====== Composer Profiles ====== */
 const COMPOSER_PROFILES = {
@@ -104,12 +79,6 @@ const COMPOSER_PROFILES = {
   },
 };
 
-/* Composer name alias for handling varied keys like "徳田光希、大竹智之" (also duplicated in index.js) */
-const COMPOSER_NAME_MAP = {
-  '徳田光希、大竹智之': '徳田光希',
-  '草川瞬、RUSH EYE': '草川瞬',
-};
-
 let composerData = [];  // [{ name, songs, avg, bpms, palette }]
 let visible = {};       // name → bool
 
@@ -125,7 +94,7 @@ function buildComposerData(songs) {
   // Sort by song count desc then name
   const sorted = Object.entries(map).sort((a, b) => b[1].length - a[1].length || a[0].localeCompare(b[0], 'ja'));
 
-  composerData = sorted.map(([name, songs], i) => {
+  composerData = sorted.map(([name, songs]) => {
     const avg = {};
     AXES.forEach(ax => {
       const vals = songs.map(s => s.scores[ax.key]).filter(v => v != null);
@@ -139,7 +108,7 @@ function buildComposerData(songs) {
       bpmMin: Math.min(...bpms),
       bpmMax: Math.max(...bpms),
       bpmAvg: bpms.length ? Math.round(bpms.reduce((a, b) => a + b, 0) / bpms.length) : 0,
-      palette: COMPOSER_PALETTE[i % COMPOSER_PALETTE.length],
+      palette: composerColorOf(name),
     };
   });
 
@@ -318,7 +287,7 @@ function buildComposerTabs() {
     panel.className = 'ctab-panel' + (ci === 0 ? ' active' : '');
     panel.dataset.idx = ci;
 
-    const key = COMPOSER_NAME_MAP[c.name] || c.name;
+    const key = composerKeyOf(c.name);
     const p = COMPOSER_PROFILES[key];
 
     // Stats
