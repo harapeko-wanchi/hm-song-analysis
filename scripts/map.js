@@ -41,7 +41,7 @@ function buildPoint(song, mapKey, range) {
   if (song.thumbnail_url) {
     thumbInner = `
       <div class="map-point-thumb">
-        <img src="${song.thumbnail_url}" alt="${song.title}" loading="lazy">
+        <img src="${smallThumb(song.thumbnail_url)}" alt="${song.title}" loading="lazy">
         <div class="map-point-play">詳細</div>
       </div>`;
   } else {

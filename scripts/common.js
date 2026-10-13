@@ -66,3 +66,9 @@ function escapeHtml(s) {
 function songUrl(id) {
   return 'song.html?id=' + encodeURIComponent(id);
 }
+
+/* 320x180 YouTube thumbnail for small displays (maps, lists); maxresdefault is 1280x720.
+   (hqdefault / sddefault are 4:3 with black bars, so they don't crop well.) */
+function smallThumb(url) {
+  return url ? url.replace('/maxresdefault.jpg', '/mqdefault.jpg') : url;
+}

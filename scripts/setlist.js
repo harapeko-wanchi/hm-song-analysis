@@ -443,7 +443,7 @@ function renderItemEl(item, idx, songNum) {
   if (!song) return el;
 
   const thumbHTML = song.thumbnail_url
-    ? `<img src="${escapeAttr(song.thumbnail_url)}" alt="${escapeAttr(song.title)}" class="sl-item-thumb" loading="lazy">`
+    ? `<img src="${escapeAttr(smallThumb(song.thumbnail_url))}" alt="${escapeAttr(song.title)}" class="sl-item-thumb" loading="lazy">`
     : `<div class="sl-item-thumb sl-item-thumb--empty"></div>`;
 
   el.innerHTML = `
@@ -678,7 +678,7 @@ function renderPickerList() {
     const item = document.createElement('div');
     item.className = 'sl-modal-item';
     const thumb = song.thumbnail_url
-      ? `<img src="${escapeAttr(song.thumbnail_url)}" alt="" width="36" height="36" style="object-fit:cover;border-radius:4px;flex-shrink:0">`
+      ? `<img src="${escapeAttr(smallThumb(song.thumbnail_url))}" alt="" width="36" height="36" style="object-fit:cover;border-radius:4px;flex-shrink:0">`
       : '';
     item.innerHTML = `
       ${thumb}

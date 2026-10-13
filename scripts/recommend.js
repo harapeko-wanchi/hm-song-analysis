@@ -117,7 +117,7 @@ function showResult(songId) {
     const rankClass = idx < 3 ? ` rank-${idx + 1}` : '';
     const thumbHTML = s.thumbnail_url
       ? `<a href="${s.youtube_url || '#'}" target="_blank" rel="noopener" class="rec-card-thumb">
-          <img src="${s.thumbnail_url}" alt="${s.title}" loading="lazy">
+          <img src="${smallThumb(s.thumbnail_url)}" alt="${s.title}" loading="lazy">
           <div class="play-icon">▶</div>
         </a>`
       : '';

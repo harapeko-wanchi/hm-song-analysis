@@ -165,7 +165,7 @@ function renderYears() {
           <li class="tl-song">
             <time class="tl-date" datetime="${escapeHtml(s.release_date)}">${escapeHtml(s.release_date.slice(5).replace('-', '/'))}</time>
             <a class="tl-song-card" href="${songUrl(s.id)}">
-              ${s.thumbnail_url ? `<img src="${escapeHtml(s.thumbnail_url)}" alt="" loading="lazy">` : '<span class="tl-noimg"></span>'}
+              ${s.thumbnail_url ? `<img src="${escapeHtml(smallThumb(s.thumbnail_url))}" alt="" loading="lazy">` : '<span class="tl-noimg"></span>'}
               <span class="tl-song-body">
                 <span class="tl-song-title">${escapeHtml(s.title)}</span>
                 <span class="tl-song-meta">♪ ${escapeHtml(s.composer)} ・ Key ${escapeHtml(s.key)} ・ BPM ${escapeHtml(s.bpm)}</span>
