@@ -189,7 +189,7 @@ Db → Eb → Ab              "Love you Love you Love you My first love love Lov
 6. **Aメロの I-IV 往復** — BPM 220 の高速上でコードを絞り、歌詞とリズムに全振り
 
 ### リズム・サウンド面
-- **BPM 220** は **Hey!Mommy! カタログ最速**（ビスケットケース 206 を更新）
+- **BPM 220** は **Hey!Mommy! カタログ最速**（Hey! get up kids の 210 を更新。のちに Happy Go Round が同じ 220 で並ぶ）
 - ギター＋バンドサウンドによる疾走感。ビスケットケースのギターロック路線を継承
 - BPM 220 で「Love...」の静寂から始まる緩急のコントラスト
 - 間奏のクロマティック上行がバンドアレンジで映える構造
@@ -244,7 +244,7 @@ Db → Eb → Ab              "Love you Love you Love you My first love love Lov
 
 ## Hey!Mommy! 楽曲群での位置づけ
 
-- **BPM 220 はカタログ最速** — ビスケットケース (206) を14BPM 更新。NNBS. が自身の記録を塗り替えた
+- **BPM 220 はカタログ最速** — Hey! get up kids（210）を10BPM 更新。NNBS. が自身の記録を塗り替えた（のちに Happy Go Round が同じ 220 で並び、最速タイに）
 - **C→Ab の長3度下転調**は START RUSH!! の Ab→C（長3度上）の鏡像 — NNBS. にとって「長3度転調」がシグネチャー技法として確立
 - Map B（サウンド・エンジン）でビスケットケースの右上に位置 — **バンド×ハイパーの極北**
 - Map C（エモーション）で **大人っぽい×エモーショナル象限** に位置。ビスケットケースが「楽しい全力疾走」なら、MY FIRST LOVE SONG は「切ない全力疾走」— 同じ NNBS. バンドロックでもベクトルが正反対

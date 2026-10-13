@@ -37,6 +37,161 @@
   },
   "songs": [
     {
+      "id": "jet_coaster_life",
+      "title": "ジェットコースターLIFE!!",
+      "release_date": "2026-09-19",
+      "lyricist": "草川瞬",
+      "composer": "草川瞬、RUSH EYE",
+      "arranger": "RUSH EYE",
+      "key": "G major",
+      "bpm": 142,
+      "youtube_url": "https://youtu.be/NX54Y9k0Udg",
+      "thumbnail_url": "https://img.youtube.com/vi/NX54Y9k0Udg/maxresdefault.jpg",
+      "scores": {
+        "cute": 4.5,
+        "cool": 5.5,
+        "emo": 3.5,
+        "band": 7.0,
+        "speed": 4.0,
+        "complexity": 3.5,
+        "childlike": 5.0,
+        "party": 7.5,
+        "happy": 7.5
+      },
+      "mapA": { "x": 1.0, "y": 5.0 },
+      "mapB": { "x": 4.0, "y": -2.0 },
+      "mapC": { "x": 0.0, "y": 4.0 },
+      "tags": [
+        "ギターロック",
+        "単音リフ・ループ",
+        "8分刻みギター×16ビートドラム",
+        "♭VIIミクソリディアン（G→F→D）",
+        "A7セカンダリードミナント（V/V）",
+        "D7→Cロック的逆行",
+        "8コードのシンプル和声",
+        "コミカル歌詞",
+        "草川瞬初提供"
+      ],
+      "harmony_note": "イントロ／アウトロのG→G→G→F→D（I→I→I→♭VII→V）が♭VIIミクソリディアンのロック色を刻む。AメロはG→C→G→D7→C→G（V7→IVのロック的逆行）、BメロはCM7→G→A7→D（IVM7→I→V/V→V）でA7セカンダリードミナントが高揚を作る。サビはC→D→G→Em（IV→V→I→vi）を軸に「ガッデム」でF（♭VII）へ落とす。全8コードのシンプルな和声を、単音リフのループと16ビートのドラムが推進する。",
+      "lyrics_hooks": [
+        "JJJジェットコースター life",
+        "ジェットコースターみたいな人生を進め",
+        "アガッて ガッて got'em",
+        "サガッて ガッて ガッデム",
+        "くるくる回って目が回っても",
+        "楽しんだもん勝ちでしょ",
+        "気が付けば充電も3%です…",
+        "駆け込み乗車はおやめください はい。",
+        "Bad dayも good dayでも 混ぜたら最強でしょ！？",
+        "感情ジェット離陸モード"
+      ],
+      "summary": "草川瞬作詞、草川瞬・RUSH EYE作曲、RUSH EYE編曲のBPM142ギターロック。ループする単音リフと8分刻みのバッキングギターに16ビートのドラムが絡み、ミドルテンポでも前のめりな推進力を生む。G→F→D（I→♭VII→V）のミクソリディアン・リフと、BメロのA7（V/V）セカンダリードミナントがロックの骨格。「アガッて ガッて got'em／サガッて ガッて ガッデム」の言葉遊びと「充電も3%です…」「はい。」のコミカルな日常描写で、浮き沈みだらけの人生を「楽しんだもん勝ち」と笑い飛ばす。"
+    },
+    {
+      "id": "happy_go_round",
+      "title": "Happy Go Round",
+      "release_date": "2026-09-01",
+      "lyricist": "NNBS.",
+      "composer": "NNBS.",
+      "arranger": "NNBS.",
+      "key": "G major",
+      "bpm": 220,
+      "youtube_url": "https://youtu.be/y5Qz8PcPhYs",
+      "thumbnail_url": "https://img.youtube.com/vi/NWe_iid_0ww/maxresdefault.jpg",
+      "scores": {
+        "cute": 6.5,
+        "cool": 3.5,
+        "emo": 2.5,
+        "band": 6.0,
+        "speed": 9.5,
+        "complexity": 6.5,
+        "childlike": 8.0,
+        "party": 9.0,
+        "happy": 8.5
+      },
+      "mapA": { "x": -3.0, "y": 8.0 },
+      "mapB": { "x": 2.0, "y": 9.0 },
+      "mapC": { "x": 6.0, "y": 6.0 },
+      "tags": [
+        "パーティーチューン",
+        "カタログ最速タイBPM220",
+        "ギターカッティング＋シンセメロ",
+        "vi-IV-I-Vシグネチャー循環",
+        "♭VI借用（Eb）",
+        "♭VIIミクソリディアン（F）",
+        "E major短3度下転調",
+        "I7（G7）NNBS.署名コード",
+        "カーニバル／遊園地モチーフ",
+        "NNBS.パーティー"
+      ],
+      "harmony_note": "サビ「I'm Mommy this way」はEm→C→G→D（vi→IV→I→V）のシグネチャー循環に、「new world」「only」でEb（♭VI）を差し込み、Ebから半音上のEmへ滑り戻る。AメロはG→D→F→C→D（I→V→♭VII→IV→V）のミクソリディアン色。プレサビはC→Dadd9→Em→G（IV→V→vi→I）で上行。終盤は間奏E→A→F#→B（I→IV→II→V）でE majorへ短3度下転調し、B始動のvi-IV-I-Vで「Happy Go Round」を歌った後、G majorのサビへ直接戻る。アウトロのG7（I7）はNNBS.の署名コード。",
+      "lyrics_hooks": [
+        "Welcome to the MITETE showtime",
+        "I'm Mommy this way",
+        "Get Chu ready Merry merry go round",
+        "Wanna wanna super E jump",
+        "Welcome to the Happy Go Round",
+        "カーニバルが はじまった時計を止めて",
+        "WHAT'S A 謎謎",
+        "青い木の扉（ポン ポン）",
+        "Let's walk this way together with my friends",
+        "Happy Happy Happy Go Round"
+      ],
+      "summary": "NNBS.作詞・作曲・編曲、MY FIRST LOVE SONGと並ぶカタログ最速タイBPM220のパーティーチューン。ギターのカッティングに要所でシンセのメロディが重なる。Em→C→G→D（vi-IV-I-V）のシグネチャー循環に♭VIのEbを差し込むフックと、AメロのF（♭VII）が色彩を添える。終盤はE majorへ短3度下転調して「Happy Happy Happy Go Round」を歌い上げ、再びG majorのサビへ帰還する。お城・人形・サーカス・メリーゴーラウンドの遊園地モチーフで「MITETE showtime」へ誘う、子供心全開のワンダーランド。"
+    },
+    {
+      "id": "colorful_pop_resistance",
+      "title": "カラフルポップレジスタンス",
+      "release_date": "2026-07-02",
+      "lyricist": "NNBS.",
+      "composer": "NNBS.",
+      "arranger": "NNBS.",
+      "key": "F major",
+      "bpm": 156,
+      "youtube_url": "https://youtu.be/WXf6qeHa248",
+      "thumbnail_url": "https://img.youtube.com/vi/1qM8XDCHAdQ/maxresdefault.jpg",
+      "scores": {
+        "cute": 5.5,
+        "cool": 5.0,
+        "emo": 4.0,
+        "band": 6.5,
+        "speed": 4.5,
+        "complexity": 6.0,
+        "childlike": 6.5,
+        "party": 8.0,
+        "happy": 7.0
+      },
+      "mapA": { "x": -0.5, "y": 6.0 },
+      "mapB": { "x": 3.0, "y": -1.0 },
+      "mapC": { "x": 3.0, "y": 3.0 },
+      "tags": [
+        "ダンスチューン",
+        "バッキングギター＋シンセ",
+        "ギターソロ",
+        "vi-IV-I-Vシグネチャー循環",
+        "C#dimパッシングディミニッシュ",
+        "Fトニック・ペダル（Gm7(omit3)/F↔Ddim/F）",
+        "マイナー・ペンタトニック上行ベース",
+        "カウントアップ・コール",
+        "ナンセンスワード「もきゅもきゅ」",
+        "勇者モチーフ"
+      ],
+      "harmony_note": "Dm→Bb→F→C→C#dim（vi→IV→I→V→#V°）の循環がIntro・Aメロ・Dメロを貫き、C#dimがベースを半音上行させてDmへ戻す。プレサビはC→Am→Bb→BbM7/A→Gm7→C（V→iii→IV→IV/3→ii7→V）でBb→A→Gと内声を下降。「This is the DANCE」はFペダル上のGm7(omit3)/F↔Ddim/Fの揺動で、DdimのAbが同主短調の影を落とす。サビはDm→F→Gm→Bb→C（vi→I→ii→IV→V）でベースがD-F-G-Bb-Cのマイナー・ペンタトニックを上行する。",
+      "lyrics_hooks": [
+        "楽しみが あふれる Future",
+        "立ち上がるよ 名もなき勇者さ",
+        "TOUCH & DA DA DANCE",
+        "今宵の宴も アゲていこう",
+        "たどり着けない夢の途中 何度でも",
+        "This is the DANCE DANCE",
+        "Let's Live SHAKE HIP HANDS UP YEAH!",
+        "もきゅもきゅもきゅ",
+        "カラフルレジスタンス ここからだ",
+        "Let's DANCE もきゅもきゅ DADADADADA"
+      ],
+      "summary": "NNBS.作詞・作曲・編曲のBPM156ダンスチューン。バッキングギターとシンセにギターソロも入る。Dm→Bb→F→C（vi-IV-I-V）のシグネチャー循環をC#dimのパッシングディミニッシュで締め、ベースを半音でDmへ押し戻す。「This is the DANCE」ではFペダル上でGm7(omit3)とDdimを揺らし、「1 2 3 Hey!」と最後は7まで数え上げるカウントでフロアを煽る。サビのD-F-G-Bb-Cペンタトニック上行ベースに「SHAKE HIP HANDS UP」「もきゅもきゅ」を乗せ、「名もなき勇者」たちが何度でも立ち上がるカラフルな抵抗を描く。"
+    },
+    {
       "id": "baby_baby_baby",
       "title": "BABY BABY BABY",
       "release_date": "2026-06-02",
@@ -168,7 +323,7 @@
       "tags": [
         "ラブソング",
         "疾走バンド",
-        "カタログ最速BPM220",
+        "カタログ最速タイBPM220",
         "C→Ab長3度下転調",
         "クロマティック間奏",
         "英語詞＋日本語Dメロ",
@@ -190,7 +345,7 @@
         "LaLaLa I love you Dakara Singing for you",
         "My first love Love... Love song"
       ],
-      "summary": "NNBS.作のカタログ最速BPM220疾走バンドポップ。C majorのAメロからG→Ebピボット一発でAb majorサビへ長3度下転調する大胆な構成が最大の個性。全編英語で「Words aren't enough」と歌い続けた末にDメロで突如日本語の本音を吐露する二層構造が圧巻。「LaLaLa I love you」のシンガロングと「Love...→Love song」の環状構造で、楽曲自体が一通のラブレターとなる。"
+      "summary": "NNBS.作のカタログ最速タイ（Happy Go Roundと並ぶ）BPM220疾走バンドポップ。C majorのAメロからG→Ebピボット一発でAb majorサビへ長3度下転調する大胆な構成が最大の個性。全編英語で「Words aren't enough」と歌い続けた末にDメロで突如日本語の本音を吐露する二層構造が圧巻。「LaLaLa I love you」のシンガロングと「Love...→Love song」の環状構造で、楽曲自体が一通のラブレターとなる。"
     },
     {
       "id": "playful_romantic",
@@ -337,11 +492,11 @@
         "コール映え",
         "ギター＋バンドサウンド",
         "ほぼ全英語詞",
-        "全楽曲最速210BPM",
+        "超高速210BPM",
         "Live Documentary MV",
-        "NNBS.唯一バンドサウンド主体"
+        "NNBS.最強バンドサウンド"
       ],
-      "harmony_note": "全楽曲最速210BPM / Bbdim(♭VIdim)→vi半音接近(A→Bb→B) / E(II=V/V)セカンダリードミナント(Verse B) / vi-I-IV-V循環Hook(Hech charappa) / C#m(viim)経過上行(vi→vii→I) / DM7(IM7)+A7sus4(V7sus4)Intro",
+      "harmony_note": "210BPM / Bbdim(♭VIdim)→vi半音接近(A→Bb→B) / E(II=V/V)セカンダリードミナント(Verse B) / vi-I-IV-V循環Hook(Hech charappa) / C#m(viim)経過上行(vi→vii→I) / DM7(IM7)+A7sus4(V7sus4)Intro",
       "lyrics_hooks": [
         "Hey! get up kids",
         "Let's celebrate",
@@ -353,7 +508,7 @@
         "we are hey mommy",
         "I won't let anyone"
       ],
-      "summary": "全楽曲最速210BPM、カタログ最強バンドサウンド。ほぼ全英語詞でライブ感を追求したNNBS.唯一のギターロック主体楽曲。攻撃的なリフと祝祭的なコールが同居する。",
+      "summary": "BPM210の超高速、カタログ最強バンドサウンド。ほぼ全英語詞でライブ感を追求した、NNBS.作品でもっともバンド色の強いギターロック。攻撃的なリフと祝祭的なコールが同居する。",
       "mapC": {
         "x": -2.6,
         "y": -0.2
@@ -609,7 +764,7 @@
         "ギターソロ",
         "飛翔"
       ],
-      "harmony_note": "全曲最多21コード / iv(Abm)同主調借用 / F7(V7/V)セカンダリードミナント / AbM9→Ebsus4/G浮遊コーラス / Cmsus2→sus4→Cm(viサスペンション変容) / Am7-5(♯IVm7♭5)パッシングコード / ♭VII(Db)借用",
+      "harmony_note": "21コード（Hey!Yummy!の35に次ぐカタログ2位） / iv(Abm)同主調借用 / F7(V7/V)セカンダリードミナント / AbM9→Ebsus4/G浮遊コーラス / Cmsus2→sus4→Cm(viサスペンション変容) / Am7-5(♯IVm7♭5)パッシングコード / ♭VII(Db)借用",
       "lyrics_hooks": [
         "ジェット",
         "Carry on",
