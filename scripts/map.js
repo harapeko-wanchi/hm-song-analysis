@@ -42,7 +42,7 @@ function buildPoint(song, mapKey, range) {
     thumbInner = `
       <div class="map-point-thumb">
         <img src="${song.thumbnail_url}" alt="${song.title}" loading="lazy">
-        ${song.youtube_url ? '<div class="map-point-play">▶</div>' : ''}
+        <div class="map-point-play">詳細</div>
       </div>`;
   } else {
     thumbInner = `<div class="map-point-placeholder">${song.title}</div>`;
@@ -59,9 +59,9 @@ function buildPoint(song, mapKey, range) {
   ).join('');
 
   el.innerHTML = `
-    ${song.youtube_url ? `<a href="${song.youtube_url}" target="_blank" rel="noopener">` : ''}
+    <a href="${songUrl(song.id)}">
     ${thumbInner}
-    ${song.youtube_url ? '</a>' : ''}
+    </a>
     <div class="map-point-title">${song.title}</div>`;
 
   /* Store tooltip data on the element */
@@ -72,6 +72,7 @@ function buildPoint(song, mapKey, range) {
     <div class="tt-title">${song.title}</div>
     ${ttHTML}
     <div style="margin-top:.3rem;font-size:.68rem;color:var(--muted);">(${x}, ${y})</div>
+    <div class="tt-hint">クリックで曲の詳細へ</div>
     ${youtubeLink}
     <a class="tt-youtube" href="${songUrl(song.id)}">📄 曲の詳細</a>`;
 
@@ -363,8 +364,9 @@ function attachTooltipListeners(container) {
 
   /* --- Mobile: tap to show tooltip, block link navigation --- */
   container.addEventListener('click', e => {
+    /* A drag that ends on a point must not open its page */
+    if (dragMoved) { if (e.target.closest('a')) e.preventDefault(); return; }
     if (!isTouchDevice()) return;
-    if (dragMoved) return;                       // Ignore drag release
     const pt = e.target.closest('.map-point');
     if (!pt) return;
     /* Prevent <a> from navigating */

@@ -437,7 +437,8 @@ a:hover { text-decoration: underline; }
   justify-content: center;
   background: rgba(0,0,0,.45);
   color: #fff;
-  font-size: 1.1rem;
+  font-size: .72rem;
+  font-weight: 700;
   opacity: 0;
   transition: opacity .2s;
   pointer-events: none;
@@ -510,6 +511,8 @@ a:hover { text-decoration: underline; }
   text-decoration: underline;
 }
 .touch .map-tooltip .tt-youtube { display: inline-block; }
+.map-tooltip .tt-hint { margin-top: .3rem; font-size: .68rem; color: var(--accent); }
+.touch .map-tooltip .tt-hint { display: none; }
 .map-tooltip .tt-youtube + .tt-youtube { margin-left: .8rem; }
 
 /* ===== Map Tabs ===== */
