@@ -49,6 +49,11 @@ const pickerListEl = document.getElementById('btModalList');
 let pickerAxis = 'release';
 let pickerOrder = 'desc';
 
+/* Small 320x180 thumbnail (same as smallThumb in common.js, which this page doesn't load) */
+function btThumb(url) {
+  return url ? url.replace('/maxresdefault.jpg', '/mqdefault.jpg') : '';
+}
+
 function updatePickerChips() {
   document.querySelectorAll('#btPickerChips .bt-picker-chip').forEach(c => {
     const active = c.dataset.axis === pickerAxis;
@@ -169,7 +174,7 @@ function renderPool() {
     chip.setAttribute('role', 'button');
     chip.setAttribute('aria-label', song.title);
     chip.innerHTML = `
-      <img class="bt-chip-thumb" src="${song.thumbnail_url || ''}" alt="" loading="lazy"
+      <img class="bt-chip-thumb" src="${btThumb(song.thumbnail_url)}" alt="" loading="lazy"
         onerror="this.style.visibility='hidden'">
       <div class="bt-chip-info">
         <div class="bt-chip-title">${song.title}</div>
@@ -192,7 +197,7 @@ function renderSlotEl(slotEl, data) {
     emptyZone.style.display = 'none';
     songDiv.classList.add('visible');
     removeBtn.removeAttribute('hidden');
-    slotEl.querySelector('.bt-slot-thumb').src = song.thumbnail_url || '';
+    slotEl.querySelector('.bt-slot-thumb').src = btThumb(song.thumbnail_url);
     slotEl.querySelector('.bt-slot-title').textContent = song.title;
     slotEl.querySelector('.bt-slot-meta').textContent =
       `BPM ${song.bpm || '?'} · Key ${song.key || '?'} · ${song.composer || ''}`;
@@ -479,7 +484,7 @@ function renderPickerList() {
     item.className = 'bt-modal-item';
     item.dataset.songId = song.id;
     item.innerHTML = `
-      <img class="bt-chip-thumb" src="${song.thumbnail_url || ''}" alt="" loading="lazy"
+      <img class="bt-chip-thumb" src="${btThumb(song.thumbnail_url)}" alt="" loading="lazy"
         onerror="this.style.visibility='hidden'">
       <div class="bt-chip-info">
         <div class="bt-chip-title">${song.title}</div>
