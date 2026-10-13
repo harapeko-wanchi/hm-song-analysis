@@ -37,6 +37,7 @@ Hey!Mommy!（6人組アイドルグループ）の楽曲を 9 軸スコア・3 �
 
 - setlist / batting: 状態を JSON 配列にし、LZ-String（`scripts/lz-string.min.js`）で圧縮して `?d=...` に格納する（各ファイルの `serializeState` / `deserializeState` の直前のコメントに形式を記載）。URL 由来の値は `deserializeState` で型・曲 id・守備位置・文字数を検証してから state に入れる。
 - compare: `?s1=<id>&s2=...`、recommend: `#<id>`。
+- timeline（年表）: `?m=<bpm|軸 key>` で表示する指標を保持（既定の BPM は省略）。
 - index（一覧）: `?q=&sort=&order=&composer=&year=` で絞り込み・並び替えを保持（`composer` / `year` は複数指定可、既定値は省略）。
 
 batting の X シェア文は 257 文字上限に収まるよう末尾から自動カットされる。
