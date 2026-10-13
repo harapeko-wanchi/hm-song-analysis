@@ -9,6 +9,7 @@ Hey!Mommy!（6人組アイドルグループ）の楽曲を 9 軸スコア・3 �
 - ビルド・パッケージマネージャ・テスト・リンターは無い。素の HTML / CSS / JS のみ。
 - 各ページは `fetch('songs.json')` するため、`file://` では動かない。ローカル確認は静的サーバーで行う（例: `python -m http.server 8000` をリポジトリ直下で実行）。
 - `.gitignore` が `*.py` を除外しているので、Python の補助スクリプトはコミットされない。
+- `node tools/validate.js` で `songs.json` と関連ファイルの整合性をチェックできる（マップ座標と式、id 重複、並び順、`analysis/<id>.md` の有無、作曲家のプロフィール・色の登録漏れ、README の曲数など）。曲の追加・スコア変更の後は必ず実行する。
 
 ## Architecture
 
@@ -20,13 +21,13 @@ Hey!Mommy!（6人組アイドルグループ）の楽曲を 9 軸スコア・3 �
 
 **ページ構成:** ルートの `<page>.html` ＋ `scripts/<page>.js` ＋（必要なら）`styles/<page>.css`。`styles/common.css` が共通ダークテーマ。ナビゲーションの HTML は各ページにコピーされているので、ページ追加・名称変更時は全 HTML のナビを更新する。
 
-- `map-a.html` / `map-b.html` / `map-c.html` は共通の `scripts/map.js` を使い、ページ内に存在する `#mapA` / `#mapB` / `#mapC` 要素で描画対象を判定する。`map.html` は旧 URL（`?m=A|B|C`）からのリダイレクト専用。
-- `AXES` 定義（軸ラベル・色）は複数の JS ファイルに重複定義されている。軸の表示を変える場合は全ファイルを grep して揃える。
+- `map-a.html` / `map-b.html` / `map-c.html` は共通の `scripts/map.js` を使い、ページ内に存在する `#mapA` / `#mapB` / `#mapC` 要素で描画対象を判定する。`map.html` は旧 URL（`?m=A|B|C`）からのリダイレクト専用。曲名ラベルは他の曲のサムネイルや先に表示したラベルと重なると隠し（`songs.json` の順＝新しい曲を優先）、ズームで間隔が開くと再表示する。
+- `scripts/common.js` に共通定義をまとめている: `AXES`（9軸の key・ラベル・色・英語短縮ラベル）、`COMPOSER_NAME_MAP`（共作表記を代表名にまとめる）、`COMPOSER_COLORS`（作曲家ごとのレーダー色とヒートマップ色相）。これらを使うページは `common.js` をページ用スクリプトより先に読み込む。各ページの JS に同じ定数を再定義しない（`tools/validate.js` が検出する）。
 
 **JS 内にハードコードされた楽曲依存データ（新曲・新作曲家追加時に要確認）:**
 
-- `scripts/composer.js`: `COMPOSER_PROFILES`（作曲家ごとの長文プロフィール、担当曲数など数値を含む文章）、`COMPOSER_PALETTE`、`COMPOSER_NAME_MAP`（複数名表記の正規化。`scripts/index.js` にも同じものがあるので両方そろえる）。
-- `scripts/heatmap.js`: `COMPOSER_HUES`（`songs.json` の `composer` 文字列そのものをキーにする）。
+- `scripts/common.js`: 新しい作曲家は `COMPOSER_COLORS` に色を追加（キーは代表名）。共作表記なら `COMPOSER_NAME_MAP` にも追加。
+- `scripts/composer.js`: `COMPOSER_PROFILES`（作曲家ごとの長文プロフィール、担当曲数など数値を含む文章。キーは代表名）。
 - `README.md` の「全 33 曲」等の記述、`prompt.md` の気分別候補リスト。
 
 **曲の並び順:** `songs` 配列は新しい曲が先頭の順で、`index.js` の既定表示（リリース日の新しい順）は同じ日付・同じ値の曲をこの配列順で並べる。新曲は配列の先頭に追加する。

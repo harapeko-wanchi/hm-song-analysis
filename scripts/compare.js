@@ -4,17 +4,6 @@ const SLOT_COLORS = [
   { fill: 'rgba(240,108,156,.25)', stroke: '#f06c9c', name: '#f06c9c' },
   { fill: 'rgba(108,240,176,.25)', stroke: '#6cf0b0', name: '#6cf0b0' },
 ];
-const AXES = [
-  { key: 'cute',       label: 'キュート',  color: '#f06c9c' },
-  { key: 'cool',       label: 'クール',    color: '#6cacf0' },
-  { key: 'emo',        label: 'エモ',      color: '#b06cf0' },
-  { key: 'childlike',  label: '子供心',    color: '#f0d860' },
-  { key: 'happy',      label: 'ハッピー',  color: '#6cf0b0' },
-  { key: 'party',      label: 'お祭り感',  color: '#fcb040' },
-  { key: 'band',       label: 'バンド',    color: '#d08040' },
-  { key: 'speed',      label: '疾走感',    color: '#f06c6c' },
-  { key: 'complexity', label: '複雑度',    color: '#a080f0' },
-];
 const MAX_SLOTS = 3;
 const MAX_VAL = 10;
 let allSongs = [];

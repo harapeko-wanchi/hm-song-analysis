@@ -1,45 +1,14 @@
-/* ====== Config ====== */
-const AXES = [
-  { key: 'cute',       label: 'キュート',  shortLabel: 'Cute' },
-  { key: 'cool',       label: 'クール',    shortLabel: 'Cool' },
-  { key: 'emo',        label: 'エモ',      shortLabel: 'Emo' },
-  { key: 'childlike',  label: '子供心',    shortLabel: 'Child' },
-  { key: 'happy',      label: 'ハッピー',  shortLabel: 'Happy' },
-  { key: 'party',      label: 'お祭り感',  shortLabel: 'Party' },
-  { key: 'band',       label: 'バンド',    shortLabel: 'Band' },
-  { key: 'speed',      label: '疾走感',    shortLabel: 'Speed' },
-  { key: 'complexity', label: '複雑度',    shortLabel: 'Cmplx' },
-];
-
 let allSongs = [];
 let sortKey = 'release';
 let sortAsc = true;     // true for the quick-sort buttons
 let colSort = null;      // { key, asc } for column header sort
 let colorMode = 'unified'; // 'unified' | 'composer'
 
-/* ====== Composer color palettes ====== */
-const COMPOSER_HUES = {
-  'NNBS.':               { hBase: 260, hRange: 80, label: 'NNBS.' },           // purple → pink
-  'AILI':                { hBase: 190, hRange: 60, label: 'AILI' },            // teal → blue
-  'しえりーほ':          { hBase: 30,  hRange: 40, label: 'しえりーほ' },       // orange → yellow
-  '山崎あおい':          { hBase: 100, hRange: 50, label: '山崎あおい' },       // green → teal
-  '阿久津健太郎':        { hBase: 0,   hRange: 30, label: '阿久津健太郎' },     // red
-  '古橋勇紀':            { hBase: 340, hRange: 30, label: '古橋勇紀' },         // rose
-  '早川博隆/柿迫ヒカル': { hBase: 50,  hRange: 30, label: '早川博隆/柿迫ヒカル' }, // gold
-  '徳田光希、大竹智之':  { hBase: 160, hRange: 40, label: '徳田光希、大竹智之' }, // cyan
-  '草川瞬、RUSH EYE':   { hBase: 85,  hRange: 15, label: '草川瞬、RUSH EYE' },   // chartreuse
-};
-const DEFAULT_HUE = { hBase: 260, hRange: 80 };
-
-function getComposerPalette(composer) {
-  return COMPOSER_HUES[composer] || DEFAULT_HUE;
-}
-
 /* ====== Color scale ====== */
 function scoreColor(val, composer) {
   const t = Math.max(0, Math.min(1, val / 10));
   if (colorMode === 'composer' && composer) {
-    const p = getComposerPalette(composer);
+    const p = composerColorOf(composer);
     const h = p.hBase + t * p.hRange;
     const s = 45 + t * 35;       // 45% → 80%
     const l = 14 + t * 48;       // 14% → 62%
@@ -220,12 +189,12 @@ function buildComposerLegend() {
   // Collect unique composers in data
   const composers = [...new Set(allSongs.map(s => s.composer).filter(Boolean))];
   el.innerHTML = composers.map(c => {
-    const p = getComposerPalette(c);
+    const p = composerColorOf(c);
     const gradFrom = `hsl(${p.hBase},45%,14%)`;
     const gradTo   = `hsl(${p.hBase + p.hRange},80%,62%)`;
     return `<div class="composer-legend-item">
       <span class="composer-legend-swatch" style="background:linear-gradient(90deg,${gradFrom},${gradTo})"></span>
-      <span>${p.label || c}</span>
+      <span>${c}</span>
     </div>`;
   }).join('');
 }

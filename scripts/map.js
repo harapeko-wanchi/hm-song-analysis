@@ -48,29 +48,12 @@ function buildPoint(song, mapKey, range) {
     thumbInner = `<div class="map-point-placeholder">${song.title}</div>`;
   }
 
-  // Tooltip rows differ per map
-  let ttRows;
-  if (mapKey === 'mapA') {
-    ttRows = [
-      ['キュート', song.scores?.cute],
-      ['クール',   song.scores?.cool],
-      ['お祭り感', song.scores?.party],
-      ['BPM',      song.bpm],
-    ];
-  } else if (mapKey === 'mapB') {
-    ttRows = [
-      ['バンド',   song.scores?.band],
-      ['疾走感',   song.scores?.speed],
-      ['BPM',      song.bpm],
-    ];
-  } else {
-    ttRows = [
-      ['子供心',   song.scores?.childlike],
-      ['ハッピー', song.scores?.bright],
-      ['エモ',     song.scores?.emo],
-      ['BPM',      song.bpm],
-    ];
-  }
+  // Tooltip rows differ per map: the axes its coordinates are computed from
+  const TT_AXES = { mapA: ['cute', 'cool', 'party'], mapB: ['band', 'speed'], mapC: ['childlike', 'happy', 'emo'] };
+  const ttRows = [
+    ...TT_AXES[mapKey].map(k => [AXES.find(a => a.key === k).label, song.scores?.[k]]),
+    ['BPM', song.bpm],
+  ];
   const ttHTML = ttRows.map(([l, v]) =>
     `<div class="tt-row"><span>${l}</span><span>${v ?? '–'}</span></div>`
   ).join('');
@@ -111,6 +94,56 @@ function applyTransform(container) {
   const s = getState(container.id);
   container.style.transform = `scale(${s.zoom}) translate(${s.panX}px, ${s.panY}px)`;
   container.style.setProperty('--inv-zoom', 1 / s.zoom);
+  scheduleLabelUpdate(container);
+}
+
+/* ====== Label collision ======
+ * Hide a song title when it would overlap another song's thumbnail or a title shown earlier
+ * (songs.json order, so newer songs keep their labels). Points and labels keep
+ * a constant on-screen size (scale(--inv-zoom)), so overlaps are computed in the
+ * container's unscaled coordinates with sizes divided by the zoom — no DOM
+ * measuring of transformed rects, which would be off during the CSS transition.
+ * Zooming in spreads the points apart and brings hidden labels back.
+ */
+const LABEL_GAP = 2;  // px of breathing room between boxes
+
+function updateLabels(container) {
+  const z = getState(container.id).zoom;
+  const W = container.clientWidth, H = container.clientHeight;
+  const labels = [];    // label boxes shown so far
+  const points = [...container.querySelectorAll('.map-point')].map(el => {
+    const thumb = el.firstElementChild?.matches('a') ? el.firstElementChild.firstElementChild : el.firstElementChild;
+    const title = el.querySelector('.map-point-title');
+    const cx = parseFloat(el.style.left) / 100 * W;
+    const cy = parseFloat(el.style.top) / 100 * H;
+    const tw = thumb.offsetWidth / z, th = thumb.offsetHeight / z;
+    const lw = title.offsetWidth / z, lh = title.offsetHeight / z;
+    const ly = cy + th / 2 + 3 / z;  // .map-point-title: top 100% + margin-top 3px
+    return {
+      el, title,
+      thumbBox: { x1: cx - tw / 2, y1: cy - th / 2, x2: cx + tw / 2, y2: cy + th / 2 },
+      labelBox: { x1: cx - lw / 2, y1: ly, x2: cx + lw / 2, y2: ly + lh },
+    };
+  });
+  const gap = LABEL_GAP / z;
+  const hits = (a, b) => a.x1 < b.x2 + gap && b.x1 < a.x2 + gap && a.y1 < b.y2 + gap && b.y1 < a.y2 + gap;
+
+  points.forEach(p => {
+    // Hidden if it would overlap any other song's thumbnail (later points paint on top of it)
+    // or a label already shown for an earlier song
+    const blocked = points.some(q => q !== p && hits(p.labelBox, q.thumbBox)) || labels.some(b => hits(p.labelBox, b));
+    p.title.classList.toggle('label-hidden', blocked);
+    if (!blocked) labels.push(p.labelBox);
+  });
+}
+
+const labelFrames = new WeakMap();
+function scheduleLabelUpdate(container) {
+  if (labelFrames.has(container)) return;
+  labelFrames.set(container, requestAnimationFrame(() => {
+    labelFrames.delete(container);
+    updateLabels(container);
+  }));
 }
 
 function clampPan(container) {
@@ -382,8 +415,10 @@ fetch('songs.json')
       }
     });
 
-    if (mapAEl) { initZoomPan(mapAEl); attachTooltipListeners(mapAEl); }
-    if (mapBEl) { initZoomPan(mapBEl); attachTooltipListeners(mapBEl); }
-    if (mapCEl) { initZoomPan(mapCEl); attachTooltipListeners(mapCEl); }
+    const maps = [mapAEl, mapBEl, mapCEl].filter(Boolean);
+    maps.forEach(el => { initZoomPan(el); attachTooltipListeners(el); scheduleLabelUpdate(el); });
+    // Label widths depend on the web font and the viewport size
+    document.fonts?.ready.then(() => maps.forEach(scheduleLabelUpdate));
+    window.addEventListener('resize', () => maps.forEach(scheduleLabelUpdate));
   })
   .catch(err => console.error('Failed to load songs.json', err));

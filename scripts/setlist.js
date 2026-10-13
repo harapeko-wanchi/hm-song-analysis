@@ -1,17 +1,5 @@
 /* ======= Setlist Generator ======= */
 
-const AXES = [
-  { key: 'cute',       label: 'キュート',   color: '#f06c9c' },
-  { key: 'cool',       label: 'クール',     color: '#6cacf0' },
-  { key: 'emo',        label: 'エモ',       color: '#b06cf0' },
-  { key: 'childlike',  label: '子供心',     color: '#f0d860' },
-  { key: 'happy',      label: 'ハッピー度', color: '#6cf0b0' },
-  { key: 'party',      label: 'お祭り感',   color: '#fcb040' },
-  { key: 'band',       label: 'バンド',     color: '#d08040' },
-  { key: 'speed',      label: '疾走感',     color: '#f06c6c' },
-  { key: 'complexity', label: '複雑度',     color: '#a080f0' },
-];
-
 const THEMES = [
   {
     id: 'hype',
