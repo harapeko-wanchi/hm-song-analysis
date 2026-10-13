@@ -18,10 +18,6 @@ const DEFAULT_POSITION = '';
 const COMMENT_MAX = 40;
 const DEBOUNCE_MS = 400;
 
-// URL compact encoding: position → 1 char
-const POS_CHAR = { '':'_', P:'p', C:'c', '1B':'1', '2B':'2', '3B':'3', SS:'s', LF:'l', CF:'m', RF:'r', DH:'d' };
-const CHAR_POS = Object.fromEntries(Object.entries(POS_CHAR).map(([k,v]) => [v,k]));
-
 
 // ===== State =====
 const state = {
@@ -69,7 +65,6 @@ fetch('songs.json')
   .then(data => {
     allSongs = data.songs;
     songMap = Object.fromEntries(allSongs.map(s => [s.id, s]));
-
     buildSlotDOM();
     buildPitcherDOM();
     renderPool();
@@ -272,79 +267,58 @@ function assign(targetType, targetIdx, songId, fromType, fromIdx) {
   syncURL();
 }
 
-// ===== URL State (LZ-String compressed) =====
-// Raw format: "{slotTokens}~{pitcherTokens}"
-//   slot token  : "{idx36}{posChar}:{comment}" or "" if empty
-//   pitcher token: "{idx36}:{comment}" or "" if empty
-// → whole string compressed with LZString.compressToEncodedURIComponent → ?d=...
+// ===== URL State (LZ-String compressed JSON) =====
+// ?d= LZString.compressToEncodedURIComponent(JSON.stringify([slots, pitchers]))
+//   slot   : [songId, position, comment]  （空の要素は末尾から省略）
+//   pitcher: [songId, comment]
+// 曲は songs.json の id で参照するので、配列の並び順や曲数が変わっても壊れない。
 
-function buildRawState(st) {
-  const slotsStr = st.slots.map(s => {
-    if (!s.songId) return '';
-    const idx = allSongs.findIndex(x => x.id === s.songId);
-    if (idx < 0) return '';
-    const posChar = POS_CHAR[s.position || ''] ?? '_';
-    return idx.toString(36) + posChar + (s.comment ? ':' + s.comment : '');
-  }).join('|');
-
-  const pitchersStr = st.pitchers.map(p => {
-    if (!p.songId) return '';
-    const idx = allSongs.findIndex(x => x.id === p.songId);
-    if (idx < 0) return '';
-    return idx.toString(36) + (p.comment ? ':' + p.comment : '');
-  }).join('|');
-
-  return slotsStr + '~' + pitchersStr;
+// 末尾の空文字を落として URL を短くする
+function trimTuple(arr) {
+  while (arr.length && !arr[arr.length - 1]) arr.pop();
+  return arr;
 }
 
-function parseRawState(raw) {
-  // 旧フォーマットのタイトルプレフィックス(\u001E)を除去
-  const rs   = raw.indexOf('\u001E');
-  const body = rs >= 0 ? raw.slice(rs + 1) : raw;
+function serializeState(st) {
+  return JSON.stringify([
+    st.slots.map(s => trimTuple([songMap[s.songId] ? s.songId : '', s.position || '', s.comment || ''])),
+    st.pitchers.map(p => trimTuple([songMap[p.songId] ? p.songId : '', p.comment || ''])),
+  ]);
+}
 
-  const tilde = body.indexOf('~');
-  const slotsRaw    = tilde >= 0 ? body.slice(0, tilde) : body;
-  const pitchersRaw = tilde >= 0 ? body.slice(tilde + 1) : '';
+// URL 由来の値は信用せず、型・曲 id・守備位置・文字数をすべて検証する
+function str(v, max) {
+  return typeof v === 'string' ? v.slice(0, max) : '';
+}
+function songIdOrNull(v) {
+  return typeof v === 'string' && songMap[v] ? v : null;
+}
 
-  const slots = slotsRaw.split('|').slice(0, 9).map(token => {
-    if (!token) return { songId: null, position: '', comment: '' };
-    const colon = token.indexOf(':');
-    const fixed   = colon >= 0 ? token.slice(0, colon) : token;
-    const comment = colon >= 0 ? token.slice(colon + 1) : '';
-    const idx  = parseInt(fixed[0], 36);
-    const song = Number.isFinite(idx) ? (allSongs[idx] ?? null) : null;
-    return { songId: song?.id ?? null, position: CHAR_POS[fixed[1] ?? '_'] ?? '', comment };
-  });
-
-  const pitchers = pitchersRaw.split('|').slice(0, PITCHER_COUNT).map(token => {
-    if (!token) return { songId: null, comment: '' };
-    const colon   = token.indexOf(':');
-    const idxStr  = colon >= 0 ? token.slice(0, colon) : token;
-    const comment = colon >= 0 ? token.slice(colon + 1) : '';
-    const idx  = parseInt(idxStr, 36);
-    const song = Number.isFinite(idx) ? (allSongs[idx] ?? null) : null;
-    return { songId: song?.id ?? null, comment };
-  });
-
-  while (slots.length    < 9)             slots.push({ songId: null, position: '', comment: '' });
-  while (pitchers.length < PITCHER_COUNT) pitchers.push({ songId: null, comment: '' });
-  return { slots, pitchers };
+function deserializeState(json) {
+  const [slotsRaw, pitchersRaw] = JSON.parse(json);
+  const tuples = (raw, length) => Array.from({ length }, (_, i) => (Array.isArray(raw) && Array.isArray(raw[i]) ? raw[i] : []));
+  return {
+    slots: tuples(slotsRaw, 9).map(([id, pos, comment]) => ({
+      songId: songIdOrNull(id),
+      position: FIELDING_POSITIONS.includes(pos) ? pos : DEFAULT_POSITION,
+      comment: str(comment, COMMENT_MAX),
+    })),
+    pitchers: tuples(pitchersRaw, PITCHER_COUNT).map(([id, comment]) => ({
+      songId: songIdOrNull(id),
+      comment: str(comment, COMMENT_MAX),
+    })),
+  };
 }
 
 function encodeState(st) {
-  const compressed = LZString.compressToEncodedURIComponent(buildRawState(st));
-  return '?d=' + compressed;
+  return '?d=' + LZString.compressToEncodedURIComponent(serializeState(st));
 }
 
 function decodeState(search) {
   try {
-    const params = new URLSearchParams(search);
-    const d = params.get('d');
-    if (d) {
-      const raw = LZString.decompressFromEncodedURIComponent(d);
-      return raw ? parseRawState(raw) : null;
-    }
-    return null;
+    const d = new URLSearchParams(search).get('d');
+    const json = d && LZString.decompressFromEncodedURIComponent(d);
+    return json ? deserializeState(json) : null;
   } catch {
     return null;
   }

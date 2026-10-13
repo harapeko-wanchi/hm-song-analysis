@@ -3,7 +3,7 @@
     "allow": [
       "WebSearch",
       "WebFetch(domain:www.youtube.com)",
-      "Read(//c/hm-song-analysis//**)",
+      "Read(//c/claude/hm-song-analysis//**)",
       "Bash(node -e \":*)"
     ]
   }

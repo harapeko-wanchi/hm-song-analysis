@@ -312,58 +312,54 @@ function drawLineChart(canvas, labels, datasets, yMin, yMax, yLabel, encorePosit
 
 /* ===== URL encoding ===== */
 
-function buildRawState(st) {
-  const titlePart = (st.title && st.title !== DEFAULT_TITLE) ? st.title : '';
-  const itemParts = st.items.map(item => {
-    if (item.type === 'encore') return 'E';
-    const idx = allSongs.findIndex(s => s.id === item.songId);
-    if (idx === -1) return null;
-    const token = idx.toString(36);
-    return item.comment ? token + ':' + item.comment : token;
-  }).filter(t => t !== null);
-  return titlePart + '~' + itemParts.join('|');
+// ?d= LZString.compressToEncodedURIComponent(JSON.stringify([title, items]))
+//   title: デフォルトタイトルなら ""
+//   item : アンコール区切りは 0、曲は [songId] または [songId, comment]
+// 曲は songs.json の id で参照するので、配列の並び順や曲数が変わっても壊れない。
+const TITLE_MAX = 30;
+const COMMENT_MAX = 40;
+
+function serializeState(st) {
+  const title = st.title !== DEFAULT_TITLE ? st.title : '';
+  const items = st.items
+    .filter(item => item.type === 'encore' || songMap[item.songId])
+    .map(item => {
+      if (item.type === 'encore') return 0;
+      return item.comment ? [item.songId, item.comment] : [item.songId];
+    });
+  return JSON.stringify([title, items]);
 }
 
-function parseRawState(raw) {
-  const tildeIdx = raw.indexOf('~');
-  if (tildeIdx === -1) return { title: DEFAULT_TITLE, items: [] };
-  const titlePart = raw.slice(0, tildeIdx);
-  const itemsStr = raw.slice(tildeIdx + 1);
-  const title = titlePart || DEFAULT_TITLE;
+// URL 由来の値は信用せず、型・曲 id・曲数・文字数をすべて検証する
+function deserializeState(json) {
+  const [rawTitle, rawItems] = JSON.parse(json);
+  const title = (typeof rawTitle === 'string' && rawTitle.trim().slice(0, TITLE_MAX)) || DEFAULT_TITLE;
   const items = [];
-  if (itemsStr) {
-    itemsStr.split('|').forEach(token => {
-      if (!token) return;
-      if (token === 'E') { items.push({ type: 'encore' }); return; }
-      const colonIdx = token.indexOf(':');
-      const idxStr = colonIdx === -1 ? token : token.slice(0, colonIdx);
-      const comment = colonIdx === -1 ? '' : token.slice(colonIdx + 1);
-      const idx = parseInt(idxStr, 36);
-      if (!isNaN(idx) && idx >= 0 && idx < allSongs.length) {
-        items.push({ type: 'song', songId: allSongs[idx].id, comment });
-      }
-    });
-  }
+  let songs = 0;
+  (Array.isArray(rawItems) ? rawItems : []).forEach(raw => {
+    if (raw === 0) { items.push({ type: 'encore' }); return; }
+    if (!Array.isArray(raw)) return;
+    const [songId, comment] = raw;
+    if (typeof songId !== 'string' || !songMap[songId] || songs >= allSongs.length) return;
+    songs++;
+    items.push({ type: 'song', songId, comment: typeof comment === 'string' ? comment.slice(0, COMMENT_MAX) : '' });
+  });
   return { title, items };
 }
 
-function encodeState(st) {
-  const raw = buildRawState(st);
-  return LZString.compressToEncodedURIComponent(raw);
-}
-
 function decodeState(search) {
-  const params = new URLSearchParams(search);
-  const d = params.get('d');
-  if (!d) return null;
-  const raw = LZString.decompressFromEncodedURIComponent(d);
-  if (!raw) return null;
-  return parseRawState(raw);
+  try {
+    const d = new URLSearchParams(search).get('d');
+    const json = d && LZString.decompressFromEncodedURIComponent(d);
+    return json ? deserializeState(json) : null;
+  } catch {
+    return null;
+  }
 }
 
 function syncURL() {
-  const encoded = encodeState(state);
-  const url = encoded ? '?d=' + encoded : location.pathname;
+  const isEmpty = state.title === DEFAULT_TITLE && state.items.length === 0;
+  const url = isEmpty ? location.pathname : '?d=' + LZString.compressToEncodedURIComponent(serializeState(state));
   history.replaceState(null, '', url);
 }
 
@@ -474,7 +470,7 @@ function renderItemEl(item, idx, songNum) {
     </div>
     <div class="sl-item-body">
       <input type="text" class="sl-item-comment" data-idx="${idx}"
-        maxlength="40" placeholder="コメントを追加（任意）"
+        maxlength="${COMMENT_MAX}" placeholder="コメントを追加（任意）"
         value="${escapeAttr(item.comment || '')}">
     </div>
   `;
@@ -489,7 +485,7 @@ function renderEditor() {
 
   const count = songCount();
   badge.textContent = count + '曲';
-  addBtn.disabled = count >= 33;
+  addBtn.disabled = count >= allSongs.length;
 
   if (state.items.length === 0) {
     list.innerHTML = '';
@@ -588,7 +584,7 @@ function renderCharts() {
 /* ===== State mutations ===== */
 
 function addSong(songId) {
-  if (songCount() >= 33) return;
+  if (songCount() >= allSongs.length) return;
   state.items.push({ type: 'song', songId, comment: '' });
   renderEditor();
   syncURL();
