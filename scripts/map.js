@@ -72,7 +72,8 @@ function buildPoint(song, mapKey, range) {
     <div class="tt-title">${song.title}</div>
     ${ttHTML}
     <div style="margin-top:.3rem;font-size:.68rem;color:var(--muted);">(${x}, ${y})</div>
-    ${youtubeLink}`;
+    ${youtubeLink}
+    <a class="tt-youtube" href="${songUrl(song.id)}">📄 曲の詳細</a>`;
 
   return el;
 }

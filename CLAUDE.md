@@ -7,7 +7,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 Hey!Mommy!（6人組アイドルグループ）の楽曲を 9 軸スコア・3 種のポジションマップ・和声分析で可視化する静的サイト。GitHub Pages で公開: https://harapeko-wanchi.github.io/hm-song-analysis/
 
 - ビルド・パッケージマネージャ・テスト・リンターは無い。素の HTML / CSS / JS のみ。
-- 各ページは `fetch('songs.json')` するため、`file://` では動かない。ローカル確認は静的サーバーで行う（例: `python -m http.server 8000` をリポジトリ直下で実行）。
+- 各ページは `fetch('songs.json')` するため、`file://` では動かない。ローカル確認は静的サーバーで行う（リポジトリ直下で `node tools/serve.js` を実行し http://localhost:8000/ を開く。Python があれば `python -m http.server 8000` でも可）。
 - `.gitignore` が `*.py` を除外しているので、Python の補助スクリプトはコミットされない。
 - `node tools/validate.js` で `songs.json` と関連ファイルの整合性をチェックできる（マップ座標と式、id 重複、並び順、`analysis/<id>.md` の有無、作曲家のプロフィール・色の登録漏れ、README の曲数など）。曲の追加・スコア変更の後は必ず実行する。
 
@@ -22,6 +22,7 @@ Hey!Mommy!（6人組アイドルグループ）の楽曲を 9 軸スコア・3 �
 **ページ構成:** ルートの `<page>.html` ＋ `scripts/<page>.js` ＋（必要なら）`styles/<page>.css`。`styles/common.css` が共通ダークテーマ。ナビゲーションの HTML は各ページにコピーされているので、ページ追加・名称変更時は全 HTML のナビを更新する。
 
 - `map-a.html` / `map-b.html` / `map-c.html` は共通の `scripts/map.js` を使い、ページ内に存在する `#mapA` / `#mapB` / `#mapC` 要素で描画対象を判定する。`map.html` は旧 URL（`?m=A|B|C`）からのリダイレクト専用。曲名ラベルは他の曲のサムネイルや先に表示したラベルと重なると隠し（`songs.json` の順＝新しい曲を優先）、ズームで間隔が開くと再表示する。
+- `song.html?id=<id>` は曲ごとの詳細ページ（`scripts/song.js`）。ヘッダー・レーダー・3 マップ上の位置・似ている曲 TOP 5 を描き、`analysis/<id>.md` を `scripts/markdown.js`（分析ファイルが使う書式だけに対応した最小の Markdown 変換。HTML はすべてエスケープ）で記事として表示する。一覧・レコメンド・ヒートマップ・マップのツールチップの曲名から `songUrl(id)`（`common.js`）でリンクしている。レーダー描画は `scripts/radar.js` を `composer.html` と共用。
 - `scripts/common.js` に共通定義をまとめている: `AXES`（9軸の key・ラベル・色・英語短縮ラベル）、`COMPOSER_NAME_MAP`（共作表記を代表名にまとめる）、`COMPOSER_COLORS`（作曲家ごとのレーダー色とヒートマップ色相）。これらを使うページは `common.js` をページ用スクリプトより先に読み込む。各ページの JS に同じ定数を再定義しない（`tools/validate.js` が検出する）。
 
 **JS 内にハードコードされた楽曲依存データ（新曲・新作曲家追加時に要確認）:**
@@ -42,7 +43,7 @@ batting の X シェア文は 257 文字上限に収まるよう末尾から自�
 
 ## Other content
 
-- `analysis/<song_id>.md`: 曲ごとの和声分析（基本情報表、セクション別コード進行と解説、楽曲間比較）。ファイル名は `songs.json` の `id` と一致。日本語で記述。
+- `analysis/<song_id>.md`: 曲ごとの楽曲分析。音楽ジャーナリストのレビュー／音楽誌の分析記事の文体で書く（リード文、基本情報、論点ごとの小見出し、楽曲を追う、カタログの中で、総評）。書き方の決まりは `docs/analysis-style.md`。ファイル名は `songs.json` の `id` と一致。`analysis/` には曲以外の md を置かない（`tools/validate.js` がエラーにする）。
 - `prompt.md`: X 上の楽曲レコメンドボット用プロンプト。GitHub の raw `songs.json`（master ブランチ）を参照するので、`songs.json` のスキーマ（特に `youtube_url`, `tags`, `summary`, `lyrics_hooks`）を変える場合は影響に注意。
 - `img/og-*.png`: 各ページの OGP 画像。OGP メタタグは各 HTML に絶対 URL で記述されている。
 - 歌詞・コード進行の出典は ChordWiki。

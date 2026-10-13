@@ -1,5 +1,3 @@
-const MAX_VAL = 10;
-
 /* ====== Composer Profiles ====== */
 const COMPOSER_PROFILES = {
   'NNBS.': {
@@ -57,7 +55,7 @@ const COMPOSER_PROFILES = {
     summary: 'ストリングス×シンセ×ギターの三位一体サウンドで、Hey!Mommy!カタログ最多の35コードと3/4拍子という前例なき音楽的挑戦を実現した共作コンビ。',
     background: '早川博隆（作詞・作曲）と柿迫ヒカル（共作曲）による共作。Hey!Yummy!はストリングスを本格導入したカタログ唯一の楽曲であり、ii-V-I完全終止やV7(♭9)上部構造分離といったジャズ和声の技法をアイドルソングに昇華させた意欲作。全35コード（カタログ全時代最多）は、DIAMOND JETの21コードを大きく上回る。',
     role: '食べ物×愛情をテーマにした温かい楽曲で、「HoneyかわいいHoney!」「Yummy!Yummy!」のキャッチーなフックとジャジーな和声の共存が独特。BPM150のミドルテンポで、♭VIM9（BM9）からVsus4への半音下行や、ii→iii→IV→#IV→Vの5段クロマティック上行バスラインなど、カタログ最高難度のハーモニー処理が随所に散りばめられている。',
-    signature: 'Bridge Aでの3/4拍子導入（AbM7-Gm7）はカタログ唯一の拍子変化。Bbm7(13)同主調v7借用、Bb7(♭9)→Bdim上部構造分離、G7(#9)ヘンドリクスコード（カタログ2曲目）など、1曲に詰め込まれた技法の密度が驚異的。',
+    signature: 'Bridge Aでの3/4拍子導入（AbM7-Gm7）はカタログ唯一の拍子変化。Bbm7(13)同主調v7借用、Bb7(♭9)→Bdim上部構造分離、G7(#9)ヘンドリクスコード（START RUSH!!、OKに続くカタログ3曲目）など、1曲に詰め込まれた技法の密度が驚異的。',
     bpmNote: 'BPM150。ミドルテンポの中に緩急と拍子変化を織り込む設計。',
     lyricsTheme: '「Honey」「Yummy」「おいしい」——食とスイーツのメタファーで愛情を表現。「私が食べてあげる！」「あーんして！」のコール＆レスポンスはライブでの参加性を最大化。',
   },
@@ -113,97 +111,6 @@ function buildComposerData(songs) {
   });
 
   composerData.forEach(c => { visible[c.name] = true; });
-}
-
-/* ====== Radar drawing helper ====== */
-function drawRadar(ctx, W, H, datasets, options = {}) {
-  const cx = W / 2, cy = H / 2;
-  const R = Math.min(W, H) / 2 - (options.labelMargin || 70);
-  const n = AXES.length;
-
-  ctx.clearRect(0, 0, W, H);
-
-  // Grid
-  const levels = [2, 4, 6, 8, 10];
-  levels.forEach(lv => {
-    const r = R * lv / MAX_VAL;
-    ctx.beginPath();
-    for (let i = 0; i <= n; i++) {
-      const angle = (Math.PI * 2 * i) / n - Math.PI / 2;
-      const x = cx + r * Math.cos(angle);
-      const y = cy + r * Math.sin(angle);
-      i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
-    }
-    ctx.closePath();
-    ctx.strokeStyle = lv === 10 ? 'rgba(255,255,255,.12)' : 'rgba(255,255,255,.05)';
-    ctx.lineWidth = 1;
-    ctx.stroke();
-
-    if (options.showGridLabels) {
-      ctx.fillStyle = 'rgba(255,255,255,.18)';
-      ctx.font = `${options.gridFontSize || 18}px sans-serif`;
-      ctx.textAlign = 'center';
-      ctx.fillText(lv, cx + 6, cy - r + 14);
-    }
-  });
-
-  // Axis lines + labels
-  for (let i = 0; i < n; i++) {
-    const angle = (Math.PI * 2 * i) / n - Math.PI / 2;
-    const ex = cx + R * Math.cos(angle);
-    const ey = cy + R * Math.sin(angle);
-    ctx.beginPath();
-    ctx.moveTo(cx, cy);
-    ctx.lineTo(ex, ey);
-    ctx.strokeStyle = 'rgba(255,255,255,.06)';
-    ctx.lineWidth = 1;
-    ctx.stroke();
-
-    if (options.showAxisLabels !== false) {
-      const lx = cx + (R + (options.labelOffset || 28)) * Math.cos(angle);
-      const ly = cy + (R + (options.labelOffset || 28)) * Math.sin(angle);
-      ctx.fillStyle = AXES[i].color;
-      ctx.font = `bold ${options.labelFontSize || 20}px "Segoe UI","Noto Sans JP",sans-serif`;
-      ctx.textAlign = 'center';
-      ctx.textBaseline = 'middle';
-      ctx.fillText(AXES[i].label, lx, ly);
-    }
-  }
-
-  // Data polygons
-  datasets.forEach(ds => {
-    if (!ds.visible) return;
-    ctx.beginPath();
-    AXES.forEach((ax, i) => {
-      const val = ds.values[ax.key] ?? 0;
-      const r = R * val / MAX_VAL;
-      const angle = (Math.PI * 2 * i) / n - Math.PI / 2;
-      const x = cx + r * Math.cos(angle);
-      const y = cy + r * Math.sin(angle);
-      i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
-    });
-    ctx.closePath();
-    ctx.fillStyle = ds.fill;
-    ctx.fill();
-    ctx.strokeStyle = ds.stroke;
-    ctx.lineWidth = ds.lineWidth || 2.5;
-    ctx.stroke();
-
-    // Dots
-    if (ds.showDots !== false) {
-      AXES.forEach((ax, i) => {
-        const val = ds.values[ax.key] ?? 0;
-        const r = R * val / MAX_VAL;
-        const angle = (Math.PI * 2 * i) / n - Math.PI / 2;
-        const x = cx + r * Math.cos(angle);
-        const y = cy + r * Math.sin(angle);
-        ctx.beginPath();
-        ctx.arc(x, y, ds.dotRadius || 4, 0, Math.PI * 2);
-        ctx.fillStyle = ds.stroke;
-        ctx.fill();
-      });
-    }
-  });
 }
 
 /* ====== Overview Chart ====== */
