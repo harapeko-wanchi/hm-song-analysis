@@ -21,7 +21,7 @@ Hey!Mommy!（6人組アイドルグループ）の楽曲を 9 軸スコア・3 �
 
 **ページ構成:** ルートの `<page>.html` ＋ `scripts/<page>.js` ＋（必要なら）`styles/<page>.css`。`styles/common.css` が共通ダークテーマ。ナビゲーションの HTML は各ページにコピーされているので、ページ追加・名称変更時は全 HTML のナビを更新する。
 
-- `map-a.html` / `map-b.html` / `map-c.html` は共通の `scripts/map.js` を使い、ページ内に存在する `#mapA` / `#mapB` / `#mapC` 要素で描画対象を判定する。`map.html` は旧 URL（`?m=A|B|C`）からのリダイレクト専用。
+- `map-a.html` / `map-b.html` / `map-c.html` は共通の `scripts/map.js` を使い、ページ内に存在する `#mapA` / `#mapB` / `#mapC` 要素で描画対象を判定する。`map.html` は旧 URL（`?m=A|B|C`）からのリダイレクト専用。曲名ラベルは他の曲のサムネイルや先に表示したラベルと重なると隠し（`songs.json` の順＝新しい曲を優先）、ズームで間隔が開くと再表示する。
 - `scripts/common.js` に共通定義をまとめている: `AXES`（9軸の key・ラベル・色・英語短縮ラベル）、`COMPOSER_NAME_MAP`（共作表記を代表名にまとめる）、`COMPOSER_COLORS`（作曲家ごとのレーダー色とヒートマップ色相）。これらを使うページは `common.js` をページ用スクリプトより先に読み込む。各ページの JS に同じ定数を再定義しない（`tools/validate.js` が検出する）。
 
 **JS 内にハードコードされた楽曲依存データ（新曲・新作曲家追加時に要確認）:**

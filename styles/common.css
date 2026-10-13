@@ -463,6 +463,9 @@ a:hover { text-decoration: underline; }
   white-space: nowrap;
   pointer-events: none;
 }
+/* Hidden by label collision in map.js; still shown while the point is hovered */
+.map-point-title.label-hidden { opacity: 0; }
+.map-point:hover .map-point-title.label-hidden { opacity: 1; }
 
 /* Tooltip (floating, appended to body) */
 .map-tooltip {
