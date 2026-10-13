@@ -12,6 +12,7 @@
   <meta property="og:type" content="website">
   <meta name="twitter:card" content="summary_large_image">
   <link rel="stylesheet" href="styles/common.css">
+  <link rel="stylesheet" href="styles/index.css">
 </head>
 <body>
 
@@ -57,7 +58,30 @@
   </div>
 </nav>
 
+<section class="list-toolbar" aria-label="絞り込みと並び替え">
+  <div class="lt-row">
+    <input type="search" id="ltSearch" class="lt-search" placeholder="曲名・タグ・歌詞フック・解説で検索" aria-label="キーワード検索">
+    <div class="lt-sort">
+      <select id="ltSort" class="lt-select" aria-label="並び替え"></select>
+      <button type="button" id="ltOrder" class="lt-order" aria-label="並び順を切り替え"></button>
+    </div>
+  </div>
+  <div class="lt-row lt-chips-row">
+    <span class="lt-label">作曲</span>
+    <div class="lt-chips" id="ltComposers"></div>
+  </div>
+  <div class="lt-row lt-chips-row">
+    <span class="lt-label">リリース</span>
+    <div class="lt-chips" id="ltYears"></div>
+  </div>
+  <div class="lt-row lt-status">
+    <span id="ltCount" class="lt-count" aria-live="polite"></span>
+    <button type="button" id="ltReset" class="lt-reset" hidden>条件をクリア</button>
+  </div>
+</section>
+
 <main class="cards-grid" id="cards"></main>
+<p class="lt-empty" id="ltEmpty" hidden>条件に合う曲がありません</p>
 
 <script src="scripts/index.js"></script>
 </body>
