@@ -9,6 +9,7 @@ Hey!Mommy!（6人組アイドルグループ）の楽曲を 9 軸スコア・3 �
 - ビルド・パッケージマネージャ・テスト・リンターは無い。素の HTML / CSS / JS のみ。
 - 各ページは `fetch('songs.json')` するため、`file://` では動かない。ローカル確認は静的サーバーで行う（例: `python -m http.server 8000` をリポジトリ直下で実行）。
 - `.gitignore` が `*.py` を除外しているので、Python の補助スクリプトはコミットされない。
+- `node tools/validate.js` で `songs.json` と関連ファイルの整合性をチェックできる（マップ座標と式、id 重複、並び順、`analysis/<id>.md` の有無、作曲家のプロフィール・色の登録漏れ、README の曲数など）。曲の追加・スコア変更の後は必ず実行する。
 
 ## Architecture
 
