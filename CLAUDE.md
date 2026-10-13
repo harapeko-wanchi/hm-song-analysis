@@ -19,7 +19,7 @@ Hey!Mommy!（6人組アイドルグループ）の楽曲を 9 軸スコア・3 �
 - `mapA_definition` / `mapB_definition` / `mapC_definition`: マップ座標の算出式（例: Map A の x = `cool - cute`, y = `(party - 5) * 2`）。各曲の `mapA` / `mapB` / `mapC` 座標は**事前計算済みで JSON に保存**されているため、スコアを変えたら座標も式に従って更新すること。
 - 各曲のフィールド: `id, title, release_date, lyricist, composer, arranger, key, bpm, youtube_url, thumbnail_url, scores, mapA, mapB, mapC, tags, harmony_note, lyrics_hooks, summary`。
 
-**ページ構成:** ルートの `<page>.html` ＋ `scripts/<page>.js` ＋（必要なら）`styles/<page>.css`。`styles/common.css` が共通ダークテーマ。ナビゲーションの HTML は各ページにコピーされているので、ページ追加・名称変更時は全 HTML のナビを更新する。
+**ページ構成:** ルートの `<page>.html` ＋ `scripts/<page>.js` ＋（必要なら）`styles/<page>.css`。`styles/common.css` が共通ダークテーマ。ナビゲーションの HTML は各ページにコピーされているので、ページ追加・名称変更時は全 HTML のナビを更新する。幅 600px 以下ではナビ項目をメニューボタンの中に折りたたむ（ボタンは `scripts/nav.js` が実行時に追加する。全ページで最初に読み込む）。
 
 - `map-a.html` / `map-b.html` / `map-c.html` は共通の `scripts/map.js` を使い、ページ内に存在する `#mapA` / `#mapB` / `#mapC` 要素で描画対象を判定する。`map.html` は旧 URL（`?m=A|B|C`）からのリダイレクト専用。曲名ラベルは他の曲のサムネイルや先に表示したラベルと重なると隠し（`songs.json` の順＝新しい曲を優先）、ズームで間隔が開くと再表示する。曲のサムネイルは詳細ページ（`song.html`）へのリンク（YouTube はツールチップから。タッチ端末ではタップでツールチップを開く）。
 - `song.html?id=<id>` は曲ごとの詳細ページ（`scripts/song.js`）。ヘッダー・レーダー・3 マップ上の位置・似ている曲 TOP 5 を描き、`analysis/<id>.md` を `scripts/markdown.js`（分析ファイルが使う書式だけに対応した最小の Markdown 変換。HTML はすべてエスケープ）で記事として表示する。一覧・レコメンド・ヒートマップ・マップのツールチップの曲名から `songUrl(id)`（`common.js`）でリンクしている。レーダー描画は `scripts/radar.js` を `composer.html` と共用。

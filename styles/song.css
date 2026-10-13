@@ -85,6 +85,10 @@
 .sd-mini-coord { font-size: .72rem; color: var(--accent2); font-variant-numeric: tabular-nums; }
 .sd-mini-axes { font-size: .65rem; color: var(--muted); line-height: 1.5; }
 
+/* Lyrics hooks (.hook chips come from common.css) */
+.sd-hooks { display: flex; flex-wrap: wrap; gap: .4rem; font-size: .8rem; }
+.sd-hooks .hook { white-space: normal; }
+
 /* Similar songs */
 .sd-sims { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: .8rem; }
 .sd-sim { display: flex; flex-direction: column; gap: .3rem; color: var(--text); }

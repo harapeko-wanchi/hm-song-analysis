@@ -49,14 +49,6 @@ function buildCard(song) {
     barsHTML = '<div class="unscored">未分析</div>';
   }
 
-  // Tags
-  const tagsHTML = (song.tags || []).map(t => `<span class="tag">#${t}</span>`).join('');
-
-  // Lyrics hooks
-  const hooksHTML = (song.lyrics_hooks || []).map(t => `<span class="hook">${t}</span>`).join('');
-
-
-
   card.innerHTML = `
     ${thumbHTML}
     <div class="card-body">
@@ -70,9 +62,6 @@ function buildCard(song) {
       ${song.note ? `<div class="card-note">${song.note}</div>` : ''}
       <div class="score-section">${barsHTML}</div>
       ${song.summary ? `<div class="card-summary">${song.summary}</div>` : ''}
-      ${song.harmony_note ? `<details class="card-details"><summary class="card-details-summary">🎵 和声解析</summary><div class="harmony-note">${song.harmony_note}</div></details>` : ''}
-      ${hooksHTML ? `<details class="card-details"><summary class="card-details-summary">🎤 歌詞フック</summary><div class="hooks-section">${hooksHTML}</div></details>` : ''}
-      <div class="tags">${tagsHTML}</div>
       <a class="card-detail-link" href="${songUrl(song.id)}">詳しい分析を読む →</a>
     </div>`;
   return card;
