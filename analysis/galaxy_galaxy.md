@@ -126,7 +126,7 @@ B                    「ARE YOU ARE YOU READY TO GO」「さあ CLAP CLAP CLAP�
                      「WHAT'S STAY GOLD STAR STAR STAR」「ガンガンいこう」まで
 ```
 
-約 40 秒にわたって B（I）一色。コードの変化を完全に排したライブ専用のセクションで、観客は「次のコード」を気にせず、BPM 192 のビートの上で CLAP、JUMPING と身体の動きに専念できる。CLAP から CLAPPING、JUMPING、STAY GOLD、ガンガンと、動作の指示が連鎖していく。コール映え、動き映え、一体感を一度に設計する NNBS. のライブ設計の極致といえる。
+約 40 秒にわたって B（I）一色。コードの変化を完全に排したライブ専用のセクションで、観客は「次のコード」を気にせず、BPM 192 のビートの上で CLAP、JUMPING と身体の動きに専念できる。CLAP から CLAPPING、JUMPING、STAY GOLD、ガンガンと、動作の指示が連鎖していく。観客の動きと一体感を一度に設計する NNBS. のライブ設計の極致といえる。
 
 ### Outro（らんらんらん〜MOMMY SHOW TIME）
 
