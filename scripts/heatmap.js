@@ -10,18 +10,18 @@ function scoreColor(val, composer) {
   if (colorMode === 'composer' && composer) {
     const p = composerColorOf(composer);
     const h = p.hBase + t * p.hRange;
-    const s = 45 + t * 35;       // 45% → 80%
-    const l = 14 + t * 48;       // 14% → 62%
+    const s = 55 + t * 30;       // 55% → 85%
+    const l = 95 - t * 45;       // 95% → 50%
     return `hsl(${h},${s}%,${l}%)`;
   }
-  // Unified (original purple → pink)
-  const h = 260 + t * 80;
-  const s = 50 + t * 30;
-  const l = 15 + t * 50;
+  // Unified: cream yellow → orange → hot pink
+  const h = (45 - t * 75 + 360) % 360;
+  const s = 85 + t * 5;
+  const l = 93 - t * 37;
   return `hsl(${h},${s}%,${l}%)`;
 }
 function scoreTextColor(val) {
-  return val >= 5 ? '#fff' : 'rgba(255,255,255,.55)';
+  return val >= 6 ? '#fff' : 'rgba(45,35,70,.75)';
 }
 
 /* ====== Sort logic ====== */

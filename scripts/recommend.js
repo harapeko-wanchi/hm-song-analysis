@@ -32,7 +32,7 @@ function drawRadar(canvas, songs, colors, size = 400) {
       i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
     }
     ctx.closePath();
-    ctx.strokeStyle = 'rgba(255,255,255,.08)';
+    ctx.strokeStyle = 'rgba(45,35,70,.1)';
     ctx.stroke();
   }
 
@@ -45,7 +45,7 @@ function drawRadar(canvas, songs, colors, size = 400) {
     ctx.beginPath();
     ctx.moveTo(cx, cy);
     ctx.lineTo(cx + r * Math.cos(a), cy + r * Math.sin(a));
-    ctx.strokeStyle = 'rgba(255,255,255,.06)';
+    ctx.strokeStyle = 'rgba(45,35,70,.07)';
     ctx.stroke();
     ctx.fillStyle = AXES[i].color;
     ctx.fillText(AXES[i].label, cx + labelPad * Math.cos(a), cy + labelPad * Math.sin(a));
@@ -101,7 +101,7 @@ function showResult(songId) {
     </div>
     <div class="rec-source-radar"><canvas id="srcRadar"></canvas></div>
   `;
-  drawRadar(document.getElementById('srcRadar'), [song], ['#7c6cf0'], 400);
+  drawRadar(document.getElementById('srcRadar'), [song], ['#e8337f'], 400);
 
   // Similar songs
   const similar = findSimilar(song);
@@ -157,7 +157,7 @@ function showResult(songId) {
     list.appendChild(card);
 
     // Draw overlay radar: source (dim) + target
-    drawRadar(document.getElementById(canvasId), [song, s], ['rgba(124,108,240,.3)', AXES[idx % AXES.length].color], 300);
+    drawRadar(document.getElementById(canvasId), [song, s], ['rgba(232,51,127,.35)', AXES[idx % AXES.length].color], 300);
   });
 }
 

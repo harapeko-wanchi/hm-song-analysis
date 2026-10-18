@@ -1,8 +1,8 @@
 /* ====== Timeline: release-order list + yearly trend of one metric ====== */
 
-const ACCENT = '#7c6cf0';     // yearly mean line (the emphasised series)
-const MUTED_DOT = '#8888a0';  // individual songs (context)
-const SURFACE = '#22222e';    // --card: ring around markers
+const ACCENT = '#e8337f';     // yearly mean line (the emphasised series)
+const MUTED_DOT = '#b2a8c2';  // individual songs (context)
+const SURFACE = '#ffffff';    // --card: ring around markers
 
 const METRICS = [
   { key: 'bpm', label: 'BPM', get: s => s.bpm },

@@ -34,6 +34,7 @@ function buildPoint(song, mapKey, range) {
 
   const el = document.createElement('div');
   el.className = 'map-point';
+  el.dataset.id = song.id;
   el.style.left = coordToPercent(x, range) + '%';
   el.style.top  = (100 - coordToPercent(y, range)) + '%';
 
@@ -42,7 +43,6 @@ function buildPoint(song, mapKey, range) {
     thumbInner = `
       <div class="map-point-thumb">
         <img src="${smallThumb(song.thumbnail_url)}" alt="${song.title}" loading="lazy">
-        <div class="map-point-play">詳細</div>
       </div>`;
   } else {
     thumbInner = `<div class="map-point-placeholder">${song.title}</div>`;
@@ -58,10 +58,9 @@ function buildPoint(song, mapKey, range) {
     `<div class="tt-row"><span>${l}</span><span>${v ?? '–'}</span></div>`
   ).join('');
 
+  // Clicking a point selects the song (see selectSong); its page is linked from the tooltip and the selection bar
   el.innerHTML = `
-    <a href="${songUrl(song.id)}">
     ${thumbInner}
-    </a>
     <div class="map-point-title">${song.title}</div>`;
 
   /* Store tooltip data on the element */
@@ -72,7 +71,7 @@ function buildPoint(song, mapKey, range) {
     <div class="tt-title">${song.title}</div>
     ${ttHTML}
     <div style="margin-top:.3rem;font-size:.68rem;color:var(--muted);">(${x}, ${y})</div>
-    <div class="tt-hint">クリックで曲の詳細へ</div>
+    <div class="tt-hint">クリックでこの曲を選択</div>
     ${youtubeLink}
     <a class="tt-youtube" href="${songUrl(song.id)}">📄 曲の詳細</a>`;
 
@@ -113,8 +112,11 @@ function updateLabels(container) {
   const z = getState(container.id).zoom;
   const W = container.clientWidth, H = container.clientHeight;
   const labels = [];    // label boxes shown so far
-  const points = [...container.querySelectorAll('.map-point')].map(el => {
-    const thumb = el.firstElementChild?.matches('a') ? el.firstElementChild.firstElementChild : el.firstElementChild;
+  // The selected song goes first and always keeps its label
+  const els = [...container.querySelectorAll('.map-point')]
+    .sort((a, b) => b.classList.contains('selected') - a.classList.contains('selected'));
+  const points = els.map(el => {
+    const thumb = el.firstElementChild;
     const title = el.querySelector('.map-point-title');
     const cx = parseFloat(el.style.left) / 100 * W;
     const cy = parseFloat(el.style.top) / 100 * H;
@@ -133,7 +135,8 @@ function updateLabels(container) {
   points.forEach(p => {
     // Hidden if it would overlap any other song's thumbnail (later points paint on top of it)
     // or a label already shown for an earlier song
-    const blocked = points.some(q => q !== p && hits(p.labelBox, q.thumbBox)) || labels.some(b => hits(p.labelBox, b));
+    const blocked = !p.el.classList.contains('selected') &&
+      (points.some(q => q !== p && hits(p.labelBox, q.thumbBox)) || labels.some(b => hits(p.labelBox, b)));
     p.title.classList.toggle('label-hidden', blocked);
     if (!blocked) labels.push(p.labelBox);
   });
@@ -196,8 +199,8 @@ function initZoomPan(container) {
 
   vp.addEventListener('pointerdown', e => {
     if (e.button !== 0) return;
-    /* Don't capture pointer if clicking a link inside a map-point (desktop YouTube nav) */
-    if (!isTouchDevice() && e.target.closest('.map-point a')) return;
+    /* Don't capture the pointer on a point (desktop), or the click that selects it would go to the viewport */
+    if (!isTouchDevice() && e.target.closest('.map-point')) return;
     dragging = true; lastX = e.clientX; lastY = e.clientY;
     vp.setPointerCapture(e.pointerId);
     vp.style.cursor = 'grabbing';
@@ -362,19 +365,15 @@ function attachTooltipListeners(container) {
     else if (!pt) hideTooltip();
   }, true);
 
-  /* --- Mobile: tap to show tooltip, block link navigation --- */
+  /* --- Click / tap a point: select the song (a second click deselects it) --- */
   container.addEventListener('click', e => {
-    /* A drag that ends on a point must not open its page */
-    if (dragMoved) { if (e.target.closest('a')) e.preventDefault(); return; }
-    if (!isTouchDevice()) return;
+    /* A drag that ends on a point must not select it */
+    if (dragMoved) return;
     const pt = e.target.closest('.map-point');
     if (!pt) return;
-    /* Prevent <a> from navigating */
-    const anchor = e.target.closest('a');
-    if (anchor && pt.contains(anchor)) {
-      e.preventDefault();
-    }
-    /* Toggle tooltip */
+    selectSong(pt.dataset.id === selectedId ? null : pt.dataset.id);
+    if (!isTouchDevice()) return;
+    /* Mobile: the tap also toggles the tooltip, which has the song's links */
     if (tooltip.classList.contains('visible') && tooltip._currentPoint === pt) {
       hideTooltip();
     } else {
@@ -391,35 +390,147 @@ function attachTooltipListeners(container) {
   });
 }
 
+/* ====== Tabs and song selection ======
+ * URL format: map.html?m=<stage|sound|mood>&song=<song id> (the default stage tab is omitted)
+ */
+const MAP_TABS = [
+  { id: 'stage', key: 'mapA', range: RANGE_A },
+  { id: 'sound', key: 'mapB', range: RANGE_B },
+  { id: 'mood',  key: 'mapC', range: RANGE_C },
+];
+const containerOf = tab => document.getElementById(tab.key);
+const wrapOf = tab => containerOf(tab).closest('.map-wrap');
+
+let songsById = new Map();
+let currentTab = MAP_TABS[0];
+let selectedId = null;
+
+function syncUrl() {
+  const p = new URLSearchParams();
+  if (currentTab !== MAP_TABS[0]) p.set('m', currentTab.id);
+  if (selectedId) p.set('song', selectedId);
+  history.replaceState(null, '', p.size ? '?' + p : location.pathname);
+}
+
+/* Pan a zoomed map so the selected song is in the middle (no-op at zoom 1, where clampPan resets the pan) */
+function centerOnSelected(container) {
+  const pt = selectedId && container.querySelector(`.map-point[data-id="${CSS.escape(selectedId)}"]`);
+  if (!pt) return;
+  const s = getState(container.id);
+  s.panX = container.clientWidth / 2 - parseFloat(pt.style.left) / 100 * container.clientWidth;
+  s.panY = container.clientHeight / 2 - parseFloat(pt.style.top) / 100 * container.clientHeight;
+  clampPan(container);
+  applyTransform(container);
+}
+
+/* Mark the selected song's area chip for the map on screen */
+function markCurrentArea() {
+  document.querySelectorAll('.map-selected-area').forEach(b => b.classList.toggle('current', b.dataset.tab === currentTab.id));
+}
+
+function showTab(tab) {
+  currentTab = tab;
+  markCurrentArea();
+  MAP_TABS.forEach(t => wrapOf(t).classList.toggle('hidden', t !== tab));
+  document.querySelectorAll('.map-tab').forEach(btn =>
+    btn.setAttribute('aria-selected', String(btn.dataset.tab === tab.id)));
+  hideTooltip();
+  // A hidden map has no size, so its labels and pan are worked out once it is shown
+  centerOnSelected(containerOf(tab));
+  scheduleLabelUpdate(containerOf(tab));
+  syncUrl();
+}
+
+function selectSong(id) {
+  selectedId = songsById.has(id) ? id : null;
+  MAP_TABS.forEach(tab => {
+    const container = containerOf(tab);
+    container.classList.toggle('has-selection', !!selectedId);
+    // Highlight the area the selected song is in
+    const coord = songsById.get(selectedId)?.[tab.key];
+    const q = coord && mapQuadrantOf(coord);
+    container.querySelectorAll('.map-quadrant-label').forEach(l => l.classList.toggle('active', l.dataset.q === q));
+    let selPt = null;
+    container.querySelectorAll('.map-point').forEach(pt => {
+      const on = pt.dataset.id === selectedId;
+      pt.classList.toggle('selected', on);
+      if (on) selPt = pt;
+    });
+    // Guide lines from the selected song to both axes
+    container.querySelectorAll('.map-sel-guide').forEach(g => {
+      const prop = g.classList.contains('h') ? 'top' : 'left';
+      g.hidden = !selPt;
+      if (selPt) g.style[prop] = selPt.style[prop];
+    });
+    scheduleLabelUpdate(container);
+  });
+  centerOnSelected(containerOf(currentTab));
+
+  document.getElementById('mapSong').value = selectedId || '';
+  document.getElementById('mapSongClear').hidden = !selectedId;
+  const song = songsById.get(selectedId);
+  document.getElementById('mapSelected').innerHTML = song ? `
+    <a href="${songUrl(song.id)}">📄 ${escapeHtml(song.title)} の詳細</a>
+    ${song.youtube_url ? `<a href="${escapeHtml(song.youtube_url)}" target="_blank" rel="noopener">▶ YouTube</a>` : ''}
+    <span class="map-selected-areas">${MAP_TABS.map(t => {
+      const c = song[t.key];
+      if (!c) return '';
+      const name = document.querySelector(`.map-tab[data-tab="${t.id}"]`).textContent;
+      return `<button type="button" class="map-selected-area" data-tab="${t.id}" title="${name}マップを表示 (${c.x}, ${c.y})">` +
+        `<small>${name}</small>${MAP_AREAS[t.key][mapQuadrantOf(c)]}</button>`;
+    }).join('')}</span>` : '';
+  markCurrentArea();
+  syncUrl();
+}
+
 /* ------ Init: load songs and populate maps ------ */
 fetch('songs.json')
   .then(r => r.json())
   .then(data => {
-    const mapAEl = document.getElementById('mapA');
-    const mapBEl = document.getElementById('mapB');
-    const mapCEl = document.getElementById('mapC');
+    songsById = new Map(data.songs.map(s => [s.id, s]));
+    const maps = MAP_TABS.map(containerOf);
 
-    if (mapAEl) addGridLines(mapAEl, RANGE_A, 10);
-    if (mapBEl) addGridLines(mapBEl, RANGE_B, 10);
-    if (mapCEl) addGridLines(mapCEl, RANGE_C, 10);
-
-    data.songs.forEach(song => {
-      if (mapAEl) {
-        const ptA = buildPoint(song, 'mapA', RANGE_A);
-        if (ptA) mapAEl.appendChild(ptA);
-      }
-      if (mapBEl) {
-        const ptB = buildPoint(song, 'mapB', RANGE_B);
-        if (ptB) mapBEl.appendChild(ptB);
-      }
-      if (mapCEl) {
-        const ptC = buildPoint(song, 'mapC', RANGE_C);
-        if (ptC) mapCEl.appendChild(ptC);
-      }
+    MAP_TABS.forEach(tab => {
+      const container = containerOf(tab);
+      addGridLines(container, tab.range, 10);
+      // Area names in the four quadrants
+      Object.entries(MAP_AREAS[tab.key]).forEach(([q, name]) => {
+        const l = document.createElement('div');
+        l.className = 'map-quadrant-label ' + q;
+        l.dataset.q = q;
+        l.textContent = name;
+        container.appendChild(l);
+      });
+      ['h', 'v'].forEach(dir => {
+        const g = document.createElement('div');
+        g.className = 'map-sel-guide ' + dir;
+        g.hidden = true;
+        container.appendChild(g);
+      });
+      data.songs.forEach(song => {
+        const pt = buildPoint(song, tab.key, tab.range);
+        if (pt) container.appendChild(pt);
+      });
     });
+    maps.forEach(el => { initZoomPan(el); attachTooltipListeners(el); });
 
-    const maps = [mapAEl, mapBEl, mapCEl].filter(Boolean);
-    maps.forEach(el => { initZoomPan(el); attachTooltipListeners(el); scheduleLabelUpdate(el); });
+    const sel = document.getElementById('mapSong');
+    [...data.songs].sort((a, b) => a.title.localeCompare(b.title, 'ja')).forEach(s => sel.add(new Option(s.title, s.id)));
+    sel.addEventListener('change', () => selectSong(sel.value));
+    document.getElementById('mapSongClear').addEventListener('click', () => selectSong(null));
+    // The selected song's area chips switch to that map
+    document.getElementById('mapSelected').addEventListener('click', e => {
+      const btn = e.target.closest('.map-selected-area');
+      if (btn) showTab(MAP_TABS.find(t => t.id === btn.dataset.tab));
+    });
+    document.querySelectorAll('.map-tab').forEach(btn =>
+      btn.addEventListener('click', () => showTab(MAP_TABS.find(t => t.id === btn.dataset.tab))));
+
+    const params = new URLSearchParams(location.search);
+    currentTab = MAP_TABS.find(t => t.id === params.get('m')) || MAP_TABS[0];
+    selectSong(params.get('song'));
+    showTab(currentTab);
+
     // Label widths depend on the web font and the viewport size
     document.fonts?.ready.then(() => maps.forEach(scheduleLabelUpdate));
     window.addEventListener('resize', () => maps.forEach(scheduleLabelUpdate));

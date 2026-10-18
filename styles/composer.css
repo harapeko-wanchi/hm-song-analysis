@@ -101,8 +101,8 @@
     .stat-row:last-child { border-bottom: none; }
     .stat-label { color: var(--muted); }
     .stat-val { font-weight: 600; font-variant-numeric: tabular-nums; }
-    .stat-val.high { color: #6cf0b0; }
-    .stat-val.low { color: #f06c6c; }
+    .stat-val.high { color: #1fb877; }
+    .stat-val.low { color: #ec4545; }
 
     .c-song-tag {
       font-size: .68rem; padding: .12rem .5rem;

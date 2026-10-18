@@ -265,7 +265,7 @@
 .bt-pitcher-role {
   font-size: .8rem;
   font-weight: 800;
-  color: #f06c9c;
+  color: var(--accent);
   width: 52px;
   flex-shrink: 0;
 }
@@ -302,13 +302,13 @@
 .bt-action-link { }
 .bt-action-img { }
 .bt-action-reset { color: var(--muted); }
-.bt-action-reset:hover { color: #f06c6c; border-color: #f06c6c; }
+.bt-action-reset:hover { color: #ec4545; border-color: #ec4545; }
 
 /* ===== Song Picker Modal ===== */
 .bt-modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,.55);
+  background: rgba(45,35,70,.35);
   z-index: 200;
   display: flex;
   align-items: center;

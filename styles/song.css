@@ -82,7 +82,14 @@
 .sd-mini canvas { border: 1px solid var(--border); border-radius: 8px; transition: border-color .15s; }
 .sd-mini:hover canvas { border-color: var(--accent); }
 .sd-mini-name { font-size: .78rem; font-weight: 600; margin-top: .2rem; }
-.sd-mini-coord { font-size: .72rem; color: var(--accent2); font-variant-numeric: tabular-nums; }
+.sd-mini-area {
+  padding: .1rem .6rem;
+  font-size: .74rem; font-weight: 800;
+  color: #fff;
+  background: var(--accent);
+  border-radius: 999px;
+}
+.sd-mini-coord { font-size: .7rem; color: var(--muted); font-variant-numeric: tabular-nums; }
 .sd-mini-axes { font-size: .65rem; color: var(--muted); line-height: 1.5; }
 
 /* Lyrics hooks (.hook chips come from common.css) */
@@ -108,7 +115,7 @@
 .md { max-width: 760px; margin: 0 auto; font-size: .92rem; line-height: 1.95; }
 .md > :first-child { margin-top: 0; }
 /* Lead paragraph right after the (removed) title */
-.md > p:first-child { font-size: 1.02rem; line-height: 2; color: #fff; margin-bottom: 1.6rem; }
+.md > p:first-child { font-size: 1.02rem; line-height: 2; color: var(--text); font-weight: 500; margin-bottom: 1.6rem; }
 .md h2 {
   font-size: 1.25rem; line-height: 1.4;
   margin: 2.4rem 0 .9rem;
@@ -119,7 +126,7 @@
 .md h3::before { content: ''; display: inline-block; width: 4px; height: .95em; margin-right: .5rem; vertical-align: -.1em; border-radius: 2px; background: var(--accent2); }
 .md h4 { font-size: .92rem; margin: 1.4rem 0 .5rem; color: var(--muted); }
 .md p { margin: .8rem 0; }
-.md strong { color: #fff; }
+.md strong { color: var(--text); background: linear-gradient(transparent 65%, rgba(255,191,31,.35) 65%); }
 .md ul, .md ol { margin: .6rem 0 .9rem 1.3rem; }
 .md li { margin: .25rem 0; }
 .md li > ul, .md li > ol { margin: .25rem 0 .25rem 1.1rem; }

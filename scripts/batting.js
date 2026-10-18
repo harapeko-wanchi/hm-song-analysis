@@ -670,19 +670,19 @@ function generateImage() {
   const ctx = canvas.getContext('2d');
 
   // Background
-  ctx.fillStyle = '#0f0f14';
+  ctx.fillStyle = '#fff9f2';
   ctx.fillRect(0, 0, W, H);
 
   // Header
-  ctx.fillStyle = '#1a1a24';
+  ctx.fillStyle = '#fff1e4';
   ctx.fillRect(0, 0, W, headerH);
-  ctx.fillStyle = '#7c6cf0';
+  ctx.fillStyle = '#e8337f';
   ctx.fillRect(0, headerH - 2, W, 2);
   ctx.font = 'bold 26px "Segoe UI", "Noto Sans JP", sans-serif';
-  ctx.fillStyle = '#e8e8f0';
+  ctx.fillStyle = '#2d2346';
   ctx.fillText('Hey!Mommy! 打線メーカー', 32, 46);
   ctx.font = '12px "Segoe UI", sans-serif';
-  ctx.fillStyle = '#8888a0';
+  ctx.fillStyle = '#807590';
   ctx.textAlign = 'right';
   ctx.fillText('harapeko-wanchi.github.io/hm-song-analysis/', W - 24, 46);
   ctx.textAlign = 'left';
@@ -691,7 +691,7 @@ function generateImage() {
   state.slots.forEach((slot, i) => {
     drawRow(ctx, i, headerH + i * rowH, rowH, {
       label: `${i + 1}番`,
-      labelColor: '#7c6cf0',
+      labelColor: '#e8337f',
       sublabel: slot.position ? `${slot.position}（${POSITION_LABEL[slot.position]}）` : '',
       songId: slot.songId,
       comment: slot.comment,
@@ -704,12 +704,12 @@ function generateImage() {
     const pitchStartY = headerH + 9 * rowH;
 
     // Pitcher section header
-    ctx.fillStyle = '#22222e';
+    ctx.fillStyle = '#ffffff';
     ctx.fillRect(0, pitchStartY, W, rowH);
-    ctx.fillStyle = '#7c6cf0';
+    ctx.fillStyle = '#e8337f';
     ctx.fillRect(0, pitchStartY + rowH - 1, W, 1);
     ctx.font = 'bold 14px "Segoe UI", "Noto Sans JP", sans-serif';
-    ctx.fillStyle = '#7c6cf0';
+    ctx.fillStyle = '#e8337f';
     ctx.fillText('投手陣', 32, pitchStartY + rowH / 2 + 5);
 
     let pitchRow = 0;
@@ -717,7 +717,7 @@ function generateImage() {
       if (!p.songId) return;
       drawRow(ctx, pitchRow, pitchStartY + (pitchRow + 1) * rowH, rowH, {
         label: '投手',
-        labelColor: '#f06c9c',
+        labelColor: '#8b5cf6',
         sublabel: 'P（投手）',
         songId: p.songId,
         comment: p.comment,
@@ -728,10 +728,10 @@ function generateImage() {
   }
 
   // Footer
-  ctx.fillStyle = '#22222e';
+  ctx.fillStyle = '#ffffff';
   ctx.fillRect(0, H - footerH, W, footerH);
   ctx.font = '11px "Segoe UI", sans-serif';
-  ctx.fillStyle = '#8888a0';
+  ctx.fillStyle = '#807590';
   ctx.fillText('#へいまみ打線メーカー', 20, H - 10);
 
   // Download
@@ -752,9 +752,9 @@ function generateImage() {
 }
 
 function drawRow(ctx, _rowIdx, y, rowH, { label, labelColor, sublabel, songId, comment, even }) {
-  ctx.fillStyle = even ? '#1a1a24' : '#141420';
+  ctx.fillStyle = even ? '#fff1e4' : '#ffffff';
   ctx.fillRect(0, y, 1200, rowH);
-  ctx.fillStyle = '#2e2e3e';
+  ctx.fillStyle = '#f0e2d2';
   ctx.fillRect(0, y + rowH - 1, 1200, 1);
 
   // Label (番号 or 役割)
@@ -766,44 +766,44 @@ function drawRow(ctx, _rowIdx, y, rowH, { label, labelColor, sublabel, songId, c
   // Sublabel (守備位置)
   if (sublabel) {
     ctx.font = '11px "Segoe UI", sans-serif';
-    ctx.fillStyle = '#8888a0';
+    ctx.fillStyle = '#807590';
     ctx.fillText(sublabel, 78, y + rowH / 2 + 6);
   }
 
   if (songId && songMap[songId]) {
     const song = songMap[songId];
     // Placeholder swatch
-    ctx.fillStyle = '#22222e';
+    ctx.fillStyle = '#ffffff';
     fillRoundRect(ctx, 195, y + 7, 50, rowH - 14, 4);
     ctx.fillStyle = '#7c6cf040';
     fillRoundRect(ctx, 195, y + 7, 50, rowH - 14, 4);
     ctx.font = '18px sans-serif';
-    ctx.fillStyle = '#7c6cf0';
+    ctx.fillStyle = '#e8337f';
     ctx.textAlign = 'center';
     ctx.fillText('♪', 220, y + rowH / 2 + 6);
     ctx.textAlign = 'left';
 
     // Title
     ctx.font = 'bold 15px "Segoe UI", "Noto Sans JP", sans-serif';
-    ctx.fillStyle = '#e8e8f0';
+    ctx.fillStyle = '#2d2346';
     ctx.fillText(truncateText(ctx, song.title, 340), 258, y + rowH / 2 - 2);
 
     // Meta
     ctx.font = '11px "Segoe UI", sans-serif';
-    ctx.fillStyle = '#8888a0';
+    ctx.fillStyle = '#807590';
     ctx.fillText(`BPM ${song.bpm || '?'}  Key: ${song.key || '?'}  ${song.composer || ''}`, 258, y + rowH / 2 + 14);
 
     // Comment
     if (comment) {
       ctx.font = 'italic 12px "Segoe UI", "Noto Sans JP", sans-serif';
-      ctx.fillStyle = '#f06c9c';
+      ctx.fillStyle = '#8b5cf6';
       ctx.textAlign = 'right';
       ctx.fillText('「' + truncateText(ctx, comment, 380) + '」', 1176, y + rowH / 2 + 6);
       ctx.textAlign = 'left';
     }
   } else {
     ctx.font = '13px "Segoe UI", sans-serif';
-    ctx.fillStyle = '#2e2e3e';
+    ctx.fillStyle = '#f0e2d2';
     ctx.fillText('(空き)', 195, y + rowH / 2 + 5);
   }
 }
