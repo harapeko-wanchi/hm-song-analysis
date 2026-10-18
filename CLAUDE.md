@@ -49,5 +49,5 @@ batting の X シェア文は 257 文字上限に収まるよう末尾から自�
 
 - `analysis/<song_id>.md`: 曲ごとの楽曲分析。音楽ジャーナリストのレビュー／音楽誌の分析記事の文体で書く（リード文、基本情報、論点ごとの小見出し、楽曲を追う、カタログの中で、総評）。書き方の決まりは `docs/analysis-style.md`。ファイル名は `songs.json` の `id` と一致。`analysis/` には曲以外の md を置かない（`tools/validate.js` がエラーにする）。
 - `prompt.md`: X 上の楽曲レコメンドボット用プロンプト。GitHub の raw `songs.json`（master ブランチ）を参照するので、`songs.json` のスキーマ（特に `youtube_url`, `tags`, `summary`, `lyrics_hooks`）を変える場合は影響に注意。
-- `img/og-<page>.png`: 各ページの OGP 画像（1200×630）。`tools/og.html` をテンプレートに `node tools/og.js` で撮り直せる（ヘッドレスの Edge / Chrome を使う。一部だけなら `node tools/og.js map songs`）。ページの見出し文言・プレビューする URL は `og.html` の `OG_PAGES`。ページを追加したら `OG_PAGES` と `og.js` の `PAGES` に足し、HTML の `og:image` を `img/og-<page>.png` にする。OGP メタタグは各 HTML に絶対 URL で記述されている。
+- `img/og-<page>.png`: 各ページの OGP 画像（1200×630）。`tools/og.html` をテンプレートに `node tools/og.js` で撮り直せる（ヘッドレスの Edge / Chrome を使う。一部だけなら `node tools/og.js map songs`）。ページの見出し文言・プレビューする URL は `og.html` の `OG_PAGES`。ページを追加したら `OG_PAGES` と `og.js` の `PAGES` に足し、HTML の `og:image` を `img/og-<page>.png` にする。撮り直したページの `og:image` には `og.js` が `?v=<撮影日時>` を付け直す（X などが画像をキャッシュするため。撮影せず付け直すだけなら `node tools/og.js --version-only`）。OGP メタタグは各 HTML に絶対 URL で記述されている。
 - 歌詞・コード進行の出典は ChordWiki。
