@@ -168,7 +168,7 @@ function drawLineChart(canvas, labels, datasets, yMin, yMax, yLabel, encorePosit
   ctx.clearRect(0, 0, w, h);
 
   // Grid
-  ctx.strokeStyle = 'rgba(255,255,255,.06)';
+  ctx.strokeStyle = 'rgba(45,35,70,.08)';
   ctx.lineWidth = 1;
   for (let i = 0; i <= 4; i++) {
     const y = pad.top + ch * i / 4;
@@ -177,7 +177,7 @@ function drawLineChart(canvas, labels, datasets, yMin, yMax, yLabel, encorePosit
 
   // Y labels
   ctx.font = '11px "Segoe UI", sans-serif';
-  ctx.fillStyle = '#8888a0';
+  ctx.fillStyle = '#807590';
   ctx.textAlign = 'right'; ctx.textBaseline = 'middle';
   for (let i = 0; i <= 4; i++) {
     const y = pad.top + ch * i / 4;
@@ -188,7 +188,7 @@ function drawLineChart(canvas, labels, datasets, yMin, yMax, yLabel, encorePosit
   // Y axis label
   ctx.save();
   ctx.font = '600 11px "Segoe UI", sans-serif';
-  ctx.fillStyle = '#8888a0';
+  ctx.fillStyle = '#807590';
   ctx.textAlign = 'center';
   ctx.translate(12, pad.top + ch / 2);
   ctx.rotate(-Math.PI / 2);
@@ -198,7 +198,7 @@ function drawLineChart(canvas, labels, datasets, yMin, yMax, yLabel, encorePosit
   // X labels
   ctx.textAlign = 'center'; ctx.textBaseline = 'top';
   ctx.font = '11px "Segoe UI", sans-serif';
-  ctx.fillStyle = '#8888a0';
+  ctx.fillStyle = '#807590';
   for (let i = 0; i < n; i++) {
     const x = n > 1 ? pad.left + (cw * i) / (n - 1) : pad.left + cw / 2;
     ctx.fillText(labels[i], x, h - pad.bottom + 6);
@@ -257,7 +257,7 @@ function drawLineChart(canvas, labels, datasets, yMin, yMax, yLabel, encorePosit
         ctx.arc(p.x, p.y, 4, 0, Math.PI * 2);
         ctx.fillStyle = ds.color;
         ctx.fill();
-        ctx.strokeStyle = '#0f0f14';
+        ctx.strokeStyle = '#ffffff';
         ctx.lineWidth = 2;
         ctx.stroke();
 
@@ -275,7 +275,7 @@ function drawLineChart(canvas, labels, datasets, yMin, yMax, yLabel, encorePosit
   if (encorePositions.length > 0 && n > 1) {
     ctx.save();
     ctx.setLineDash([4, 4]);
-    ctx.strokeStyle = 'rgba(255,255,255,.25)';
+    ctx.strokeStyle = 'rgba(45,35,70,.25)';
     ctx.lineWidth = 1.5;
     encorePositions.forEach(k => {
       if (k <= 0 || k >= n) return;
@@ -287,7 +287,7 @@ function drawLineChart(canvas, labels, datasets, yMin, yMax, yLabel, encorePosit
     });
     ctx.setLineDash([]);
     ctx.font = '600 9px "Segoe UI", sans-serif';
-    ctx.fillStyle = 'rgba(255,255,255,.35)';
+    ctx.fillStyle = 'rgba(45,35,70,.4)';
     ctx.textAlign = 'center'; ctx.textBaseline = 'top';
     encorePositions.forEach(k => {
       if (k <= 0 || k >= n) return;
@@ -530,7 +530,7 @@ function renderCharts() {
   drawLineChart(
     document.getElementById('bpmCanvas'),
     labels,
-    [{ data: bpmData, color: '#f06c6c', fill: true, showValues: true, noData: bpmNoData }],
+    [{ data: bpmData, color: '#ec4545', fill: true, showValues: true, noData: bpmNoData }],
     bpmMin, bpmMax, 'BPM',
     encorePositions
   );
@@ -543,8 +543,8 @@ function renderCharts() {
     document.getElementById('moodCanvas'),
     labels,
     [
-      { data: hypeData, color: '#fcb040', fill: true,  showValues: false, noData: moodNoData },
-      { data: emoData,  color: '#b06cf0', fill: false, showValues: false, noData: moodNoData },
+      { data: hypeData, color: '#f08c00', fill: true,  showValues: false, noData: moodNoData },
+      { data: emoData,  color: '#9b4fe0', fill: false, showValues: false, noData: moodNoData },
     ],
     0, 10, 'Score',
     encorePositions

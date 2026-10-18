@@ -1,9 +1,9 @@
 /* ====== Song detail page: song.html?id=<song id> ====== */
 
 const MAPS = [
-  { key: 'mapA', def: 'mapA_definition', name: 'ステージ・バイブス', href: 'map-a.html' },
-  { key: 'mapB', def: 'mapB_definition', name: 'サウンド・エンジン', href: 'map-b.html' },
-  { key: 'mapC', def: 'mapC_definition', name: 'エモーション',       href: 'map-c.html' },
+  { key: 'mapA', def: 'mapA_definition', name: 'ステージ', tab: 'stage' },
+  { key: 'mapB', def: 'mapB_definition', name: 'サウンド', tab: 'sound' },
+  { key: 'mapC', def: 'mapC_definition', name: 'ムード',   tab: 'mood' },
 ];
 const MAP_RANGE = 10.5;  // same as map.js
 
@@ -68,9 +68,10 @@ function renderScores(song) {
 function renderPositions(song, data) {
   const items = MAPS.map((m, i) => {
     const p = song[m.key] || { x: 0, y: 0 };
-    return `<a class="sd-mini" href="${m.href}">
+    return `<a class="sd-mini" href="map.html?m=${m.tab}&song=${encodeURIComponent(song.id)}">
       <canvas id="sdMini${i}" aria-label="${m.name}マップ上の位置"></canvas>
       <span class="sd-mini-name">${m.name}</span>
+      <span class="sd-mini-area">${escapeHtml(MAP_AREAS[m.key][mapQuadrantOf(p)])}</span>
       <span class="sd-mini-coord">(${p.x}, ${p.y})</span>
       <span class="sd-mini-axes">${escapeHtml(data[m.def]?.x_label || '')}<br>${escapeHtml(data[m.def]?.y_label || '')}</span>
     </a>`;
@@ -128,7 +129,7 @@ function drawSongRadar(song) {
   const ctx = hiDpiContext(canvas, size, size);
   drawRadar(ctx, size, size, [{
     values: song.scores, visible: true,
-    stroke: '#7c6cf0', fill: 'rgba(124,108,240,.3)', dotRadius: 3, lineWidth: 2,
+    stroke: '#e8337f', fill: 'rgba(232,51,127,.18)', dotRadius: 3, lineWidth: 2,
   }], { labelMargin: 46, labelOffset: 20, labelFontSize: 12, showGridLabels: false });
 }
 
@@ -139,16 +140,16 @@ function drawMiniMaps(song, songs) {
     const ctx = hiDpiContext(canvas, size, size);
     const toPx = (x, y) => [(x + MAP_RANGE) / (MAP_RANGE * 2) * size, (MAP_RANGE - y) / (MAP_RANGE * 2) * size];
 
-    ctx.fillStyle = 'rgba(255,255,255,.03)';
+    ctx.fillStyle = '#fff';
     ctx.fillRect(0, 0, size, size);
-    ctx.strokeStyle = 'rgba(255,255,255,.12)';
+    ctx.strokeStyle = 'rgba(45,35,70,.14)';
     ctx.lineWidth = 1;
     ctx.beginPath();
     ctx.moveTo(size / 2, 0); ctx.lineTo(size / 2, size);
     ctx.moveTo(0, size / 2); ctx.lineTo(size, size / 2);
     ctx.stroke();
 
-    ctx.fillStyle = 'rgba(255,255,255,.22)';
+    ctx.fillStyle = 'rgba(45,35,70,.18)';
     songs.forEach(s => {
       if (s.id === song.id || !s[m.key]) return;
       const [x, y] = toPx(s[m.key].x, s[m.key].y);
@@ -158,9 +159,9 @@ function drawMiniMaps(song, songs) {
     const p = song[m.key];
     if (!p) return;
     const [x, y] = toPx(p.x, p.y);
-    ctx.fillStyle = '#f06c9c';
+    ctx.fillStyle = '#e8337f';
     ctx.beginPath(); ctx.arc(x, y, 5, 0, Math.PI * 2); ctx.fill();
-    ctx.strokeStyle = 'rgba(240,108,156,.45)';
+    ctx.strokeStyle = 'rgba(232,51,127,.4)';
     ctx.lineWidth = 2;
     ctx.beginPath(); ctx.arc(x, y, 9, 0, Math.PI * 2); ctx.stroke();
   });
@@ -176,14 +177,14 @@ fetch('songs.json')
     const id = new URLSearchParams(location.search).get('id');
     const song = data.songs.find(s => s.id === id);
     if (!song) {
-      showStatus(`曲が見つかりませんでした。<a href="index.html">楽曲一覧</a>から選んでください。`);
+      showStatus(`曲が見つかりませんでした。<a href="songs.html">楽曲一覧</a>から選んでください。`);
       return;
     }
     document.title = `${song.title} — Hey!Mommy! Song Analysis`;
 
     const main = document.getElementById('song');
     main.innerHTML = `
-      <a class="sd-back" href="index.html">← 楽曲一覧</a>
+      <a class="sd-back" href="songs.html">← 楽曲一覧</a>
       ${renderHeader(song)}
       <div class="sd-grid">
         ${renderScores(song)}
@@ -192,7 +193,7 @@ fetch('songs.json')
       ${renderHooks(song)}
       ${renderSimilar(song, data.songs)}
       <section class="sd-card sd-analysis">
-        <h2 class="sd-h2">和声分析</h2>
+        <h2 class="sd-h2">楽曲分析</h2>
         <div class="md" id="sdAnalysis"><p class="sd-status">読み込み中…</p></div>
       </section>
       ${renderPager(song, data.songs)}`;
@@ -211,7 +212,7 @@ fetch('songs.json')
       const md = (await res.text()).replace(/^#\s[^\n]*\n/, '');
       box.innerHTML = renderMarkdown(md);
     } catch (err) {
-      box.innerHTML = '<p class="sd-status">和声分析を読み込めませんでした。</p>';
+      box.innerHTML = '<p class="sd-status">楽曲分析を読み込めませんでした。</p>';
       console.error('Failed to load analysis', err);
     }
   })

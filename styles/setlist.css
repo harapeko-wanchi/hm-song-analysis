@@ -219,7 +219,7 @@
   gap: 16px;
   margin-top: 6px;
   font-size: 12px;
-  color: #aaa;
+  color: var(--muted);
 }
 .sl-legend-item { display: inline-flex; align-items: center; gap: 5px; }
 .sl-legend-swatch { display: inline-block; width: 12px; height: 12px; border-radius: 2px; }
@@ -247,13 +247,13 @@
 .sl-btn-twitter { background: #000; color: #fff; border-color: #333; }
 .sl-btn-twitter:hover { border-color: #555; opacity: 1; }
 .sl-btn-reset { color: var(--muted); }
-.sl-btn-reset:hover { color: #f06c6c; border-color: #f06c6c; opacity: 1; }
+.sl-btn-reset:hover { color: #ec4545; border-color: #ec4545; opacity: 1; }
 
 /* ===== Auto-generation Dialog ===== */
 .sl-dialog-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,.55);
+  background: rgba(45,35,70,.35);
   z-index: 200;
   display: flex;
   align-items: center;
@@ -356,7 +356,7 @@
 .sl-modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,.55);
+  background: rgba(45,35,70,.35);
   z-index: 200;
   display: flex;
   align-items: center;
@@ -548,7 +548,7 @@
 .sl-card-thumb {
   display: block; position: relative;
   width: 72px; aspect-ratio: 16/9; border-radius: 6px;
-  overflow: hidden; flex-shrink: 0; background: #111;
+  overflow: hidden; flex-shrink: 0; background: var(--surface);
 }
 .sl-card-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .sl-card-body { flex: 1; min-width: 0; }
@@ -561,10 +561,10 @@
   background: var(--surface); border: 1px solid var(--border); color: var(--muted);
   white-space: nowrap;
 }
-.sl-badge.role-opener { border-color: #6cf0b0; color: #6cf0b0; }
-.sl-badge.role-closer { border-color: #f06c9c; color: #f06c9c; }
-.sl-badge.role-peak   { border-color: #fcb040; color: #fcb040; }
-.sl-badge.role-breather { border-color: #6cacf0; color: #6cacf0; }
+.sl-badge.role-opener { border-color: #1fb877; color: #1fb877; }
+.sl-badge.role-closer { border-color: #f0508c; color: #f0508c; }
+.sl-badge.role-peak   { border-color: #f08c00; color: #f08c00; }
+.sl-badge.role-breather { border-color: #3a8ee6; color: #3a8ee6; }
 
 /* ===== Responsive ===== */
 @media (max-width: 600px) {

@@ -19,9 +19,11 @@ Hey!Mommy!（6人組アイドルグループ）の楽曲を 9 軸スコア・3 �
 - `mapA_definition` / `mapB_definition` / `mapC_definition`: マップ座標の算出式（例: Map A の x = `cool - cute`, y = `(party - 5) * 2`）。各曲の `mapA` / `mapB` / `mapC` 座標は**事前計算済みで JSON に保存**されているため、スコアを変えたら座標も式に従って更新すること。
 - 各曲のフィールド: `id, title, release_date, lyricist, composer, arranger, key, bpm, youtube_url, thumbnail_url, scores, mapA, mapB, mapC, tags, harmony_note, lyrics_hooks, summary`。
 
-**ページ構成:** ルートの `<page>.html` ＋ `scripts/<page>.js` ＋（必要なら）`styles/<page>.css`。`styles/common.css` が共通ダークテーマ。ナビゲーションの HTML は各ページにコピーされているので、ページ追加・名称変更時は全 HTML のナビを更新する。幅 600px 以下ではナビ項目をメニューボタンの中に折りたたむ（ボタンは `scripts/nav.js` が実行時に追加する。全ページで最初に読み込む）。
+**ページ構成:** ルートの `<page>.html` ＋ `scripts/<page>.js` ＋（必要なら）`styles/<page>.css`。`styles/common.css` が共通テーマ（明るい配色・丸ゴシック。色は `:root` の変数で、メンバーカラー 6 色の `--m-*` と帯の `--member-stripe` もここ）。ナビゲーションは、各ページの空の `<nav class="nav"></nav>` の直後で読み込む `scripts/nav.js` が `NAV_GROUPS`（楽曲一覧／分析／探す／つくる）から生成する。ページ追加・名称変更時は `NAV_GROUPS` だけを直す。幅 600px 以下ではナビ項目をメニューボタンの中に折りたたむ（ボタンも `nav.js` が追加する）。
 
-- `map-a.html` / `map-b.html` / `map-c.html` は共通の `scripts/map.js` を使い、ページ内に存在する `#mapA` / `#mapB` / `#mapC` 要素で描画対象を判定する。`map.html` は旧 URL（`?m=A|B|C`）からのリダイレクト専用。曲名ラベルは他の曲のサムネイルや先に表示したラベルと重なると隠し（`songs.json` の順＝新しい曲を優先）、ズームで間隔が開くと再表示する。曲のサムネイルは詳細ページ（`song.html`）へのリンク（YouTube はツールチップから。タッチ端末ではタップでツールチップを開く）。
+- `index.html` はトップページ（`scripts/home.js`）。Hey!Mommy! とサイトの紹介、非公式ファンサイトである旨の断り、おすすめ 3 コンテンツ（楽曲一覧・ポジションマップ・似た曲レコメンド）、ランダムの「今日の 1 曲」、指標別ランキング TOP 5。迷わせないようトップで紹介するコンテンツは絞っており、それ以外はナビから辿る。
+- `songs.html` は楽曲一覧（`scripts/songs.js`）。
+- `map.html` はポジションマップ（`scripts/map.js` ＋ `styles/map.css`）。ステージ／サウンド／ムードの 3 マップ（`#mapA` / `#mapB` / `#mapC`）をタブで切り替え、それぞれズーム状態を持つ。曲を選ぶ（選択欄か、マップ上の曲をクリック）と 3 マップすべてでその曲を強調し、他の曲を薄くして軸へのガイド線を引く。曲の詳細ページへは選択欄の下のリンクとツールチップから行く（タッチ端末ではタップで選択とツールチップ表示）。曲名ラベルは他の曲のサムネイルや先に表示したラベルと重なると隠し（`songs.json` の順＝新しい曲を優先、選択中の曲は常に表示）、ズームで間隔が開くと再表示する。
 - `song.html?id=<id>` は曲ごとの詳細ページ（`scripts/song.js`）。ヘッダー・レーダー・3 マップ上の位置・似ている曲 TOP 5 を描き、`analysis/<id>.md` を `scripts/markdown.js`（分析ファイルが使う書式だけに対応した最小の Markdown 変換。HTML はすべてエスケープ）で記事として表示する。一覧・レコメンド・ヒートマップ・マップのツールチップの曲名から `songUrl(id)`（`common.js`）でリンクしている。レーダー描画は `scripts/radar.js` を `composer.html` と共用。
 - `scripts/common.js` に共通定義をまとめている: `AXES`（9軸の key・ラベル・色・英語短縮ラベル）、`COMPOSER_NAME_MAP`（共作表記を代表名にまとめる）、`COMPOSER_COLORS`（作曲家ごとのレーダー色とヒートマップ色相）。これらを使うページは `common.js` をページ用スクリプトより先に読み込む。各ページの JS に同じ定数を再定義しない（`tools/validate.js` が検出する）。
 
@@ -31,14 +33,15 @@ Hey!Mommy!（6人組アイドルグループ）の楽曲を 9 軸スコア・3 �
 - `scripts/composer.js`: `COMPOSER_PROFILES`（作曲家ごとの長文プロフィール、担当曲数など数値を含む文章。キーは代表名）。
 - `README.md` の「全 33 曲」等の記述、`prompt.md` の気分別候補リスト。
 
-**曲の並び順:** `songs` 配列は新しい曲が先頭の順で、`index.js` の既定表示（リリース日の新しい順）は同じ日付・同じ値の曲をこの配列順で並べる。新曲は配列の先頭に追加する。
+**曲の並び順:** `songs` 配列は新しい曲が先頭の順で、`songs.js` の既定表示（リリース日の新しい順）は同じ日付・同じ値の曲をこの配列順で並べる。新曲は配列の先頭に追加する。
 
 **URL 共有状態:** どのページも曲は `songs.json` の `id` で参照するので、配列の並び順や曲数に依存しない。`id` を変えると共有済み URL が壊れる。
 
 - setlist / batting: 状態を JSON 配列にし、LZ-String（`scripts/lz-string.min.js`）で圧縮して `?d=...` に格納する（各ファイルの `serializeState` / `deserializeState` の直前のコメントに形式を記載）。URL 由来の値は `deserializeState` で型・曲 id・守備位置・文字数を検証してから state に入れる。
 - compare: `?s1=<id>&s2=...`、recommend: `#<id>`。
 - timeline（年表）: `?m=<bpm|軸 key>` で表示する指標を保持（既定の BPM は省略）。
-- index（一覧）: `?q=&sort=&order=&composer=&year=` で絞り込み・並び替えを保持（`composer` / `year` は複数指定可、既定値は省略）。
+- map（ポジションマップ）: `?m=<stage|sound|mood>&song=<id>`（既定の stage は省略）。曲の詳細ページの小さなマップからこの形でリンクしている。
+- songs（一覧）: `?q=&sort=&order=&composer=&year=` で絞り込み・並び替えを保持（`composer` / `year` は複数指定可、既定値は省略）。
 
 batting の X シェア文は 257 文字上限に収まるよう末尾から自動カットされる。
 
@@ -46,5 +49,5 @@ batting の X シェア文は 257 文字上限に収まるよう末尾から自�
 
 - `analysis/<song_id>.md`: 曲ごとの楽曲分析。音楽ジャーナリストのレビュー／音楽誌の分析記事の文体で書く（リード文、基本情報、論点ごとの小見出し、楽曲を追う、カタログの中で、総評）。書き方の決まりは `docs/analysis-style.md`。ファイル名は `songs.json` の `id` と一致。`analysis/` には曲以外の md を置かない（`tools/validate.js` がエラーにする）。
 - `prompt.md`: X 上の楽曲レコメンドボット用プロンプト。GitHub の raw `songs.json`（master ブランチ）を参照するので、`songs.json` のスキーマ（特に `youtube_url`, `tags`, `summary`, `lyrics_hooks`）を変える場合は影響に注意。
-- `img/og-*.png`: 各ページの OGP 画像。OGP メタタグは各 HTML に絶対 URL で記述されている。
+- `img/og-<page>.png`: 各ページの OGP 画像（1200×630）。`tools/og.html` をテンプレートに `node tools/og.js` で撮り直せる（ヘッドレスの Edge / Chrome を使う。一部だけなら `node tools/og.js map songs`）。ページの見出し文言・プレビューする URL は `og.html` の `OG_PAGES`。ページを追加したら `OG_PAGES` と `og.js` の `PAGES` に足し、HTML の `og:image` を `img/og-<page>.png` にする。OGP メタタグは各 HTML に絶対 URL で記述されている。
 - 歌詞・コード進行の出典は ChordWiki。

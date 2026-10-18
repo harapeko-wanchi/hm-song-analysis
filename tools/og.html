@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="robots" content="noindex">
+  <title>OGP template</title>
+  <!--
+    OGP 画像のテンプレート（1200×630）。tools/og.js がヘッドレス Edge / Chrome で撮影して img/og-<page>.png に保存する。
+    ブラウザで確認するときは node tools/serve.js を起動して http://localhost:8000/tools/og.html?p=map を開く。
+  -->
+  <link rel="stylesheet" href="../styles/common.css">
+  <style>
+    html, body { width: 1200px; height: 630px; overflow: hidden; }
+    body {
+      position: relative;
+      background-color: var(--bg);
+      background-image:
+        radial-gradient(circle, rgba(255, 92, 157, .16) 4px, transparent 4.5px),
+        radial-gradient(circle, rgba(255, 191, 31, .22) 4px, transparent 4.5px);
+      background-size: 44px 44px;
+      background-position: 0 0, 22px 22px;
+    }
+    body::after {
+      content: '';
+      position: absolute; left: 0; right: 0; bottom: 0;
+      height: 14px;
+      background: var(--member-stripe);
+    }
+
+    .og-text {
+      position: absolute; left: 64px; top: 64px; width: 470px;
+    }
+    .og-logo { font-size: 58px; font-weight: 800; line-height: 1; letter-spacing: .02em; }
+    .og-logo span { display: inline-block; text-shadow: 3px 3px 0 #fff, 4px 4px 0 rgba(45, 35, 70, .12); }
+    .og-logo span:nth-child(5n+1) { color: var(--m-green); }
+    .og-logo span:nth-child(5n+2) { color: var(--m-pink); }
+    .og-logo span:nth-child(5n+3) { color: var(--m-yellow); }
+    .og-logo span:nth-child(5n+4) { color: var(--m-red); }
+    .og-logo span:nth-child(5n)   { color: var(--m-purple); }
+    .og-logo span:nth-child(odd)  { transform: rotate(-4deg); }
+    .og-logo span:nth-child(even) { transform: rotate(3deg) translateY(2px); }
+    .og-sub {
+      display: inline-block;
+      margin-top: 14px;
+      padding: 4px 18px;
+      font-size: 20px; font-weight: 800; letter-spacing: .12em;
+      color: #fff;
+      background: var(--text);
+      border-radius: 999px;
+    }
+    .og-title {
+      margin-top: 64px;
+      font-size: 54px; font-weight: 800; line-height: 1.25;
+    }
+    .og-title span { background: linear-gradient(transparent 62%, rgba(255, 92, 157, .35) 62%); }
+    .og-desc {
+      margin-top: 20px;
+      font-size: 25px; font-weight: 700; line-height: 1.6;
+      color: var(--muted);
+      word-break: auto-phrase; line-break: strict;
+    }
+    .og-url {
+      position: absolute; left: 64px; bottom: 44px;
+      font-size: 18px; font-weight: 700; color: var(--muted);
+    }
+
+    /* Live preview of the page */
+    .og-shot {
+      position: absolute; right: 52px; top: 56px;
+      width: 600px; height: 480px;
+      padding: 10px;
+      background: #fff;
+      border-radius: 28px;
+      box-shadow: 0 16px 40px rgba(120, 70, 40, .22);
+      transform: rotate(2deg);
+    }
+    .og-shot-inner { width: 580px; height: 460px; overflow: hidden; border-radius: 20px; background: var(--bg); }
+    .og-shot iframe {
+      width: 1160px; height: 920px; border: 0;
+      transform: scale(.5); transform-origin: 0 0;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+
+<div class="og-text">
+  <div class="og-logo"><span>H</span><span>e</span><span>y</span><span>!</span><span>M</span><span>o</span><span>m</span><span>m</span><span>y</span><span>!</span></div>
+  <div class="og-sub">Song Analysis</div>
+  <div class="og-title"><span id="title"></span></div>
+  <div class="og-desc" id="desc"></div>
+</div>
+<div class="og-url">harapeko-wanchi.github.io/hm-song-analysis</div>
+<div class="og-shot"><div class="og-shot-inner"><iframe id="shot" scrolling="no" title="preview"></iframe></div></div>
+
+<script src="../scripts/lz-string.min.js"></script>
+<script>
+/* One entry per OGP image: img/og-<key>.png. {n} = song count, {latest} = newest song id. */
+const OG_PAGES = {
+  index:     { title: '楽曲をまるごと<br>可視化！', desc: '全{n}曲を9つの軸でスコア化。マップや分析記事で曲の個性を楽しもう', src: 'index.html' },
+  songs:     { title: '楽曲一覧', desc: '全{n}曲のスコアと解説をまとめてチェック', src: 'songs.html' },
+  song:      { title: '楽曲詳細', desc: '9軸スコア、マップ上の位置、似ている曲、そして楽曲分析の記事', src: 'song.html?id={latest}' },
+  map:       { title: 'ポジション<br>マップ', desc: 'ステージ・サウンド・ムードの3つの地図で、曲の立ち位置を見比べよう', src: 'map.html?song={latest}' },
+  heatmap:   { title: 'スコア<br>ヒートマップ', desc: '全曲×9軸のスコアを色でひと目で', src: 'heatmap.html' },
+  timeline:  { title: '年表', desc: 'リリース順に、BPMやスコアの移り変わりをたどろう', src: 'timeline.html' },
+  composer:  { title: '作曲家DNA', desc: '作曲家ごとのスコアの傾向とプロフィール', src: 'composer.html' },
+  compare:   { title: 'レーダー比較', desc: '最大3曲のスコアを重ねて比べよう', src: 'compare.html?s1=magnet&s2=mochipuru&s3=next_story' },
+  recommend: { title: '似た曲<br>レコメンド', desc: '好きな曲から、スコアの近い曲を見つけよう', src: 'recommend.html#{latest}' },
+  setlist:   { title: 'セトリメーカー', desc: '曲を並べて自分だけのセトリを作ろう。BPMやムードの流れも見える', src: 'setlist.html?d={setlist}' },
+  batting:   { title: '打線メーカー', desc: 'Hey!Mommy!の曲で打線を組んで、Xでシェアしよう', src: 'batting.html?d={batting}' },
+};
+
+// Sample contents for the makers (formats: comments above serializeState in setlist.js / batting.js)
+const SAMPLE_SETLIST = ['', [['happy_go_round'], ['biscuit_case'], ['mochipuru'], ['baby_baby_baby'], ['next_story'], ['hey_get_up_kids'], 0, ['7777777']]];
+const SAMPLE_BATTING = [
+  [['biscuit_case', 'CF'], ['hey_baby', '2B'], ['hey_get_up_kids', 'SS'], ['happy_go_round', '1B'], ['magnet', '3B'],
+   ['baby_baby_baby', 'LF'], ['mochipuru', 'RF'], ['diamond_jet', 'C'], ['7777777', 'DH']],
+  [['next_story']],
+];
+
+const key = new URLSearchParams(location.search).get('p') || 'index';
+const page = OG_PAGES[key] || OG_PAGES.index;
+
+fetch('../songs.json')
+  .then(r => r.json())
+  .then(data => {
+    const vars = {
+      n: data.songs.length,
+      latest: data.songs[0].id,
+      setlist: LZString.compressToEncodedURIComponent(JSON.stringify(SAMPLE_SETLIST)),
+      batting: LZString.compressToEncodedURIComponent(JSON.stringify(SAMPLE_BATTING)),
+    };
+    const fill = s => s.replace(/\{(\w+)\}/g, (_, k) => vars[k]);
+    document.getElementById('title').innerHTML = fill(page.title);
+    document.getElementById('desc').textContent = fill(page.desc);
+    document.getElementById('shot').src = '../' + fill(page.src);
+  });
+</script>
+</body>
+</html>

@@ -54,7 +54,7 @@
 
     .hm-table td {
       padding: .35rem .4rem; text-align: center;
-      border-bottom: 1px solid rgba(46,46,62,.5);
+      border-bottom: 1px solid var(--border);
       transition: transform .15s;
       font-variant-numeric: tabular-nums;
     }
@@ -130,7 +130,7 @@
       border-radius: 8px; padding: .5rem .7rem;
       font-size: .75rem; z-index: 9999;
       pointer-events: none;
-      box-shadow: 0 4px 16px rgba(0,0,0,.5);
+      box-shadow: var(--shadow-lg);
     }
     .hm-tooltip.visible { display: block; }
     .hm-tooltip .tt-song { font-weight: 700; margin-bottom: .2rem; }

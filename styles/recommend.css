@@ -48,7 +48,7 @@
 .rec-source-thumb {
   display: block; position: relative;
   width: 160px; aspect-ratio: 16/9; border-radius: 8px;
-  overflow: hidden; flex-shrink: 0; background: #111;
+  overflow: hidden; flex-shrink: 0; background: var(--surface);
 }
 .rec-source-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .rec-source-thumb .play-icon {
@@ -79,7 +79,7 @@
 }
 .rec-card:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(0,0,0,.3);
+  box-shadow: var(--shadow-lg);
 }
 
 .rec-rank {
@@ -87,14 +87,14 @@
   flex-shrink: 0; width: 36px; text-align: center;
   align-self: center;
 }
-.rec-rank.rank-1 { color: #ffd700; font-size: 1.6rem; }
-.rec-rank.rank-2 { color: #c0c0c0; }
-.rec-rank.rank-3 { color: #cd7f32; }
+.rec-rank.rank-1 { color: #f0a800; font-size: 1.6rem; }
+.rec-rank.rank-2 { color: #98a2ae; }
+.rec-rank.rank-3 { color: #c47a35; }
 
 .rec-card-thumb {
   display: block; position: relative;
   width: 100px; aspect-ratio: 16/9; border-radius: 6px;
-  overflow: hidden; flex-shrink: 0; background: #111;
+  overflow: hidden; flex-shrink: 0; background: var(--surface);
 }
 .rec-card-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .rec-card-thumb .play-icon {

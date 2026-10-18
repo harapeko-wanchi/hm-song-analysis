@@ -30,11 +30,11 @@
 .tl-chart-sub { font-size: .72rem; color: var(--muted); margin-bottom: .4rem; }
 .tl-chart { width: 100%; }
 .tl-chart svg { display: block; overflow: visible; }
-.tl-grid { stroke: rgba(255,255,255,.07); stroke-width: 1; }
+.tl-grid { stroke: rgba(45,35,70,.08); stroke-width: 1; }
 .tl-axis { fill: var(--muted); font-size: 11px; font-variant-numeric: tabular-nums; }
 .tl-endlabel { fill: var(--text); font-size: 12px; font-weight: 700; }
 .tl-dot { cursor: pointer; }
-.tl-dot:hover .tl-dot-mark, .tl-dot:focus .tl-dot-mark { fill: #c8c8dc; }
+.tl-dot:hover .tl-dot-mark, .tl-dot:focus .tl-dot-mark { fill: var(--accent); }
 .tl-dot:focus, .tl-mean:focus { outline: none; }
 .tl-dot:focus-visible .tl-dot-mark, .tl-mean:focus-visible circle:last-child { stroke: var(--text); }
 
@@ -43,13 +43,14 @@
   padding: .45rem .65rem;
   font-size: .75rem; line-height: 1.5;
   color: var(--muted);
-  background: rgba(15,15,20,.95);
+  background: rgba(255,255,255,.97);
+  box-shadow: var(--shadow-lg);
   border: 1px solid var(--border);
   border-radius: 8px;
   pointer-events: none;
   max-width: 240px;
 }
-.tl-tooltip strong { color: #fff; font-size: .95rem; margin-right: .2rem; }
+.tl-tooltip strong { color: var(--text); font-size: .95rem; margin-right: .2rem; }
 .tl-tooltip span { color: var(--text); }
 
 /* Table view */
@@ -60,7 +61,7 @@
 .tl-table th, .tl-table td { padding: .3rem .55rem; border-bottom: 1px solid var(--border); text-align: right; }
 .tl-table thead th { color: var(--muted); font-weight: 600; }
 .tl-table tbody th { text-align: left; }
-.tl-table .is-current { color: #fff; font-weight: 700; }
+.tl-table .is-current { color: var(--accent); font-weight: 700; }
 
 /* Release-order list */
 .tl-years { display: flex; flex-direction: column; gap: 1.8rem; }

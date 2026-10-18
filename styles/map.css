@@ -1,0 +1,88 @@
+/* ===== Position map: tabs and song selection (map.html) ===== */
+.map-head {
+  max-width: 900px;
+  margin: 1rem auto 0;
+  padding: 0 1rem;
+  display: flex; flex-direction: column; align-items: center; gap: .6rem;
+}
+
+.map-tabs {
+  display: flex;
+  padding: 3px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+}
+.map-tab {
+  padding: .4rem 1.1rem;
+  font: inherit; font-size: .85rem; font-weight: 600;
+  color: var(--muted);
+  background: none; border: none; border-radius: 8px;
+  cursor: pointer;
+}
+.map-tab:hover { color: var(--text); }
+.map-tab[aria-selected="true"] { background: var(--accent); color: #fff; }
+
+.map-picker { display: flex; gap: .4rem; flex-wrap: wrap; justify-content: center; max-width: 100%; }
+.map-select, .map-clear {
+  padding: .4rem .7rem;
+  font: inherit; font-size: .82rem;
+  color: var(--text);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  cursor: pointer;
+}
+.map-select { min-width: 0; max-width: 100%; }
+.map-select:focus, .map-select:hover, .map-clear:hover { outline: none; border-color: var(--accent); }
+
+.map-selected {
+  display: flex; flex-wrap: wrap; justify-content: center; align-items: baseline; gap: .3rem 1rem;
+  font-size: .8rem;
+}
+.map-selected:empty { display: none; }
+/* The selected song's area in each map; clicking one shows that map */
+.map-selected-areas { flex-basis: 100%; display: flex; flex-wrap: wrap; justify-content: center; gap: .35rem; }
+.map-selected-area {
+  display: inline-flex; align-items: baseline; gap: .35rem;
+  padding: .2rem .7rem;
+  font: inherit; font-size: .78rem; font-weight: 700;
+  color: var(--text);
+  background: #fff;
+  border: 1.5px solid var(--border);
+  border-radius: 999px;
+  cursor: pointer;
+}
+.map-selected-area small { font-size: .66rem; color: var(--muted); }
+.map-selected-area:hover { border-color: var(--accent); }
+.map-selected-area.current { color: #fff; background: var(--accent); border-color: var(--accent); }
+.map-selected-area.current small { color: rgba(255,255,255,.85); }
+
+/* Selected song: other songs fade, the selected one is enlarged with a glow and guide lines to the axes */
+.has-selection .map-point:not(.selected) { opacity: .3; }
+.has-selection .map-point:not(.selected):hover { opacity: 1; }
+.map-point.selected {
+  z-index: 30;
+  transform: translate(-50%, -50%) scale(calc(var(--inv-zoom, 1) * 1.25));
+}
+.map-point.selected .map-point-thumb,
+.map-point.selected .map-point-placeholder {
+  border-color: var(--accent2);
+  box-shadow: 0 0 0 3px rgba(240,108,156,.35), 0 0 18px rgba(240,108,156,.7);
+}
+.map-point.selected .map-point-title { color: var(--accent2); font-weight: 700; }
+
+.map-sel-guide {
+  position: absolute;
+  z-index: 5;
+  pointer-events: none;
+  border: 0 dashed var(--accent2);
+  opacity: .6;
+}
+.map-sel-guide.h { left: 0; right: 0; border-top-width: 1px; }
+.map-sel-guide.v { top: 0; bottom: 0; border-left-width: 1px; }
+
+@media (max-width: 600px) {
+  .map-head { margin-top: .6rem; gap: .45rem; }
+  .map-tab { padding: .4rem .8rem; }
+}

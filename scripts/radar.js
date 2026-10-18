@@ -23,12 +23,12 @@ function drawRadar(ctx, W, H, datasets, options = {}) {
       i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
     }
     ctx.closePath();
-    ctx.strokeStyle = lv === 10 ? 'rgba(255,255,255,.12)' : 'rgba(255,255,255,.05)';
+    ctx.strokeStyle = lv === 10 ? 'rgba(45,35,70,.18)' : 'rgba(45,35,70,.08)';
     ctx.lineWidth = 1;
     ctx.stroke();
 
     if (options.showGridLabels) {
-      ctx.fillStyle = 'rgba(255,255,255,.18)';
+      ctx.fillStyle = 'rgba(45,35,70,.3)';
       ctx.font = `${options.gridFontSize || 18}px sans-serif`;
       ctx.textAlign = 'center';
       ctx.fillText(lv, cx + 6, cy - r + 14);
@@ -43,7 +43,7 @@ function drawRadar(ctx, W, H, datasets, options = {}) {
     ctx.beginPath();
     ctx.moveTo(cx, cy);
     ctx.lineTo(ex, ey);
-    ctx.strokeStyle = 'rgba(255,255,255,.06)';
+    ctx.strokeStyle = 'rgba(45,35,70,.08)';
     ctx.lineWidth = 1;
     ctx.stroke();
 

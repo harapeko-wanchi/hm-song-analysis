@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Hey!Mommy! Song Analysis</title>
+  <meta name="description" content="Hey!Mommy! の楽曲を 9 軸スコア・ポジションマップ・楽曲分析で可視化する非公式ファンサイト">
   <!-- OGP -->
   <meta property="og:title" content="Hey!Mommy! Song Analysis">
   <meta property="og:description" content="Hey!Mommy! 楽曲分析 — 9軸スコアと3つのポジションマップで特徴を可視化">
@@ -12,83 +13,99 @@
   <meta property="og:type" content="website">
   <meta name="twitter:card" content="summary_large_image">
   <link rel="stylesheet" href="styles/common.css">
-  <link rel="stylesheet" href="styles/index.css">
+  <link rel="stylesheet" href="styles/home.css">
 </head>
 <body>
 
-<nav class="nav">
-  <a href="index.html" class="nav-title">Hey!Mommy! Song Analysis</a>
-  <a href="https://github.com/harapeko-wanchi/hm-song-analysis" class="nav-github" target="_blank" rel="noopener" title="GitHub" aria-label="GitHub リポジトリ">
-    <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
-  </a>
-  <a href="index.html" class="nav-btn active" title="Song List" aria-label="Song List">
-    <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1.5" y="1.5" width="6" height="6" rx="1"/><rect x="10.5" y="1.5" width="6" height="6" rx="1"/><rect x="1.5" y="10.5" width="6" height="6" rx="1"/><rect x="10.5" y="10.5" width="6" height="6" rx="1"/></svg>
-    <span>List</span>
-  </a>
-  <div class="nav-dropdown">
-    <button class="nav-btn" title="ポジショニングマップ" aria-label="ポジショニングマップ">
-      <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.3"><circle cx="9" cy="9" r="7"/><line x1="9" y1="2" x2="9" y2="16"/><line x1="2" y1="9" x2="16" y2="9"/></svg>
-      <span>マップ</span>
-    </button>
-    <div class="nav-dropdown-menu">
-      <a href="map-a.html">バイブス</a>
-      <a href="map-b.html">エンジン</a>
-      <a href="map-c.html">エモーション</a>
-    </div>
-  </div>
-  <a href="heatmap.html" class="nav-btn" title="ヒートマップ" aria-label="スコアヒートマップ">
-    <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.3"><rect x="2" y="2" width="4" height="4" rx=".5"/><rect x="7" y="2" width="4" height="4" rx=".5"/><rect x="12" y="2" width="4" height="4" rx=".5"/><rect x="2" y="7" width="4" height="4" rx=".5"/><rect x="7" y="7" width="4" height="4" rx=".5"/><rect x="12" y="7" width="4" height="4" rx=".5"/><rect x="2" y="12" width="4" height="4" rx=".5"/><rect x="7" y="12" width="4" height="4" rx=".5"/><rect x="12" y="12" width="4" height="4" rx=".5"/></svg>
-    <span>ヒートマップ</span>
-  </a>
-  <a href="timeline.html" class="nav-btn" title="年表" aria-label="年表">
-    <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.3"><line x1="2" y1="15" x2="16" y2="15"/><circle cx="4" cy="10" r="1.6"/><circle cx="9" cy="6" r="1.6"/><circle cx="14" cy="8" r="1.6"/><polyline points="4,10 9,6 14,8"/></svg>
-    <span>年表</span>
-  </a>
-  <a href="composer.html" class="nav-btn" title="作曲家DNA" aria-label="作曲家DNA">
-    <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.3"><circle cx="6" cy="6" r="3"/><circle cx="12" cy="12" r="3"/><line x1="8.1" y1="8.1" x2="9.9" y2="9.9"/></svg>
-    <span>作曲家</span>
-  </a>
-  <div class="nav-dropdown">
-    <button class="nav-btn" title="ツール" aria-label="ツール">
-      <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M14.5 3.5l-3 3M10 5l3 3M6.5 8.5l-4 4a1.4 1.4 0 002 2l4-4"/><circle cx="12" cy="6" r="4" stroke-dasharray="2,1.5"/></svg>
-      <span>ツール</span>
-    </button>
-    <div class="nav-dropdown-menu">
-      <a href="compare.html">比較</a>
-      <a href="recommend.html">レコメンド</a>
-      <a href="setlist.html">セトリ</a>
-      <a href="batting.html">打線</a>
-    </div>
-  </div>
-</nav>
-
-<section class="list-toolbar" aria-label="絞り込みと並び替え">
-  <div class="lt-row">
-    <input type="search" id="ltSearch" class="lt-search" placeholder="曲名・タグ・歌詞フック・解説で検索" aria-label="キーワード検索">
-    <div class="lt-sort">
-      <select id="ltSort" class="lt-select" aria-label="並び替え"></select>
-      <button type="button" id="ltOrder" class="lt-order" aria-label="並び順を切り替え"></button>
-    </div>
-  </div>
-  <div class="lt-row lt-chips-row">
-    <span class="lt-label">作曲</span>
-    <div class="lt-chips" id="ltComposers"></div>
-  </div>
-  <div class="lt-row lt-chips-row">
-    <span class="lt-label">リリース</span>
-    <div class="lt-chips" id="ltYears"></div>
-  </div>
-  <div class="lt-row lt-status">
-    <span id="ltCount" class="lt-count" aria-live="polite"></span>
-    <button type="button" id="ltReset" class="lt-reset" hidden>条件をクリア</button>
-  </div>
-</section>
-
-<main class="cards-grid" id="cards"></main>
-<p class="lt-empty" id="ltEmpty" hidden>条件に合う曲がありません</p>
-
+<nav class="nav"></nav>
 <script src="scripts/nav.js"></script>
+
+<main class="home">
+
+  <section class="home-hero">
+    <h1 class="home-logo" aria-label="Hey!Mommy! Song Analysis">
+      <span class="home-logo-main" aria-hidden="true"><span>H</span><span>e</span><span>y</span><span>!</span><span>M</span><span>o</span><span>m</span><span>m</span><span>y</span><span>!</span></span>
+      <span class="home-logo-sub" aria-hidden="true">Song Analysis</span>
+    </h1>
+    <p class="home-lead">
+      このサイトは、アイドルグループ Hey!Mommy! の全<span id="songCount"></span>曲を 9 つの軸でスコア化し、ポジションマップや楽曲分析の記事で、それぞれの曲の個性とカタログ全体の広がりを可視化するファンサイトです。
+    </p>
+  </section>
+
+  <section class="home-section home-about">
+    <h2 style="--c: var(--m-green)">Hey!Mommy! とは？</h2>
+    <div class="home-about-card">
+      <p>
+        <a href="https://www.heymommy.jp/" target="_blank" rel="noopener">Hey!Mommy!</a>（ヘイマミー）は、振付師・槙田紗子による『SACO PROJECT!』オーディションから 2021 年に誕生した 6 人組のアイドルグループ。「いつまでも子ども心を忘れずに、日常に大きな HAPPY を！」をコンセプトに活動しています。
+      </p>
+      <ul class="home-members" aria-label="メンバーと担当カラー">
+        <li style="--c: var(--m-green)"><a href="https://official.heymommy.jp/members/asuka" target="_blank" rel="noopener">原明日香<small>Hey!Green!</small></a></li>
+        <li style="--c: var(--m-pink)"><a href="https://official.heymommy.jp/members/yuuri" target="_blank" rel="noopener">秋元悠里<small>Hey!Pink!</small></a></li>
+        <li style="--c: var(--m-yellow)"><a href="https://official.heymommy.jp/members/himawari" target="_blank" rel="noopener">佐々木ひまわり<small>Hey!Yellow!</small></a></li>
+        <li style="--c: var(--m-white)"><a href="https://official.heymommy.jp/members/hazuki" target="_blank" rel="noopener">今丘葉月<small>Hey!White!</small></a></li>
+        <li style="--c: var(--m-red)"><a href="https://official.heymommy.jp/members/maika" target="_blank" rel="noopener">延松舞佳<small>Hey!Red!</small></a></li>
+        <li style="--c: var(--m-purple)"><a href="https://official.heymommy.jp/members/ai" target="_blank" rel="noopener">作島藍<small>Hey!Purple!</small></a></li>
+      </ul>
+    </div>
+  </section>
+
+  <div class="home-columns">
+    <section class="home-section">
+      <h2 style="--c: var(--m-pink)">今日の 1 曲</h2>
+      <div class="home-pick" id="pick"></div>
+      <button type="button" class="home-btn small" id="pickAgain">もう 1 曲</button>
+    </section>
+
+    <section class="home-section">
+      <div class="home-rank-head">
+        <h2 style="--c: var(--m-yellow)">ランキング</h2>
+        <select id="rankAxis" class="home-select" aria-label="ランキングの指標"></select>
+      </div>
+      <ol class="home-rank" id="rank"></ol>
+      <a class="home-rank-more" id="rankMore" href="songs.html">一覧でもっと見る →</a>
+    </section>
+  </div>
+
+  <section class="home-section">
+    <h2 style="--c: var(--m-purple)">おすすめコンテンツ</h2>
+    <div class="home-features">
+      <a class="home-feature" href="songs.html" style="--c: var(--m-pink)">
+        <div class="home-visual home-mosaic" id="visList" aria-hidden="true"></div>
+        <h3>楽曲一覧</h3>
+        <p>全曲のスコアと解説をカードで一覧。曲名から、コード進行まで踏み込んだ分析記事を読めます。</p>
+        <div class="home-axes" id="axisChips"></div>
+      </a>
+      <div class="home-feature" style="--c: var(--m-green)">
+        <a class="home-visual home-scatter" id="visMap" href="map.html" aria-hidden="true" tabindex="-1"></a>
+        <h3><a href="map.html">ポジションマップ</a></h3>
+        <p>スコアを 2 軸に組み合わせて、曲の立ち位置を地図のように俯瞰。曲を選ぶと 3 つのマップでの位置を見比べられます。</p>
+        <ul class="home-maps">
+          <li><a href="map.html">ステージマップ</a><span>かわいい ↔ かっこいい／聴かせる ↔ 沸かせる</span></li>
+          <li><a href="map.html?m=sound">サウンドマップ</a><span>エレクトロ ↔ バンド／ゆったり ↔ 疾走感</span></li>
+          <li><a href="map.html?m=mood">ムードマップ</a><span>大人っぽい ↔ 子供心／エモーショナル ↔ ハッピー</span></li>
+        </ul>
+      </div>
+      <a class="home-feature" href="recommend.html" id="recLink" style="--c: var(--m-purple)">
+        <div class="home-visual home-rec" id="visRec" aria-hidden="true"></div>
+        <h3>似た曲レコメンド</h3>
+        <p>好きな曲を 1 つ選ぶと、スコアの近い曲を 5 曲提案。次に聴く曲探しに。</p>
+      </a>
+    </div>
+    <p class="home-more">他にも、ヒートマップ・年表・作曲家 DNA・セトリメーカー・打線メーカーなど、楽しいコンテンツがいっぱい！ 上のメニューからのぞいてみてください。</p>
+  </section>
+
+</main>
+
+<footer class="home-footer">
+  <p class="home-note">
+    ファンが個人で制作した<strong>非公式サイト</strong>です。Hey!Mommy! および所属事務所とは関係ありません。スコアと分析は生成 AI（Claude）を使って作成した主観的なもので、公式の見解ではありません。
+  </p>
+  歌詞・コード進行の出典: <a href="https://ja.chordwiki.org/tag/Hey%21Mommy%21" target="_blank" rel="noopener">ChordWiki</a>
+  ／ <a href="https://github.com/harapeko-wanchi/hm-song-analysis" target="_blank" rel="noopener">GitHub</a>
+</footer>
+
 <script src="scripts/common.js"></script>
-<script src="scripts/index.js"></script>
+<script src="scripts/radar.js"></script>
+<script src="scripts/home.js"></script>
 </body>
 </html>

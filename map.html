@@ -2,19 +2,105 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <title>Redirecting…</title>
-  <script>
-    // 旧URL (map.html?m=A|B|C) からの互換リダイレクト
-    const m = new URLSearchParams(location.search).get('m');
-    const target = m === 'B' ? 'map-b.html' : m === 'C' ? 'map-c.html' : 'map-a.html';
-    location.replace(target);
-  </script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ポジションマップ — Hey!Mommy! Song Analysis</title>
+  <!-- OGP -->
+  <meta property="og:title" content="ポジションマップ — Hey!Mommy! Song Analysis">
+  <meta property="og:description" content="Hey!Mommy! の楽曲をステージ・サウンド・ムードの 3 つのポジションマップで俯瞰">
+  <meta property="og:image" content="https://harapeko-wanchi.github.io/hm-song-analysis/img/og-map.png">
+  <meta property="og:url" content="https://harapeko-wanchi.github.io/hm-song-analysis/map.html">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="stylesheet" href="styles/common.css">
+  <link rel="stylesheet" href="styles/map.css">
 </head>
 <body>
-  <noscript>
-    <p><a href="map-a.html">ステージ・バイブスマップ</a></p>
-    <p><a href="map-b.html">サウンド・エンジンマップ</a></p>
-    <p><a href="map-c.html">エモーション・マップ</a></p>
-  </noscript>
+
+<nav class="nav"></nav>
+<script src="scripts/nav.js"></script>
+
+<div class="map-head">
+  <div class="map-tabs" role="tablist" aria-label="マップの切り替え">
+    <button type="button" class="map-tab" role="tab" data-tab="stage" aria-controls="wrapA">ステージ</button>
+    <button type="button" class="map-tab" role="tab" data-tab="sound" aria-controls="wrapB">サウンド</button>
+    <button type="button" class="map-tab" role="tab" data-tab="mood" aria-controls="wrapC">ムード</button>
+  </div>
+  <div class="map-picker">
+    <select id="mapSong" class="map-select" aria-label="曲を選んでマップ上で強調">
+      <option value="">曲を選んで位置を表示…</option>
+    </select>
+    <button type="button" id="mapSongClear" class="map-clear" hidden>選択を解除</button>
+  </div>
+  <div class="map-selected" id="mapSelected" aria-live="polite"></div>
+</div>
+
+<div class="map-wrap" id="wrapA">
+  <div class="map-title">ステージマップ</div>
+  <div class="map-subtitle">
+    x: かわいい ↔ かっこいい &nbsp;/&nbsp; y: 聴かせる ↔ 沸かせる
+  </div>
+  <div class="map-viewport">
+    <div class="map-container" id="mapA">
+      <div class="map-axis-x"></div>
+      <div class="map-axis-y"></div>
+      <div class="map-label map-label-left" style="color:var(--cute);">← かわいい</div>
+      <div class="map-label map-label-right" style="color:var(--cool);">かっこいい →</div>
+      <div class="map-label map-label-top" style="color:#f08c00;">↑ 沸かせる</div>
+      <div class="map-label map-label-bottom" style="color:#1fb877;">↓ 聴かせる</div>
+    </div>
+  </div>
+  <div class="map-controls">
+    <button class="map-ctrl-btn" data-target="mapA" data-action="zoom-in" title="ズームイン">＋</button>
+    <button class="map-ctrl-btn" data-target="mapA" data-action="zoom-out" title="ズームアウト">−</button>
+    <button class="map-ctrl-btn" data-target="mapA" data-action="reset" title="リセット">↺</button>
+  </div>
+</div>
+
+<div class="map-wrap hidden" id="wrapB">
+  <div class="map-title">サウンドマップ</div>
+  <div class="map-subtitle">
+    x: エレクトロ ↔ バンド &nbsp;/&nbsp; y: ゆったり ↔ 疾走感
+  </div>
+  <div class="map-viewport">
+    <div class="map-container" id="mapB">
+      <div class="map-axis-x"></div>
+      <div class="map-axis-y"></div>
+      <div class="map-label map-label-left" style="color:#7a5cf0;">← エレクトロ</div>
+      <div class="map-label map-label-right" style="color:#c46a2a;">バンド →</div>
+      <div class="map-label map-label-top" style="color:#ec4545;">↑ 疾走感</div>
+      <div class="map-label map-label-bottom" style="color:#4f7fb3;">↓ ゆったり</div>
+    </div>
+  </div>
+  <div class="map-controls">
+    <button class="map-ctrl-btn" data-target="mapB" data-action="zoom-in" title="ズームイン">＋</button>
+    <button class="map-ctrl-btn" data-target="mapB" data-action="zoom-out" title="ズームアウト">−</button>
+    <button class="map-ctrl-btn" data-target="mapB" data-action="reset" title="リセット">↺</button>
+  </div>
+</div>
+
+<div class="map-wrap hidden" id="wrapC">
+  <div class="map-title">ムードマップ</div>
+  <div class="map-subtitle">
+    x: 大人っぽい ↔ 子供心 &nbsp;/&nbsp; y: エモーショナル ↔ ハッピー
+  </div>
+  <div class="map-viewport">
+    <div class="map-container" id="mapC">
+      <div class="map-axis-x"></div>
+      <div class="map-axis-y"></div>
+      <div class="map-label map-label-left" style="color:#4f7fb3;">← 大人っぽい</div>
+      <div class="map-label map-label-right" style="color:#d39a00;">子供心 →</div>
+      <div class="map-label map-label-top" style="color:#1fb877;">↑ ハッピー</div>
+      <div class="map-label map-label-bottom" style="color:#9b4fe0;">↓ エモーショナル</div>
+    </div>
+  </div>
+  <div class="map-controls">
+    <button class="map-ctrl-btn" data-target="mapC" data-action="zoom-in" title="ズームイン">＋</button>
+    <button class="map-ctrl-btn" data-target="mapC" data-action="zoom-out" title="ズームアウト">−</button>
+    <button class="map-ctrl-btn" data-target="mapC" data-action="reset" title="リセット">↺</button>
+  </div>
+</div>
+
+<script src="scripts/common.js"></script>
+<script src="scripts/map.js"></script>
 </body>
 </html>

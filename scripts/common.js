@@ -2,15 +2,15 @@
 
 /* 9-axis score definitions (order is the radar / table column order) */
 const AXES = [
-  { key: 'cute',       label: 'キュート',   shortLabel: 'Cute',  color: '#f06c9c' },
-  { key: 'cool',       label: 'クール',     shortLabel: 'Cool',  color: '#6cacf0' },
-  { key: 'emo',        label: 'エモ',       shortLabel: 'Emo',   color: '#b06cf0' },
-  { key: 'childlike',  label: '子供心',     shortLabel: 'Child', color: '#f0d860' },
-  { key: 'happy',      label: 'ハッピー度', shortLabel: 'Happy', color: '#6cf0b0' },
-  { key: 'party',      label: 'お祭り感',   shortLabel: 'Party', color: '#fcb040' },
-  { key: 'band',       label: 'バンド',     shortLabel: 'Band',  color: '#d08040' },
-  { key: 'speed',      label: '疾走感',     shortLabel: 'Speed', color: '#f06c6c' },
-  { key: 'complexity', label: '複雑度',     shortLabel: 'Cmplx', color: '#a080f0' },
+  { key: 'cute',       label: 'キュート',   shortLabel: 'Cute',  color: '#f0508c' },
+  { key: 'cool',       label: 'クール',     shortLabel: 'Cool',  color: '#3a8ee6' },
+  { key: 'emo',        label: 'エモ',       shortLabel: 'Emo',   color: '#9b4fe0' },
+  { key: 'childlike',  label: '子供心',     shortLabel: 'Child', color: '#e0a800' },
+  { key: 'happy',      label: 'ハッピー度', shortLabel: 'Happy', color: '#1fb877' },
+  { key: 'party',      label: 'お祭り感',   shortLabel: 'Party', color: '#f08c00' },
+  { key: 'band',       label: 'バンド',     shortLabel: 'Band',  color: '#c46a2a' },
+  { key: 'speed',      label: '疾走感',     shortLabel: 'Speed', color: '#ec4545' },
+  { key: 'complexity', label: '複雑度',     shortLabel: 'Cmplx', color: '#7a5cf0' },
 ];
 
 /* Co-written credits are grouped under one representative name */
@@ -60,6 +60,17 @@ function cosineSim(a, b) {
 
 function escapeHtml(s) {
   return String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+
+/* Area names of the position maps' quadrants (map.html, song.html) */
+const MAP_AREAS = {
+  mapA: { tl: '胸キュン☆ブチ上げ', tr: '攻め！全力アゲ',       bl: '甘くてじんわり', br: '大人のエモ' },
+  mapB: { tl: 'デジタル爆走',      tr: 'ロック全開！',         bl: 'チルいビート',   br: 'まったりバンド' },
+  mapC: { tl: '洗練ポジティブ',    tr: 'わちゃわちゃパラダイス', bl: 'ヒリヒリ覚醒',   br: '切なかわいい' },
+};
+/* Quadrant key of a map coordinate (a point on an axis counts as the upper / right side) */
+function mapQuadrantOf(p) {
+  return (p.y >= 0 ? 't' : 'b') + (p.x >= 0 ? 'r' : 'l');
 }
 
 /* Link to a song's detail page */

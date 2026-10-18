@@ -1,8 +1,8 @@
 /* ====== Config ====== */
 const SLOT_COLORS = [
-  { fill: 'rgba(124,108,240,.25)', stroke: '#7c6cf0', name: '#7c6cf0' },
-  { fill: 'rgba(240,108,156,.25)', stroke: '#f06c9c', name: '#f06c9c' },
-  { fill: 'rgba(108,240,176,.25)', stroke: '#6cf0b0', name: '#6cf0b0' },
+  { fill: 'rgba(232,51,127,.2)', stroke: '#e8337f', name: '#e8337f' },
+  { fill: 'rgba(58,142,230,.2)', stroke: '#3a8ee6', name: '#3a8ee6' },
+  { fill: 'rgba(31,184,119,.2)', stroke: '#1fb877', name: '#1fb877' },
 ];
 const MAX_SLOTS = 3;
 const MAX_VAL = 10;
@@ -90,11 +90,11 @@ function draw() {
       i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
     }
     ctx.closePath();
-    ctx.strokeStyle = lv === 10 ? 'rgba(255,255,255,.12)' : 'rgba(255,255,255,.06)';
+    ctx.strokeStyle = lv === 10 ? 'rgba(45,35,70,.18)' : 'rgba(45,35,70,.08)';
     ctx.stroke();
 
     // Level label
-    ctx.fillStyle = 'rgba(255,255,255,.2)';
+    ctx.fillStyle = 'rgba(45,35,70,.3)';
     ctx.font = '20px sans-serif';
     ctx.textAlign = 'center';
     ctx.fillText(lv, cx + 8, cy - r + 18);
@@ -109,7 +109,7 @@ function draw() {
     ctx.beginPath();
     ctx.moveTo(cx, cy);
     ctx.lineTo(ex, ey);
-    ctx.strokeStyle = 'rgba(255,255,255,.08)';
+    ctx.strokeStyle = 'rgba(45,35,70,.08)';
     ctx.lineWidth = 1;
     ctx.stroke();
 
@@ -214,7 +214,7 @@ function buildDiff(songs) {
     });
     if (valid.length >= 2) {
       const diff = Math.max(...vals) - Math.min(...vals);
-      html += `<td class="val" style="color:${diff >= 4 ? '#f06c6c' : diff >= 2 ? '#fcb040' : 'var(--muted)'}">${diff.toFixed(1)}</td>`;
+      html += `<td class="val" style="color:${diff >= 4 ? '#ec4545' : diff >= 2 ? '#f08c00' : 'var(--muted)'}">${diff.toFixed(1)}</td>`;
     }
     html += '</tr>';
   });
