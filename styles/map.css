@@ -47,15 +47,15 @@
   display: inline-flex; align-items: baseline; gap: .35rem;
   padding: .2rem .7rem;
   font: inherit; font-size: .78rem; font-weight: 700;
-  color: var(--text);
+  color: var(--q-ink);
   background: #fff;
-  border: 1.5px solid var(--border);
+  border: 1.5px solid color-mix(in srgb, var(--q-ink) 35%, transparent);
   border-radius: 999px;
   cursor: pointer;
 }
 .map-selected-area small { font-size: .66rem; color: var(--muted); }
-.map-selected-area:hover { border-color: var(--accent); }
-.map-selected-area.current { color: #fff; background: var(--accent); border-color: var(--accent); }
+.map-selected-area:hover { border-color: var(--q-ink); }
+.map-selected-area.current { color: #fff; background: var(--q-ink); border-color: var(--q-ink); }
 .map-selected-area.current small { color: rgba(255,255,255,.85); }
 
 /* Selected song: other songs fade, the selected one is enlarged with a glow and guide lines to the axes */

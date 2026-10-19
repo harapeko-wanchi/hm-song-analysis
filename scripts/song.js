@@ -71,7 +71,7 @@ function renderPositions(song, data) {
     return `<a class="sd-mini" href="map.html?m=${m.tab}&song=${encodeURIComponent(song.id)}">
       <canvas id="sdMini${i}" aria-label="${m.name}マップ上の位置"></canvas>
       <span class="sd-mini-name">${m.name}</span>
-      <span class="sd-mini-area">${escapeHtml(MAP_AREAS[m.key][mapQuadrantOf(p)])}</span>
+      <span class="sd-mini-area q-${mapQuadrantOf(p)}">${escapeHtml(MAP_AREAS[m.key][mapQuadrantOf(p)])}</span>
       <span class="sd-mini-coord">(${p.x}, ${p.y})</span>
       <span class="sd-mini-axes">${escapeHtml(data[m.def]?.x_label || '')}<br>${escapeHtml(data[m.def]?.y_label || '')}</span>
     </a>`;
@@ -134,14 +134,21 @@ function drawSongRadar(song) {
 }
 
 function drawMiniMaps(song, songs) {
+  const rootStyle = getComputedStyle(document.documentElement);
   MAPS.forEach((m, i) => {
     const canvas = document.getElementById('sdMini' + i);
     const size = 130;
     const ctx = hiDpiContext(canvas, size, size);
     const toPx = (x, y) => [(x + MAP_RANGE) / (MAP_RANGE * 2) * size, (MAP_RANGE - y) / (MAP_RANGE * 2) * size];
 
-    ctx.fillStyle = '#fff';
-    ctx.fillRect(0, 0, size, size);
+    // Quadrant tints, as on map.html
+    const half = size / 2;
+    [['tl', 0, 0], ['tr', half, 0], ['bl', 0, half], ['br', half, half]].forEach(([q, x, y]) => {
+      ctx.fillStyle = rootStyle.getPropertyValue('--q-' + q);
+      ctx.fillRect(x, y, half, half);
+    });
+    ctx.fillStyle = rootStyle.getPropertyValue('--q-c');
+    ctx.beginPath(); ctx.arc(half, half, MAP_CENTER_RADIUS / MAP_RANGE * half, 0, Math.PI * 2); ctx.fill();
     ctx.strokeStyle = 'rgba(45,35,70,.14)';
     ctx.lineWidth = 1;
     ctx.beginPath();

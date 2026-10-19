@@ -62,14 +62,18 @@ function escapeHtml(s) {
   return String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 }
 
-/* Area names of the position maps' quadrants (map.html, song.html) */
+/* Area names of the position maps: the four quadrants and the center (map.html, song.html) */
 const MAP_AREAS = {
-  mapA: { tl: '胸キュン☆ブチ上げ', tr: '攻め！全力アゲ',       bl: '甘くてじんわり', br: '大人のエモ' },
-  mapB: { tl: 'デジタル爆走',      tr: 'ロック全開！',         bl: 'チルいビート',   br: 'まったりバンド' },
-  mapC: { tl: '洗練ポジティブ',    tr: 'わちゃわちゃパラダイス', bl: 'ヒリヒリ覚醒',   br: '切なかわいい' },
+  mapA: { tl: '胸キュン☆ブチ上げ', tr: '攻め！全力アゲ',       bl: '甘くてじんわり', br: '大人のエモ',     c: 'ど真ん中アイドル' },
+  mapB: { tl: 'デジタル爆走',      tr: 'ロック全開！',         bl: 'チルいビート',   br: 'まったりバンド', c: '王道ポップ' },
+  mapC: { tl: '洗練ポジティブ',    tr: 'わちゃわちゃパラダイス', bl: 'ヒリヒリ覚醒',   br: '切なかわいい',   c: '等身大ガール' },
 };
-/* Quadrant key of a map coordinate (a point on an axis counts as the upper / right side) */
+/* Radius of the center area, in map coordinates (axes run -10 to 10) */
+const MAP_CENTER_RADIUS = 3;
+/* Area key of a map coordinate: 'c' near the origin, otherwise the quadrant
+   (a point on an axis counts as the upper / right side) */
 function mapQuadrantOf(p) {
+  if (Math.hypot(p.x, p.y) <= MAP_CENTER_RADIUS) return 'c';
   return (p.y >= 0 ? 't' : 'b') + (p.x >= 0 ? 'r' : 'l');
 }
 

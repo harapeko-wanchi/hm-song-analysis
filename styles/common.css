@@ -32,6 +32,12 @@
   --member-stripe: linear-gradient(90deg,
     var(--m-green) 0 16.66%, var(--m-pink) 0 33.33%, var(--m-yellow) 0 50%,
     #ece6f4 0 66.66%, var(--m-red) 0 83.33%, var(--m-purple) 0);
+  /* Position map quadrant tints (background) and inks (area labels); the same for all three maps */
+  --q-tl: #fff0f6;  --q-tl-ink: #d4568d;
+  --q-tr: #ebf4ff;  --q-tr-ink: #4a86c8;
+  --q-bl: #fff8e0;  --q-bl-ink: #a67c00;
+  --q-br: #f4eeff;  --q-br-ink: #8a62d0;
+  --q-c:  rgba(255,255,255,.85);  --q-c-ink: #2f9a63;
 }
 
 html { font-size: 15px; }
@@ -325,7 +331,8 @@ a:hover { text-decoration: underline; }
   position: relative;
   width: 100%;
   height: 100%;
-  background: #fff;
+  /* Quadrants split at the axes (the map's center) */
+  background: conic-gradient(var(--q-tr) 0 25%, var(--q-br) 0 50%, var(--q-bl) 0 75%, var(--q-tl) 0);
   border: 1px solid var(--border);
   border-radius: var(--radius);
   box-shadow: var(--shadow);
@@ -385,14 +392,21 @@ a:hover { text-decoration: underline; }
 .map-label-top    { top: 8px;   left: 50%; transform: translateX(-50%); color: var(--childlike);  font-weight: 600; }
 .map-label-bottom { bottom: 8px;left: 50%; transform: translateX(-50%); color: var(--emo);  font-weight: 600; }
 
+/* Area color (--q-ink) of a map area's label or chip, by area key (map.js, song.js) */
+.q-tl { --q-ink: var(--q-tl-ink); }
+.q-tr { --q-ink: var(--q-tr-ink); }
+.q-bl { --q-ink: var(--q-bl-ink); }
+.q-br { --q-ink: var(--q-br-ink); }
+.q-c  { --q-ink: var(--q-c-ink); }
+
 /* Quadrant labels */
 .map-quadrant-label {
   position: absolute;
   padding: .15rem .6rem;
   font-size: .78rem; font-weight: 800;
-  color: #a597b3;
+  color: var(--q-ink);
   background: rgba(255,255,255,.8);
-  border: 1.5px dashed #e3d6ea;
+  border: 1.5px dashed color-mix(in srgb, var(--q-ink) 40%, transparent);
   border-radius: 999px;
   pointer-events: none;
   transition: color .2s, background .2s, border-color .2s;
@@ -401,12 +415,29 @@ a:hover { text-decoration: underline; }
 .map-quadrant-label.tr { top: 13%; right: 12%; }
 .map-quadrant-label.bl { bottom: 13%; left: 12%; }
 .map-quadrant-label.br { bottom: 13%; right: 12%; }
+/* The center area's label sits on the top edge of its circle (songs crowd the middle);
+   smaller and see-through except when active */
+.map-quadrant-label.c  {
+  top: calc(50% - var(--center-r)); left: 50%; transform: translate(-50%, -50%);
+  font-size: .7rem; white-space: nowrap; opacity: .75;
+}
+.map-quadrant-label.c.active { opacity: 1; }
+/* Center area circle (map.js sets the radius --center-r on the map as a % of its width) */
+.map-center-area {
+  position: absolute;
+  left: calc(50% - var(--center-r)); top: calc(50% - var(--center-r));
+  width: calc(var(--center-r) * 2); aspect-ratio: 1;
+  background: var(--q-c);
+  border: 1.5px dashed color-mix(in srgb, var(--q-c-ink) 35%, transparent);
+  border-radius: 50%;
+  pointer-events: none;
+}
 /* The area of the selected song (map.js) */
 .map-quadrant-label.active {
   color: #fff;
-  background: var(--accent);
-  border: 1.5px solid var(--accent);
-  box-shadow: 0 2px 10px rgba(232, 51, 127, .35);
+  background: var(--q-ink);
+  border: 1.5px solid var(--q-ink);
+  box-shadow: 0 2px 10px color-mix(in srgb, var(--q-ink) 35%, transparent);
 }
 
 /* Grid lines */
