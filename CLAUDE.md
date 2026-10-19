@@ -10,18 +10,19 @@ Hey!Mommy!（6人組アイドルグループ）の楽曲を 9 軸スコア・3 �
 - 各ページは `fetch('songs.json')` するため、`file://` では動かない。ローカル確認は静的サーバーで行う（リポジトリ直下で `node tools/serve.js` を実行し http://localhost:8000/ を開く。Python があれば `python -m http.server 8000` でも可）。
 - `.gitignore` が `*.py` を除外しているので、Python の補助スクリプトはコミットされない。
 - `node tools/validate.js` で `songs.json` と関連ファイルの整合性をチェックできる（マップ座標と式、id 重複、並び順、`analysis/<id>.md` の有無、作曲家のプロフィール・色の登録漏れ、README の曲数など）。曲の追加・スコア変更の後は必ず実行する。
+- 新曲は `node tools/new-song.js <入力.json>` で追加する（入力の雛形は `--template`、書き込まずに座標だけ見るなら `--dry-run`。入力ファイル `new-song.json` は `.gitignore` 済み）。マップ座標の計算、`songs.json` への差し込み（既存の曲の書式は変えない）、`analysis/<id>.md` の雛形、README の曲数更新をして、最後に `validate.js` を実行し、作曲家の色・プロフィールなど手で直す残りの作業を表示する。
 
 ## Architecture
 
 **データ: `songs.json` が唯一のデータソース。** 全ページがこれを読み込む。
 
-- `scoring_scale.axes`: 9 軸（cute, cool, emo, happy, band, childlike, complexity, party, speed）。0〜10、0.1 刻み、probit 正規化（順位ベース、平均 5.0・SD 2.3）。
+- `scoring_scale.axes`: 9 軸（cute, cool, emo, happy, band, childlike, complexity, party, speed）。0〜10、0.1 刻み、probit 正規化（順位ベース、平均 5.0・SD 2.3）。各軸の基準と新曲の点の付け方（既存曲と比べて 0.5 刻みで置く）は `docs/scoring.md`。
 - `mapA_definition` / `mapB_definition` / `mapC_definition`: マップ座標の算出式（例: Map A の x = `cool - cute`, y = `(party - 5) * 2`）。各曲の `mapA` / `mapB` / `mapC` 座標は**事前計算済みで JSON に保存**されているため、スコアを変えたら座標も式に従って更新すること。
 - 各曲のフィールド: `id, title, release_date, lyricist, composer, arranger, key, bpm, youtube_url, thumbnail_url, scores, mapA, mapB, mapC, tags, harmony_note, lyrics_hooks, summary`。
 
 **ページ構成:** ルートの `<page>.html` ＋ `scripts/<page>.js` ＋（必要なら）`styles/<page>.css`。`styles/common.css` が共通テーマ（明るい配色・丸ゴシック。色は `:root` の変数で、メンバーカラー 6 色の `--m-*` と帯の `--member-stripe` もここ）。ナビゲーションは、各ページの空の `<nav class="nav"></nav>` の直後で読み込む `scripts/nav.js` が `NAV_GROUPS`（楽曲一覧／分析／探す／つくる）から生成する。ページ追加・名称変更時は `NAV_GROUPS` だけを直す。幅 600px 以下ではナビ項目をメニューボタンの中に折りたたむ（ボタンも `nav.js` が追加する）。
 
-- `index.html` はトップページ（`scripts/home.js`）。Hey!Mommy! とサイトの紹介、非公式ファンサイトである旨の断り、おすすめ 3 コンテンツ（楽曲一覧・ポジションマップ・似た曲レコメンド）、ランダムの「今日の 1 曲」、指標別ランキング TOP 5。迷わせないようトップで紹介するコンテンツは絞っており、それ以外はナビから辿る。
+- `index.html` はトップページ（`scripts/home.js`）。Hey!Mommy! とサイトの紹介、非公式ファンサイトである旨の断り、おすすめ 3 コンテンツ（楽曲一覧・ポジションマップ・似た曲レコメンド）、ランダムの「今日の 1 曲」（3 マップのエリア名のチップつき）、指標別ランキング TOP 5。迷わせないようトップで紹介するコンテンツは絞っており、それ以外はナビから辿る。
 - `songs.html` は楽曲一覧（`scripts/songs.js`）。
 - `map.html` はポジションマップ（`scripts/map.js` ＋ `styles/map.css`）。ステージ／サウンド／ムードの 3 マップ（`#mapA` / `#mapB` / `#mapC`）をタブで切り替え、それぞれズーム状態を持つ。曲を選ぶ（選択欄か、マップ上の曲をクリック）と 3 マップすべてでその曲を強調し、他の曲を薄くして軸へのガイド線を引く。曲の詳細ページへは選択欄の下のリンクとツールチップから行く（タッチ端末ではタップで選択とツールチップ表示）。曲名ラベルは他の曲のサムネイルや先に表示したラベルと重なると隠し（`songs.json` の順＝新しい曲を優先、選択中の曲は常に表示）、ズームで間隔が開くと再表示する。各マップは四象限と中央（原点から半径 `MAP_CENTER_RADIUS` 以内）の 5 エリアに分かれ、名前は `common.js` の `MAP_AREAS`、判定は `mapQuadrantOf`。エリアの色は `common.css` の `--q-*`（背景）と `--q-*-ink`（ラベル・チップ。`.q-<エリア>` クラスで付ける）で、曲の詳細ページの小さなマップも同じ色を使う。
 - `song.html?id=<id>` は曲ごとの詳細ページ（`scripts/song.js`）。ヘッダー・レーダー・3 マップ上の位置・似ている曲 TOP 5 を描き、`analysis/<id>.md` を `scripts/markdown.js`（分析ファイルが使う書式だけに対応した最小の Markdown 変換。HTML はすべてエスケープ）で記事として表示する。一覧・レコメンド・ヒートマップ・マップのツールチップの曲名から `songUrl(id)`（`common.js`）でリンクしている。レーダー描画は `scripts/radar.js` を `composer.html` と共用。
