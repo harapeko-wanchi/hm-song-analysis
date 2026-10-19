@@ -252,6 +252,19 @@ a.home-feature:hover .home-mosaic img { transform: scale(1.08); }
 .home-pick-title { font-size: 1.15rem; font-weight: 800; }
 .home-pick-meta { margin-top: .2rem; font-size: .72rem; color: var(--muted); }
 .home-pick-summary { margin: .5rem 0 0; font-size: .84rem; line-height: 1.75; }
+/* Area chips in the area's color (--q-ink from the .q-* classes in common.css) */
+.home-pick-areas { display: flex; flex-wrap: wrap; gap: .35rem; margin-top: .5rem; }
+.home-pick-area {
+  display: inline-flex; align-items: baseline; gap: .35rem;
+  padding: .15rem .65rem;
+  font-size: .74rem; font-weight: 800;
+  color: var(--q-ink);
+  background: #fff;
+  border: 1.5px solid color-mix(in srgb, var(--q-ink) 35%, transparent);
+  border-radius: 999px;
+}
+.home-pick-area small { font-size: .64rem; font-weight: 700; color: var(--muted); }
+.home-pick-area:hover { text-decoration: none; border-color: var(--q-ink); }
 
 .home-rank-head { display: flex; align-items: center; gap: .8rem; margin-bottom: 1rem; }
 .home-rank-head h2 { margin: 0; }

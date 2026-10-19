@@ -13,6 +13,21 @@ function renderAxisChips() {
     `<span class="home-axis" style="--c:${ax.color}">${ax.label}</span>`).join('');
 }
 
+// The pick's area on each position map
+const PICK_MAPS = [
+  { key: 'mapA', name: 'ステージ', tab: 'stage' },
+  { key: 'mapB', name: 'サウンド', tab: 'sound' },
+  { key: 'mapC', name: 'ムード',   tab: 'mood' },
+];
+
+function pickAreas(song) {
+  return PICK_MAPS.filter(m => song[m.key]).map(m => {
+    const q = mapQuadrantOf(song[m.key]);
+    return `<a class="home-pick-area q-${q}" href="map.html?m=${m.tab}&song=${encodeURIComponent(song.id)}" title="${m.name}マップで見る">` +
+      `<small>${m.name}</small>${escapeHtml(MAP_AREAS[m.key][q])}</a>`;
+  }).join('');
+}
+
 function renderPick(prevId) {
   const pool = songs.length > 1 ? songs.filter(s => s.id !== prevId) : songs;
   const song = pool[Math.floor(Math.random() * pool.length)];
@@ -25,6 +40,7 @@ function renderPick(prevId) {
     <div class="home-pick-body">
       <a class="home-pick-title" href="${songUrl(song.id)}">${escapeHtml(song.title)}</a>
       <div class="home-pick-meta">${[song.release_date, song.bpm && `BPM ${song.bpm}`, song.composer && `♪ ${song.composer}`].filter(Boolean).map(escapeHtml).join(' ・ ')}</div>
+      <div class="home-pick-areas">${pickAreas(song)}</div>
       ${song.summary ? `<p class="home-pick-summary">${escapeHtml(song.summary)}</p>` : ''}
     </div>`;
 }
