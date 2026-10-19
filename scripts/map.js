@@ -476,8 +476,9 @@ function selectSong(id) {
       const c = song[t.key];
       if (!c) return '';
       const name = document.querySelector(`.map-tab[data-tab="${t.id}"]`).textContent;
-      return `<button type="button" class="map-selected-area" data-tab="${t.id}" title="${name}マップを表示 (${c.x}, ${c.y})">` +
-        `<small>${name}</small>${MAP_AREAS[t.key][mapQuadrantOf(c)]}</button>`;
+      const q = mapQuadrantOf(c);
+      return `<button type="button" class="map-selected-area q-${q}" data-tab="${t.id}" title="${name}マップを表示 (${c.x}, ${c.y})">` +
+        `<small>${name}</small>${MAP_AREAS[t.key][q]}</button>`;
     }).join('')}</span>` : '';
   markCurrentArea();
   syncUrl();
@@ -493,10 +494,14 @@ fetch('songs.json')
     MAP_TABS.forEach(tab => {
       const container = containerOf(tab);
       addGridLines(container, tab.range, 10);
-      // Area names in the four quadrants
+      // Center area circle, then the area names (four quadrants and the center)
+      container.style.setProperty('--center-r', (coordToPercent(MAP_CENTER_RADIUS, tab.range) - 50) + '%');
+      const center = document.createElement('div');
+      center.className = 'map-center-area';
+      container.appendChild(center);
       Object.entries(MAP_AREAS[tab.key]).forEach(([q, name]) => {
         const l = document.createElement('div');
-        l.className = 'map-quadrant-label ' + q;
+        l.className = `map-quadrant-label ${q} q-${q}`;
         l.dataset.q = q;
         l.textContent = name;
         container.appendChild(l);
